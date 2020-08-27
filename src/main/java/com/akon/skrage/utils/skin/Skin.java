@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 public class Skin {
 
-	public static final Skin EMPTY = new Skin(null, null);
+	public static final Skin EMPTY = new Skin("", "");
 
 	private final String value;
 	private final String signature;

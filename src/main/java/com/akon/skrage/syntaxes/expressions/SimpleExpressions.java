@@ -4,11 +4,14 @@ import com.akon.skrage.syntaxes.ExpressionFactory;
 import com.akon.skrage.utils.NMSUtil;
 import com.akon.skrage.utils.anvilgui.AnvilGUI;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonManager;
+import com.akon.skrage.utils.skin.Skin;
+import com.akon.skrage.utils.skin.SkinManager;
 import com.shampaggon.crackshot.CSDirector;
 import com.shampaggon.crackshot.events.WeaponDamageEntityEvent;
 import com.shampaggon.crackshot.events.WeaponReloadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
@@ -25,6 +28,7 @@ public class SimpleExpressions {
 		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
 			ExpressionFactory.registerExpression("ExprAnvilGUI", "anvil[ ]gui", Player.class, AnvilGUI.class, AnvilGUI::getAnvilGUI, null, "プレイヤーに表示されているAnvilGUI");
 			ExpressionFactory.registerExpression("ExprAnvilGUIName", "anvil[ ]gui name", AnvilGUI.class, String.class, AnvilGUI::getName, null, "金床のGUIの名前");
+			ExpressionFactory.registerExpression("ExprSkin", "skin", OfflinePlayer.class, Skin.class, SkinManager::getSkin, null, "プレイヤーが使用しているスキン");
 		}
 		if (Bukkit.getPluginManager().isPluginEnabled("CrackShot")) {
 			ExpressionFactory.registerExpression("ExprBulletWeaponName", "[(crackshot|cs)] weapon [internal[ ]]name", Entity.class, String.class, entity -> {

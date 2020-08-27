@@ -425,7 +425,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 	ExprDisplayedSkin:
 		ID: ExprDisplayedSkin
 		Description:
-			プレイヤーの使用しているスキンを取得します
+			プレイヤーに表示されているスキン
 		Return type: Skin
 		Changers:
 			set
@@ -614,6 +614,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove all
 		Patterns:
 			new entity %entitytype%
+	ExprNewSkin:
+		ID: ExprNewSkin
+		Description:
+			valueとsignatureから新しいスキンを作成します
+		Return type: Skin
+		Changers:
+			none
+		Patterns:
+			new skin value %string% signature %string%
 	ExprNoDamageTicks:
 		ID: ExprNoDamageTicks
 		Description:
@@ -671,12 +680,14 @@ send "Projectile_Damage: %{_weapondamage}%"
 			%livingentity%'s old ai state
 	ExprSkin:
 		ID: ExprSkin
+		Description:
+			プレイヤーが使用しているスキン
 		Return type: Skin
 		Changers:
 			none
 		Patterns:
-			%player%'s skin
-			skin of %player%
+			skin of %offlineplayer%
+			%offlineplayer%'s skin
 	ExprSource:
 		ID: ExprSource
 		Description:

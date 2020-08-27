@@ -10,17 +10,48 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SkinManager {
 
 	private static final HashMap<UUID, Skin> PLAYER_SKIN_MAP = Maps.newHashMap();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static final String SKIN_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
+
+	public static Skin getSkin(OfflinePlayer player) {
+		if (player == null) {
+			return Skin.EMPTY;
+		}
+		if (player.isOnline()) {
+			return Skin.fromGameProfile(WrappedGameProfile.fromPlayer(player.getPlayer()));
+		} else {
+			try (JsonReader reader = new JsonReader(new InputStreamReader(new URL(String.format(SKIN_URL, player.getUniqueId().toString().replace("-", StringUtils.EMPTY))).openStream()))) {
+				LinkedTreeMap<String, ?> json = GSON.fromJson(reader, new TypeToken<LinkedTreeMap<String, ?>>() {}.getType());
+				ArrayList<?> properties = (ArrayList<?>)json.get("properties");
+				LinkedTreeMap<String, String> property = (LinkedTreeMap<String, String>)properties.get(0);
+				return new Skin(property.get("value"), property.get("signature"));
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return null;
+	}
 
 	public static Skin getDisplayedSkin(Player p) {
 		return Optional.ofNullable(PLAYER_SKIN_MAP.get(p.getUniqueId())).orElse(Skin.fromGameProfile(WrappedGameProfile.fromPlayer(p)));
@@ -52,7 +83,7 @@ public class SkinManager {
 				vehicle.addPassenger(p);
 			}
 		});
-		PlayerInfoData playerInfoData = new PlayerInfoData(PLAYER_SKIN_MAP.get(p.getUniqueId()).toGameProfile(p.getUniqueId(), p.getName()), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()), WrappedChatComponent.fromText(p.getPlayerListName()));
+		PlayerInfoData playerInfoData = new PlayerInfoData(getDisplayedSkin(p).toGameProfile(p.getUniqueId(), p.getName()), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()), WrappedChatComponent.fromText(p.getPlayerListName()));
 		PacketContainer removeInfo = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
 		removeInfo.getPlayerInfoAction().write(0, EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
 		removeInfo.getPlayerInfoDataLists().write(0, Collections.singletonList(playerInfoData));

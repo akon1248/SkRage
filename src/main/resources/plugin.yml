@@ -1,0 +1,7 @@
+name: SkRage
+version: ${project.version}
+main: com.akon.skrage.SkRage
+author: akon
+api-version: 1.12.2
+depend: [Skript]
+softdepend: [CrackShot, LibsDisguises, LunaChat, ProtocolLib]

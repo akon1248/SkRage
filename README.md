@@ -1,5 +1,5 @@
 # SkRage
- Skript Addon
+ AnvilGUI、CrackShot、その他実用性皆無な構文が入っているアドオン
 
 Document
 ```

@@ -2,7 +2,8 @@
  Skript Addon
 
 Document
-```Events:
+```
+Events:
 	On anvil gui close:
 		ID: anvil_gui_close
 		Description:
@@ -753,4 +754,5 @@ Functions:
 	xor:
 		Return type: Number
 		Patterns:
-			xor(val1: number, val2: number)```
+			xor(val1: number, val2: number)
+```

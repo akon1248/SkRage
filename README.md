@@ -12,8 +12,8 @@ Events:
 			[on] anvil[ ]gui close
 		Event values:
 			event-world
-			event-anvilinv
 			event-player
+			event-anvilinv
 		Cancellable: false
 	On anvil gui done:
 		ID: anvil_gui_done
@@ -23,9 +23,9 @@ Events:
 			[on] anvil[ ]gui done
 		Event values:
 			event-world
-			event-anvilinv
-			event-string
 			event-player
+			event-string
+			event-anvilinv
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -35,8 +35,8 @@ Events:
 			[on] anvil[ ]gui open
 		Event values:
 			event-world
-			event-anvilinv
 			event-player
+			event-anvilinv
 		Cancellable: true
 	On combust by sunlight:
 		ID: combust_by_sunlight
@@ -45,8 +45,8 @@ Events:
 		Patterns:
 			[on] combust[ing] by sunlight
 		Event values:
-			event-world
 			event-entity
+			event-world
 		Cancellable: true
 	On console log:
 		ID: console_log
@@ -66,9 +66,9 @@ Events:
 			[on] (crackshot|cs) damage
 		Event values:
 			event-entity
-			event-string
 			event-projectile
 			event-player
+			event-string
 		Cancellable: true
 	On cs pre shoot:
 		ID: cs_pre_shoot
@@ -77,8 +77,8 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) pre shoot
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: true
 	On cs prepare shoot:
 		ID: cs_prepare_shoot
@@ -87,8 +87,8 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) prepare shoot
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: true
 	On cs shoot:
 		ID: cs_shoot
@@ -98,9 +98,9 @@ Events:
 			[on] (crackshot|cs) shoot
 		Event values:
 			event-entity
-			event-string
 			event-projectile
 			event-player
+			event-string
 		Cancellable: false
 	On plugin message receiving:
 		ID: plugin_message_receiving
@@ -125,8 +125,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] reload complete
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: false
 	On reload start:
 		ID: reload_start
@@ -135,8 +135,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] reload [start]
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: false
 	On scope:
 		ID: scope
@@ -145,8 +145,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] scope
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: true
 	On unscope:
 		ID: unscope
@@ -155,8 +155,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] unscope
 		Event values:
-			event-string
 			event-player
+			event-string
 		Cancellable: true
 Conditions:
 	CondBackstab:
@@ -271,6 +271,16 @@ Expressions:
 			none
 		Patterns:
 			all (crackshot|cs) weapons
+	ExprAlwaysAngry:
+		ID: ExprAlwaysAngry
+		Description:
+			ゾンビピッグマンが常に敵対的かどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			always angry state of %livingentity%
+			%livingentity%'s always angry state
 	ExprAnvilGUI:
 		ID: ExprAnvilGUI
 		Description:

@@ -21,6 +21,7 @@ import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
@@ -78,7 +80,7 @@ public class ExpressionFactory {
 		private final Class<U> returnType;
 		@Getter
 		private Class<?> singleReturnType;
-		private Expression<?> expr;
+		private WeakHashMap<SimpleExpression<?>, Expression<?>> exprs = new WeakHashMap<>();
 
 		public ExpressionMethodInterceptor(String pattern, Class<T> type, Class<U> returnType, Function<T, U> getter, BiConsumer<T, U> setter) {
 			this.isEvent = Event.class.isAssignableFrom(type);
@@ -96,7 +98,7 @@ public class ExpressionFactory {
 			this.singleReturnType = this.returnType.isArray() ? this.returnType.getComponentType() : this.returnType;
 		}
 
-		private Object[] get(Event event) {
+		private Object[] get(SimpleExpression<?> thiz, Event event) {
 			boolean flag = false;
 			Object obj = null;
 			if (this.isEvent) {
@@ -104,8 +106,8 @@ public class ExpressionFactory {
 					obj = event;
 					flag = true;
 				}
-			} else if (this.expr != null) {
-				if (this.type.isInstance(obj = this.expr.getSingle(event))) {
+			} else if (this.exprs.get(thiz) != null) {
+				if (this.type.isInstance(obj = this.exprs.get(thiz).getSingle(event))) {
 					flag = true;
 				}
 			}
@@ -122,10 +124,10 @@ public class ExpressionFactory {
 		}
 
 		@RuntimeType
-		public Object intercept(@Origin Method method, @AllArguments Object[] params) {
+		public Object intercept(@This SimpleExpression<?> thiz, @Origin Method method, @AllArguments Object[] params) {
 			if (method.getName().equals("init")) {
 				if (!this.isEvent){
-					this.expr = ((Expression<?>[]) params[0])[0];
+					this.exprs.put(thiz, ((Expression<?>[]) params[0])[0]);
 				} else if (!ScriptLoader.isCurrentEvent((Class<? extends Event>)this.type)) {
 					Skript.error(this.patterns[0] + "は" + this.type.getSimpleName() + "でのみ使用可能です");
 					return false;
@@ -138,7 +140,7 @@ public class ExpressionFactory {
 			} else if (method.getName().equals("toString")) {
 				return this.patterns[0];
 			} else if (method.getName().equals("get")) {
-				return this.get((Event)params[0]);
+				return this.get(thiz, (Event)params[0]);
 			} else if (method.getName().equals("acceptChange") && this.setter != null) {
 				Changer.ChangeMode mode = (Changer.ChangeMode)params[0];
 				if (mode == Changer.ChangeMode.SET || (this.returnType.equals(Number.class) && (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE))) {
@@ -153,8 +155,8 @@ public class ExpressionFactory {
 						obj = event;
 						flag = true;
 					}
-				} else if (this.expr != null) {
-					if (this.type.isInstance(obj = this.expr.getSingle(event))) {
+				} else if (this.exprs.get(thiz) != null) {
+					if (this.type.isInstance(obj = this.exprs.get(thiz).getSingle(event))) {
 						flag = true;
 					}
 				}
@@ -166,9 +168,9 @@ public class ExpressionFactory {
 						if (mode == Changer.ChangeMode.SET) {
 							newValue = value;
 						} else if (mode == Changer.ChangeMode.ADD && this.returnType.equals(Number.class)) {
-							newValue = (((Number)this.get(event)[0]).doubleValue() + ((Number)value).doubleValue());
+							newValue = (((Number)this.get(thiz, event)[0]).doubleValue() + ((Number)value).doubleValue());
 						} else if (mode == Changer.ChangeMode.REMOVE && this.returnType.equals(Number.class)) {
-							newValue = (((Number)this.get(event)[0]).doubleValue() - ((Number)value).doubleValue());
+							newValue = (((Number)this.get(thiz, event)[0]).doubleValue() - ((Number)value).doubleValue());
 						}
 						this.setter.accept((T)obj, (U)newValue);
 					}

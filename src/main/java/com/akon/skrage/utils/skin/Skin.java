@@ -11,14 +11,16 @@ import java.util.UUID;
 @Data
 public class Skin {
 
-	public static final Skin EMPTY = new Skin("", "");
+	public static final Skin EMPTY = new Skin(null, null);
 
 	private final String value;
 	private final String signature;
 
 	public WrappedGameProfile toGameProfile(UUID uuid, String name) {
 		WrappedGameProfile profile = new WrappedGameProfile(uuid, name);
-		profile.getProperties().put("textures", new WrappedSignedProperty("textures", this.value, this.signature));
+		if (this.value != null && this.signature != null) {
+			profile.getProperties().put("textures", new WrappedSignedProperty("textures", this.value, this.signature));
+		}
 		return profile;
 	}
 

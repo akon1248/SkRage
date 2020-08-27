@@ -35,26 +35,29 @@ public class SkinManager {
 	private static final String SKIN_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
 
 	public static Skin getSkin(OfflinePlayer player) {
-		if (player == null) {
-			return Skin.EMPTY;
-		}
-		if (player.isOnline()) {
-			return Skin.fromGameProfile(WrappedGameProfile.fromPlayer(player.getPlayer()));
-		} else {
-			try (JsonReader reader = new JsonReader(new InputStreamReader(new URL(String.format(SKIN_URL, player.getUniqueId().toString().replace("-", StringUtils.EMPTY))).openStream()))) {
-				LinkedTreeMap<String, ?> json = GSON.fromJson(reader, new TypeToken<LinkedTreeMap<String, ?>>() {}.getType());
-				ArrayList<?> properties = (ArrayList<?>)json.get("properties");
-				LinkedTreeMap<String, String> property = (LinkedTreeMap<String, String>)properties.get(0);
-				return new Skin(property.get("value"), property.get("signature"));
-			} catch (IOException ex) {
-				ex.printStackTrace();
+		if (player != null) {
+			if (player.isOnline()) {
+				return Skin.fromGameProfile(WrappedGameProfile.fromPlayer(player.getPlayer()));
+			} else {
+				try (JsonReader reader = new JsonReader(new InputStreamReader(new URL(String.format(SKIN_URL, player.getUniqueId().toString().replace("-", StringUtils.EMPTY))).openStream()))) {
+					LinkedTreeMap<String, ?> json = GSON.fromJson(reader, new TypeToken<LinkedTreeMap<String, ?>>() {
+
+					}.getType());
+					if (json != null) {
+						ArrayList<?> properties = (ArrayList<?>) json.get("properties");
+						LinkedTreeMap<String, String> property = (LinkedTreeMap<String, String>) properties.get(0);
+						return new Skin(property.get("value"), property.get("signature"));
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
-		return null;
+		return Skin.EMPTY;
 	}
 
 	public static Skin getDisplayedSkin(Player p) {
-		return Optional.ofNullable(PLAYER_SKIN_MAP.get(p.getUniqueId())).orElse(Skin.fromGameProfile(WrappedGameProfile.fromPlayer(p)));
+		return Optional.ofNullable(PLAYER_SKIN_MAP.get(p.getUniqueId())).orElse(getSkin(p));
 	}
 
 	public static void changeSkin(Player p, @Nullable Skin skin) {

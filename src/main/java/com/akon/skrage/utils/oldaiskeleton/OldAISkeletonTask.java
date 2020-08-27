@@ -22,7 +22,7 @@ public class OldAISkeletonTask implements Runnable {
 					PathfinderGoalBowShoot bowShoot = (PathfinderGoalBowShoot)ReflectionUtil.getField(EntitySkeletonAbstract.class, nmsSkeleton, "b");
 					if (NMSUtil.getGoalSelectors(skeleton).contains(bowShoot)) {
 						nmsSkeleton.goalSelector.a(bowShoot);
-						nmsSkeleton.goalSelector.a(new PathfinderGoalArrowAttack(nmsSkeleton, 1.0D, 20, 60, 15.0F));
+						nmsSkeleton.goalSelector.a(4, new PathfinderGoalArrowAttack(nmsSkeleton, 1.0D, 20, 60, 15.0F));
 					}
 				} catch (ReflectiveOperationException ex) {
 					ex.printStackTrace();

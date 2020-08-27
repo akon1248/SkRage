@@ -44,6 +44,7 @@ public class SimpleExpressions {
 			ExpressionFactory.registerExpression("ExprCSWeaponDisplayName", "weapon display[ ]name", String.class, String.class, str -> ((CSDirector)Bukkit.getServer().getPluginManager().getPlugin("CrackShot")).getString(str + ".Item_Information.Item_Name"), null, "CrackShotの武器の表示名");
 			ExpressionFactory.registerExpression("ExprReloadDuration", "reload duration", WeaponReloadEvent.class, Number.class, WeaponReloadEvent::getReloadDuration, (event, number) -> event.setReloadDuration(number.intValue()), "CrackShot Reload Startイベントでの武器のリロード時間");
 		}
+		ExpressionFactory.registerExpression("ExprAlwaysAngry", "always angry state", LivingEntity.class, Boolean.class, entity -> entity instanceof PigZombie && NMSUtil.isAlwaysAngry((PigZombie)entity), (entity, bool) -> {if (entity instanceof PigZombie) NMSUtil.setAlwaysAngry((PigZombie)entity, bool);}, "ゾンビピッグマンが常に敵対的かどうか");
 		ExpressionFactory.registerExpression("ExprBossBarFromEntity", "boss[ ]bar", Entity.class, BossBar.class, NMSUtil::getBossBar, null, "エンダードラゴン、ウィザーのボスバー", "SkellettもしくはskRayFallを導入しないとボスバーを扱うことはできません");
 		ExpressionFactory.registerExpression("ExprDeathMessageFormat", "death message format", LivingEntity.class, String.class, NMSUtil::getDeathMessageFormat, null, "エンティティが仮に現在死亡した場合の死亡メッセージのフォーマット");
 		ExpressionFactory.registerExpression("ExprEntityName", "entity name", Entity.class, String.class, Entity::getName, null, "エンティティの名前を取得します", "エンティティにカスタムネームが設定されていない場合通常の表示名");

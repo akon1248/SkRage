@@ -162,8 +162,7 @@ public class NMSUtil {
 	}
 
 	//ゾンビピッグマンのAIを取得し、常に怒っている状態かを確認する
-	public boolean isAlwaysAngry(PigZombie pigZombie) {
-		EntityPigZombie entityPigZombie = ((CraftPigZombie)pigZombie).getHandle();
+	public static boolean isAlwaysAngry(PigZombie pigZombie) {
 		PathfinderGoal angerOther = null;
 		PathfinderGoal anger = null;
 		for (PathfinderGoal pathfinderGoal: getTargetSelectors(pigZombie)) {
@@ -177,31 +176,25 @@ public class NMSUtil {
 	}
 
 	//ゾンビピッグマンのAIを操作してAIをゾンビと同様にする
-	public void setAlwaysAngry(PigZombie pigZombie, boolean alwaysAngry) {
+	public static void setAlwaysAngry(PigZombie pigZombie, boolean alwaysAngry) {
 		EntityPigZombie entityPigZombie = ((CraftPigZombie)pigZombie).getHandle();
-		try {
-			if (alwaysAngry && isAlwaysAngry(pigZombie)) {
+		if (!alwaysAngry && isAlwaysAngry(pigZombie)) {
+			try {
+				getTargetSelectors(pigZombie).stream()
+					.filter(pathfinderGoal -> pathfinderGoal instanceof PathfinderGoalHurtByTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget)
+					.forEach(entityPigZombie.targetSelector::a);
 				entityPigZombie.targetSelector.a(1, (PathfinderGoal)ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAngerOther"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
 				entityPigZombie.targetSelector.a(2, (PathfinderGoal)ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAnger"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
-			} else {
-				PathfinderGoal angerOther = null;
-				PathfinderGoal anger = null;
-				for (PathfinderGoal pathfinderGoal: getTargetSelectors(pigZombie)) {
-					if (pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAngerOther")) {
-						angerOther = pathfinderGoal;
-					} else if (pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAnger")) {
-						anger = pathfinderGoal;
-					}
-				}
-				if (angerOther != null) {
-					entityPigZombie.targetSelector.a(angerOther);
-				}
-				if (anger != null) {
-					entityPigZombie.targetSelector.a(anger);
-				}
+			} catch (ReflectiveOperationException ex) {
+				ex.printStackTrace();
 			}
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
+		} else {
+			getTargetSelectors(pigZombie).stream()
+				.filter(pathfinderGoal -> pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie.PathfinderGoalAngerOther") || pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie.PathfinderGoalAnger"))
+				.forEach(entityPigZombie.targetSelector::a);
+			entityPigZombie.targetSelector.a(1, new PathfinderGoalHurtByTarget(entityPigZombie, true, EntityPigZombie.class));
+			entityPigZombie.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(entityPigZombie, EntityHuman.class, true));
+			entityPigZombie.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(entityPigZombie, EntityIronGolem.class, true));
 		}
 	}
 

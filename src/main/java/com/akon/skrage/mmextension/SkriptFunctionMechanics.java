@@ -21,8 +21,10 @@ public class SkriptFunctionMechanics extends SkillMechanic implements INoTargetS
     public boolean cast(SkillMetadata skillMetadata) {
         if (this.funcName != null) {
             Function<?> function = Functions.getFunction(this.funcName);
-            if (function != null && function.getParameters().length <= 1 && Entity.class.isAssignableFrom(function.getParameter(0).getType().getC())) {
-                function.execute(new Object[][]{new Object[]{skillMetadata.getCaster().getEntity().getBukkitEntity()}});
+            Class<?> clazz;
+            Entity entity;
+            if (function != null && function.getParameters().length <= 1 && Entity.class.isAssignableFrom((clazz = function.getParameter(0).getType().getC())) && clazz.isInstance(entity = skillMetadata.getCaster().getEntity().getBukkitEntity())) {
+                function.execute(new Object[][]{new Object[]{entity}});
             }
         }
         return false;

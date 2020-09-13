@@ -1,10 +1,16 @@
 package com.akon.skrage.utils.skin;
 
+import com.akon.skrage.utils.ReflectionUtil;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import lombok.Data;
-
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -32,6 +38,19 @@ public class Skin {
 			return new Skin(property.getValue(), property.getSignature());
 		}
 		return null;
+	}
+
+	public ItemStack toPlayerHead() {
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+		SkullMeta meta = (SkullMeta)head.getItemMeta();
+		WrappedGameProfile profile = this.toGameProfile(UUID.nameUUIDFromBytes(this.value.getBytes(StandardCharsets.UTF_8)), StringUtils.EMPTY);
+		try {
+			ReflectionUtil.setField(meta, "profile", profile);
+		} catch (ReflectiveOperationException ex) {
+			ex.printStackTrace();
+		}
+		head.setItemMeta(meta);
+		return head;
 	}
 
 }

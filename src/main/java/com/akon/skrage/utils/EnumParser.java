@@ -9,7 +9,7 @@ public class EnumParser<T extends Enum<?>> extends Parser<T> {
 
 	@Override
 	public T parse(String s, ParseContext context) {
-		if (s.matches("[^A-Z]")) {
+		if (s.matches("[^_A-Z]")) {
 			try {
 				Class<T> clazz = (Class<T>)((ParameterizedType)EnumParser.class.getGenericSuperclass()).getActualTypeArguments()[0];
 				return (T)ReflectionUtil.getStaticField(clazz, s.toLowerCase().replace(" ", "_"));

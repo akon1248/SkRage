@@ -7,6 +7,7 @@ import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -42,24 +43,31 @@ public class NMSUtil {
 		ArrayList<ItemStack> result = new ArrayList<>();
 		net.minecraft.server.v1_12_R1.WorldServer nmsWorld = ((CraftWorld)block.getWorld()).getHandle();
 		BlockPosition blockposition = new BlockPosition(block.getX(), block.getY(), block.getZ());
-		IBlockData iblockdata = nmsWorld.getType(blockposition);
-		net.minecraft.server.v1_12_R1.Block nmsBlock = iblockdata.getBlock();
-		net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item);
-		if (nmsBlock.getBlockData().g() && nmsBlock.isTileEntity() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, nmsItemStack) > 0) {
-			Item nmsItem = Item.getItemOf(nmsBlock);
-			int i = 0;
-			if (nmsItem.k()) {
-				i = nmsBlock.toLegacyData(iblockdata);
-			}
-			result.add(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nmsItem, 1, i)));
+		Material[] cut = new Material[]{Material.DEAD_BUSH, Material.LEAVES, Material.LEAVES_2, Material.LONG_GRASS, Material.DOUBLE_PLANT, Material.WEB};
+		if (block.getType() == Material.SNOW) {
+			result.add(new ItemStack(Material.SNOW_BALL, 2 + block.getData()));
+		} else if (item.getType() == Material.SHEARS && Arrays.asList(cut).contains(block.getType())) {
+			result.add(new ItemStack(block.getType(), 1, (short)(block.getType() == Material.LEAVES ? block.getData() % 4 : block.getType() == Material.LEAVES_2 ? block.getData() % 2 : block.getData())));
 		} else {
-			int fortune = EnchantmentManager.getEnchantmentLevel(Enchantments.LOOT_BONUS_BLOCKS, nmsItemStack);
-			int dropCount = nmsBlock.getDropCount(fortune, nmsWorld.random);
-			for (int i = 0; i < dropCount; i++) {
-				if (nmsWorld.random.nextFloat() < 1) {
-					Item nmsItem = nmsBlock.getDropType(iblockdata, nmsWorld.random, fortune);
-					if (nmsItem != Items.a) {
-						result.add(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nmsItem, 1, nmsBlock.getDropData(iblockdata))));
+			IBlockData iblockdata = nmsWorld.getType(blockposition);
+			net.minecraft.server.v1_12_R1.Block nmsBlock = iblockdata.getBlock();
+			net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item);
+			if (nmsBlock.getBlockData().g() && !nmsBlock.isTileEntity() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, nmsItemStack) > 0) {
+				Item nmsItem = Item.getItemOf(nmsBlock);
+				int i = 0;
+				if (nmsItem.k()) {
+					i = nmsBlock.toLegacyData(iblockdata);
+				}
+				result.add(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nmsItem, 1, i)));
+			} else {
+				int fortune = EnchantmentManager.getEnchantmentLevel(Enchantments.LOOT_BONUS_BLOCKS, nmsItemStack);
+				int dropCount = nmsBlock.getDropCount(fortune, nmsWorld.random);
+				for (int i = 0; i < dropCount; i++) {
+					if (nmsWorld.random.nextFloat() < 1) {
+						Item nmsItem = nmsBlock.getDropType(iblockdata, nmsWorld.random, fortune);
+						if (nmsItem != Items.a) {
+							result.add(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nmsItem, 1, nmsBlock.getDropData(iblockdata))));
+						}
 					}
 				}
 			}

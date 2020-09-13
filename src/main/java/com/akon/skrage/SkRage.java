@@ -15,9 +15,9 @@ public class SkRage extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		try {
-			Skript.registerAddon(this).loadClasses("com.akon", "skrage");
-		} catch (IOException e) {
-			e.printStackTrace();
+			Skript.registerAddon(this).loadClasses("com.akon.skrage", "skript");
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 		Registration.registerRepeatingTasks();
 		Registration.registerBukkitListeners();

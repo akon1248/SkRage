@@ -28,8 +28,8 @@ public class ConsoleLogEvent extends Event implements Cancellable {
 	private static final HashMap<String, ChatColor> CONSOLE_COLOR_MAP = Maps.newHashMap();
 	@Setter
 	private boolean cancelled;
-	private String message;
-	private StandardLevel level;
+	private final String message;
+	private final StandardLevel level;
 
 	static {
 		CONSOLE_COLOR_MAP.put('\u001b' + "[0;30;22m", ChatColor.BLACK);

@@ -73,9 +73,7 @@ public class AnvilGUI {
 	}
 
 	public void close() {
-		if (this.viewer == null) {
-			throw new IllegalStateException("GUIを表示しているプレイヤーがいません");
-		}
+		Optional.ofNullable(this.viewer).orElseThrow(() -> new IllegalStateException("GUIを表示しているプレイヤーがいません"));
 		Bukkit.getPluginManager().callEvent(new AnvilGUICloseEvent(this.viewer, this));
 		PacketContainer close = new PacketContainer(PacketType.Play.Server.CLOSE_WINDOW);
 		close.getIntegers().write(0, this.windowId);

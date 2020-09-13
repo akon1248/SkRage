@@ -30,10 +30,10 @@ public class CustomCombatTracker extends CombatTracker {
 	}
 	
 	public static CustomCombatTracker fromOrigin(CombatTracker combatTracker) {
-		Class<CombatTracker> clazz = CombatTracker.class;
-		if (!combatTracker.getClass().equals(clazz)) {
-			throw new IllegalArgumentException("CombatTrackerのサブクラスのインスタンスを引数として渡すことはできません");
+		if (combatTracker instanceof CustomCombatTracker) {
+			return (CustomCombatTracker)combatTracker;
 		}
+		Class<CombatTracker> clazz = CombatTracker.class;
 		CustomCombatTracker custom = new CustomCombatTracker(combatTracker.h());
 		try {
 			ReflectionUtil.copyFields(clazz, combatTracker, custom);

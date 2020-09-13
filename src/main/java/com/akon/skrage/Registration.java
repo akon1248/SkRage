@@ -1,9 +1,11 @@
 package com.akon.skrage;
 
+import com.akon.skrage.mmextension.MythicListener;
 import com.akon.skrage.utils.anvilgui.AnvilGUIListener;
 import com.akon.skrage.utils.combattracker.CombatTrackerListener;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonPacketListener;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonTask;
+import com.akon.skrage.utils.signeditor.SignEditorListener;
 import com.akon.skrage.utils.skin.SkinListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketListener;
@@ -27,8 +29,12 @@ public class Registration {
 	}
 
 	public static void registerBukkitListeners() {
+		if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs") && Bukkit.getPluginManager().isPluginEnabled("MythicSkriptAddon")) {
+			Bukkit.getPluginManager().registerEvents(new MythicListener(), PLUGIN);
+		}
 		Bukkit.getPluginManager().registerEvents(new CombatTrackerListener(), PLUGIN);
 		Bukkit.getPluginManager().registerEvents(AnvilGUIListener.INSTANCE, PLUGIN);
+		Bukkit.getPluginManager().registerEvents(SignEditorListener.INSTANCE, PLUGIN);
 		registerClasses("com.akon.skrage.listener", clazz -> {
 			if (Listener.class.isAssignableFrom(clazz)) {
 				try {
@@ -45,6 +51,7 @@ public class Registration {
 		ProtocolLibrary.getProtocolManager().addPacketListener(new OldAISkeletonPacketListener());
 		ProtocolLibrary.getProtocolManager().addPacketListener(new SkinListener());
 		ProtocolLibrary.getProtocolManager().addPacketListener(AnvilGUIListener.INSTANCE);
+		ProtocolLibrary.getProtocolManager().addPacketListener(SignEditorListener.INSTANCE);
 		registerClasses("com.akon.skrage.listener.packet", clazz -> {
 			if (PacketListener.class.isAssignableFrom(clazz)) {
 				try {

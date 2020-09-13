@@ -9,7 +9,7 @@ public class MythicListener implements Listener {
     @EventHandler
     public void onLoadMechanics(MythicMechanicLoadEvent e) {
         if (e.getMechanicName().equalsIgnoreCase("skript_function")) {
-            e.register(new SkriptFunctionMechanics(e.getMechanicName(), e.getConfig()));
+            e.register(new SkriptFunctionMechanic(e.getMechanicName(), e.getConfig()));
         }
     }
 }

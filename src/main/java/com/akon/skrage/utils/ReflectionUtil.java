@@ -274,7 +274,7 @@ public class ReflectionUtil {
 	 * @throws InstantiationException 指定されたクラスが抽象クラスの場合
 	 * @throws IllegalAccessException ConstructorオブジェクトがJava言語アクセス制御を実施しており、基本となるフィールドにアクセスできない場合
 	 */
-	public static <T> T invokeConstructor(Class<T> clazz, Class[] paramTypes, Object[] params) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public static <T> T invokeConstructor(Class<T> clazz, Class<?>[] paramTypes, Object[] params) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		Constructor<T> constructor = clazz.getDeclaredConstructor(paramTypes);
 		constructor.setAccessible(true);
 		return constructor.newInstance(params);

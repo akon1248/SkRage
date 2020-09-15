@@ -1,18 +1,19 @@
-package com.akon.skrage.utils;
+package com.akon.skrage.classes;
 
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
+import com.akon.skrage.utils.ReflectionUtil;
 
 import java.lang.reflect.ParameterizedType;
 
-public class EnumParser<T extends Enum<?>> extends Parser<T> {
+public class EnumParser<T extends Enum<T>> extends Parser<T> {
 
 	@Override
 	public T parse(String s, ParseContext context) {
 		if (s.matches("[^_A-Z]")) {
 			try {
 				Class<T> clazz = (Class<T>)((ParameterizedType)EnumParser.class.getGenericSuperclass()).getActualTypeArguments()[0];
-				return (T)ReflectionUtil.getStaticField(clazz, s.toLowerCase().replace(" ", "_"));
+				return (T) ReflectionUtil.getStaticField(clazz, s.toLowerCase().replace(" ", "_"));
 			} catch (IllegalArgumentException | NoSuchFieldException | IllegalAccessException ignored) {}
 		}
 		return null;

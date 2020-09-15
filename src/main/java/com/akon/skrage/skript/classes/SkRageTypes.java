@@ -7,7 +7,7 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import com.akon.skrage.skript.syntaxes.expressions.ExprDamageModifier;
-import com.akon.skrage.utils.EnumParser;
+import com.akon.skrage.classes.EnumParser;
 import com.akon.skrage.utils.anvilgui.AnvilGUI;
 import com.akon.skrage.utils.signeditor.SignEditor;
 import com.akon.skrage.utils.skin.Skin;

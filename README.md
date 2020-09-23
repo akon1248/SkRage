@@ -4,6 +4,15 @@
 Document
 ```
 Events:
+	On add tracking player:
+		ID: add_tracking_player
+		Patterns:
+			[on] add tracking player
+		Event values:
+			event-world
+			event-player
+			event-entity
+		Cancellable: true
 	On anvil gui close:
 		ID: anvil_gui_close
 		Description:
@@ -11,9 +20,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
+			event-anvilinv
 			event-world
 			event-player
-			event-anvilinv
 		Cancellable: false
 	On anvil gui done:
 		ID: anvil_gui_done
@@ -22,10 +31,10 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
+			event-anvilinv
 			event-world
 			event-player
 			event-string
-			event-anvilinv
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -34,19 +43,19 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
+			event-anvilinv
 			event-world
 			event-player
-			event-anvilinv
 		Cancellable: true
 	On combust by sunlight:
 		ID: combust_by_sunlight
 		Description:
-			ゾンビやスケルトンなどが日光によって燃えたとき
+			ゾンビやスケルトンが日光によって燃えたとき
 		Patterns:
 			[on] combust[ing] by sunlight
 		Event values:
-			event-entity
 			event-world
+			event-entity
 		Cancellable: true
 	On console log:
 		ID: console_log
@@ -65,9 +74,9 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
+			event-player
 			event-entity
 			event-projectile
-			event-player
 			event-string
 		Cancellable: true
 	On cs pre shoot:
@@ -97,11 +106,42 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
+			event-player
 			event-entity
 			event-projectile
-			event-player
 			event-string
 		Cancellable: false
+	On disguise:
+		ID: disguise
+		Description:
+			エンティティが変身したとき
+		Patterns:
+			[on] disguise
+		Event values:
+			event-disguise
+			event-entity
+		Cancellable: true
+	On jump:
+		ID: jump
+		Description:
+			プレイヤーがジャンプしたとき
+		Patterns:
+			[on] jump
+		Event values:
+			event-world
+			event-player
+		Cancellable: true
+	On player velocity:
+		ID: player_velocity
+		Description:
+			プレイヤーのベクトルが変化したとき
+		Patterns:
+			[on] [player] velocity
+		Event values:
+			event-world
+			event-player
+			event-vector
+		Cancellable: true
 	On plugin message receiving:
 		ID: plugin_message_receiving
 		Patterns:
@@ -118,6 +158,14 @@ Events:
 			event-world
 			event-player
 		Cancellable: true
+	On receive creative item:
+		ID: receive_creative_item
+		Patterns:
+			[on] receive creative item
+		Event values:
+			event-world
+			event-player
+		Cancellable: false
 	On reload complete:
 		ID: reload_complete
 		Description:
@@ -138,6 +186,15 @@ Events:
 			event-player
 			event-string
 		Cancellable: false
+	On remove tracking player:
+		ID: remove_tracking_player
+		Patterns:
+			[on] remove tracking player
+		Event values:
+			event-world
+			event-player
+			event-entity
+		Cancellable: true
 	On scope:
 		ID: scope
 		Description:
@@ -147,6 +204,48 @@ Events:
 		Event values:
 			event-player
 			event-string
+		Cancellable: true
+	On show item:
+		ID: show_item
+		Description:
+			アイテムがプレイヤーに表示されるとき
+		Patterns:
+			[on] (sen(d|t)|show) item[stack]
+		Event values:
+			event-world
+			event-player
+		Cancellable: false
+	On sign editor done:
+		ID: sign_editor_done
+		Description:
+			プレイヤーがSignEditorでの編集を終えた時(通常の看板では発動しません)
+		Patterns:
+			[on] sign[ ]editor done
+		Event values:
+			event-world
+			event-player
+			event-signeditor
+		Cancellable: false
+	On sign editor open:
+		ID: sign_editor_open
+		Description:
+			SignEditorが開かれたとき(通常の看板では発動しません)
+		Patterns:
+			[on] sign[ ]editor open
+		Event values:
+			event-world
+			event-player
+			event-signeditor
+		Cancellable: true
+	On undisguise:
+		ID: undisguise
+		Description:
+			エンティティが変身を解いたとき
+		Patterns:
+			[on] undisguise
+		Event values:
+			event-disguise
+			event-entity
 		Cancellable: true
 	On unscope:
 		ID: unscope
@@ -190,6 +289,10 @@ Conditions:
 		Patterns:
 			%entity% is [(crackshot|cs)] weapon bullet
 Effects:
+	EffArmSwing:
+		ID: EffArmSwing
+		Patterns:
+			make arm swing %livingentity%
 	EffBetterBreakNaturally:
 		ID: EffBetterBreakNaturally
 		Description:
@@ -220,35 +323,78 @@ Effects:
 			ブロックが壊れた時のエフェクトを発生させます
 		Patterns:
 			show %itemtype% (break[ing]|destroy) effect at %location% [for %-players%]
-	EffBlockBreakEffect:
-		ID: EffBlockBreakEffect
-		Description:
-			ブロックが壊れた時のエフェクトを発生させます
-		Patterns:
-			make %entities% glow[ing] for %players%
-			make %entities% unglow[ing] for %players%
 	EffBroadcastDeathMessage:
 		ID: EffBroadcastDeathMessage
 		Patterns:
 			broadcast death message of %livingentity%
+	EffChestOpenClose:
+		ID: EffChestOpenClose
+		Description:
+			チェストやシュルカーボックスなどに開く/閉じるの動作をさせます
+		Patterns:
+			make open %block%
+			make close %block%
+	EffClientSideEquipment:
+		ID: EffClientSideEquipment
+		Patterns:
+			make %entities% (0¦[main]hand|1¦offhand|2¦(boots|feet)|3¦(le[ggin]gs)|4¦chest[plate]|5¦he(lmet|ad)) %itemtype% for %players%
+	EffClientSideGlowing:
+		ID: EffClientSideGlowing
+		Description:
+			特定のプレイヤーに対してEntityが発光しているように見せます
+		Patterns:
+			make %entities% glow[ing] for %players%
+			make %entities% unglow[ing] for %players%
 	EffCloseAnvilGUI:
 		ID: EffCloseAnvilGUI
 		Description:
 			金床のGUIを閉じます
 		Patterns:
 			close anvil[ ]gui %anvilinv%
+	EffDamageSource:
+		ID: EffDamageSource
+		Description:
+			DamageSourceを用いてエンティティにダメージを与えます
+			※一度使用したDamageSourceは不変になります
+		Patterns:
+			damage %entity% by %number% with damage[ ]source %damagesource%
 	EffDespawn:
 		ID: EffDespawn
 		Description:
 			エンティティをデスポーンさせます
 		Patterns:
 			(despawn|remove) %entities%
+	EffDestroyStage:
+		ID: EffDestroyStage
+		Description:
+			ブロックにひびをつけます
+			idを同一にすれば後からひびの入り具合を変更できます
+			ひびの入り具合は0 ~ 9
+		Patterns:
+			set destroy stage with id %string% of %block% to %number%
+	EffEntityVisibility:
+		ID: EffEntityVisibility
+		Patterns:
+			hide entity %entity% from %players%
+			(show|reveal) entity %entity% to %players%
+	EffMakePlayerAttack:
+		ID: EffMakePlayerAttack
+		Description:
+			プレイヤーに攻撃をさせます
+		Patterns:
+			make %player% attack %livingentity%
 	EffOpenAnvilGUI:
 		ID: EffOpenAnvilGUI
 		Description:
 			プレイヤーに金床のGUIを表示します
 		Patterns:
 			open anvil[ ]gui named %string% with icon %itemtype% text %string% (to|for) %player%
+	EffOpenSignEditor:
+		ID: EffOpenSignEditor
+		Description:
+			プレイヤーに看板のSignEditorを開かせます
+		Patterns:
+			open sign[ ]editor named %string% with (line|text) 1 %string% (line|text) 2 %string% (line|text) 3 %string% (line|text) 4 %string% (to|for) %player%
 	EffPotionBreakEffect:
 		ID: EffPotionBreakEffect
 		Description:
@@ -263,6 +409,13 @@ Effects:
 			また、一度死亡したEntityをリスポーンさせることも可能です
 		Patterns:
 			[re]spawn [(a|an)] %entity% at %location%
+	EffUpdateInventory:
+		ID: EffUpdateInventory
+		Description:
+			プレイヤーのインベントリを更新します
+		Patterns:
+			update %player%'s inventory
+			update inventory of %player%
 Expressions:
 	ExprAllCSWeapons:
 		ID: ExprAllCSWeapons
@@ -279,8 +432,8 @@ Expressions:
 		Changers:
 			set
 		Patterns:
-			always angry state of %livingentity%
 			%livingentity%'s always angry state
+			always angry state of %livingentity%
 	ExprAnvilGUI:
 		ID: ExprAnvilGUI
 		Description:
@@ -289,8 +442,9 @@ Expressions:
 		Changers:
 			none
 		Patterns:
-			anvil[ ]gui of %player%
-			%player%'s anvil[ ]gui
+			%player%'s [opened] anvil[ ]gui
+			[opened] anvil[ ]gui of %player%
+			[opened] anvil[ ]gui from %player%
 	ExprAnvilGUIName:
 		ID: ExprAnvilGUIName
 		Description:
@@ -299,8 +453,8 @@ Expressions:
 		Changers:
 			none
 		Patterns:
-			anvil[ ]gui name of %anvilinv%
 			%anvilinv%'s anvil[ ]gui name
+			anvil[ ]gui name of %anvilinv%
 	ExprBetterDropsOfBlock:
 		ID: ExprBetterDropsOfBlock
 		Description:
@@ -319,8 +473,9 @@ Expressions:
 		Changers:
 			none
 		Patterns:
-			boss[ ]bar of %entity%
 			%entity%'s boss[ ]bar
+			boss[ ]bar of %entity%
+			boss[ ]bar from %entity%
 	ExprBulletWeaponName:
 		ID: ExprBulletWeaponName
 		Description:
@@ -329,8 +484,19 @@ Expressions:
 		Changers:
 			none
 		Patterns:
-			[(crackshot|cs)] weapon [internal[ ]]name of %entity%
 			%entity%'s [(crackshot|cs)] weapon [internal[ ]]name
+			[(crackshot|cs)] weapon [internal[ ]]name of %entity%
+			[(crackshot|cs)] weapon [internal[ ]]name from %entity%
+	ExprBytes:
+		ID: ExprBytes
+		Description:
+			文字列をバイトのリストに変換します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			bytes of %string%
+			bytes from %string%
 	ExprCSDamage:
 		ID: ExprCSDamage
 		Description:
@@ -371,7 +537,7 @@ Expressions:
 			none
 		Patterns:
 			weapon display[ ]name of %string%
-			%string%'s weapon display[ ]name
+			weapon display[ ]name from %string%
 	ExprCSWeaponModule:
 		ID: ExprCSWeaponModule
 		Description:
@@ -393,24 +559,33 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			(cs|crackshot) weapon (name|title) (from|of) %item%
+			(cs|crackshot) weapon (name|title) (from|of) %itemtype%
+	ExprCreateItemType:
+		ID: ExprCreateItemType
+		Return type: Item Type
+		Changers:
+			none
+		Patterns:
+			[a] [new] item[ ]type %string% [data %-number%]
+	ExprCustomDamageSource:
+		ID: ExprCustomDamageSource
+		Description:
+			このアドオンのDamageSourceによるダメージだった場合、そのDamageSourceを取得します
+		Return type: Damage Source
+		Changers:
+			none
+		Patterns:
+			custom damage source
 	ExprCustomPlayerDisguise:
 		ID: ExprCustomPlayerDisguise
 		Description:
 			スキンからプレイヤーのDisguiseを取得します
 			Skellettが導入されていないとLibsDisguiseの機能を利用することはできません
-		Return type: Object
+		Return type: disguise
 		Changers:
 			none
 		Patterns:
 			[a] [new] player disguise named %string% with skin %skin%
-	ExprDamageModifier:
-		ID: ExprDamageModifier
-		Return type: Damage Modifier
-		Changers:
-			none
-		Patterns:
-			[the] damage modifier
 	ExprDamageModifierDamage:
 		ID: ExprDamageModifierDamage
 		Description:
@@ -422,6 +597,178 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove
 		Patterns:
 			damage modifier %damagemodifier%
+	ExprDamageSourceDifficultyScaled:
+		ID: ExprDamageSourceDifficultyScaled
+		Description:
+			難易度によって受けるダメージが変化するかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s difficulty scaled
+			difficulty scaled of %damagesource%
+	ExprDamageSourceEntity:
+		ID: ExprDamageSourceEntity
+		Description:
+			ダメージを与えるエンティティ
+		Return type: Entity
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source (entity|attacker)
+			damage[ ]source (entity|attacker) of %damagesource%
+	ExprDamageSourceEntityProjectile:
+		ID: ExprDamageSourceEntityProjectile
+		Description:
+			ダメージを与える飛び道具
+		Return type: Entity
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source projectile
+			damage[ ]source projectile of %damagesource%
+	ExprDamageSourceExhaustion:
+		ID: ExprDamageSourceExhaustion
+		Description:
+			ダメージを受けたときの疲労度
+		Return type: Number
+		Changers:
+			add
+			set
+			remove
+		Patterns:
+			%damagesource%'s exhaustion (cost|damage)
+			exhaustion (cost|damage) of %damagesource%
+	ExprDamageSourceExplosion:
+		ID: ExprDamageSourceExplosion
+		Description:
+			爆発のダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source explosion
+			damage[ ]source explosion of %damagesource%
+	ExprDamageSourceFire:
+		ID: ExprDamageSourceFire
+		Description:
+			炎のダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source fire
+			damage[ ]source fire of %damagesource%
+	ExprDamageSourceIgnoreArmor:
+		ID: ExprDamageSourceIgnoreArmor
+		Description:
+			防具を無視してダメージを与えるかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s ignore armor
+			ignore armor of %damagesource%
+	ExprDamageSourceIgnoreCreativeMode:
+		ID: ExprDamageSourceIgnoreCreativeMode
+		Description:
+			クリエイティブモードの無敵を無視してダメージを与えるかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s ignore creative[[ ]mode]
+			ignore creative[[ ]mode] of %damagesource%
+	ExprDamageSourceIgnoreNoDamageTicks:
+		ID: ExprDamageSourceIgnoreNoDamageTicks
+		Description:
+			無敵時間を無視してダメージを与えるかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s ignore no damage ticks
+			ignore no damage ticks of %damagesource%
+	ExprDamageSourceMagic:
+		ID: ExprDamageSourceMagic
+		Description:
+			魔法ダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source magic
+			damage[ ]source magic of %damagesource%
+	ExprDamageSourcePreventKnockback:
+		ID: ExprDamageSourcePreventKnockback
+		Description:
+			ダメージを与えたときのノックバックを防ぐかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s prevent knockback
+			prevent knockback of %damagesource%
+	ExprDamageSourceProjectile:
+		ID: ExprDamageSourceProjectile
+		Description:
+			飛び道具によるダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source projectile damage
+			damage[ ]source projectile damage of %damagesource%
+	ExprDamageSourceStarvation:
+		ID: ExprDamageSourceStarvation
+		Description:
+			空腹ダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source starvation
+			damage[ ]source starvation of %damagesource%
+	ExprDamageSourceSweep:
+		ID: ExprDamageSourceSweep
+		Description:
+			薙ぎ払い攻撃によるダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source sweep
+			damage[ ]source sweep of %damagesource%
+	ExprDamageSourceThorns:
+		ID: ExprDamageSourceThorns
+		Description:
+			棘の鎧のダメージかどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source thorns
+			damage[ ]source thorns of %damagesource%
+	ExprDamageSourceType:
+		ID: ExprDamageSourceType
+		Description:
+			ダメージのタイプ
+		Return type: Text
+		Changers:
+			set
+		Patterns:
+			%damagesource%'s damage[ ]source type
+			damage[ ]source type of %damagesource%
+	ExprDamageSources:
+		ID: ExprDamageSources
+		Description:
+			デフォルトに存在しているDamageSourceを取得します
+			※この構文を使用して取得できるDamageSourceは不変です
+		Return type: Damage Source
+		Changers:
+			none
+		Patterns:
+			damage[ ]source (0¦fire|1¦lightning|2¦burn|3¦lava|4¦hot floor|5¦stuck|6¦cramming|7¦drown|8¦starve|9¦cactus|10¦fall|11¦fly into wall|12¦out of world|13¦generic|14¦magic|15¦wither|16¦anvil|17¦falling block|18¦dragon breath|19¦fireworks)
 	ExprDeathMessageFormat:
 		ID: ExprDeathMessageFormat
 		Description:
@@ -430,8 +777,20 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			death message format of %livingentity%
 			%livingentity%'s death message format
+			death message format of %livingentity%
+	ExprDisguiseSlimeSize:
+		ID: ExprDisguiseSlimeSize
+		Description:
+			スライムのDisguiseのサイズ
+		Return type: Number
+		Changers:
+			add
+			set
+			remove
+		Patterns:
+			%disguise%'s [slime] disguise size
+			[slime] disguise size of %disguise%
 	ExprDisplayedSkin:
 		ID: ExprDisplayedSkin
 		Description:
@@ -452,8 +811,20 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			entity name of %entity%
 			%entity%'s entity name
+			entity name of %entity%
+	ExprEntitySize:
+		ID: ExprEntitySize
+		Description:
+			エンティティの幅と高さを取得します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			height of %entity%
+			%entity%'s height
+			width of %entity%
+			%entity%'s width
 	ExprExplosionFire:
 		ID: ExprExplosionFire
 		Description:
@@ -517,6 +888,16 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove all
 		Patterns:
 			hit entity
+	ExprIllagerSpell:
+		ID: ExprIllagerSpell
+		Description:
+			エヴォーカー、イリュージョナーが現在唱えている呪文(none, summon vex, fangs, wololo, disappear, blindness)
+		Return type: Text
+		Changers:
+			set
+		Patterns:
+			%livingentity%'s [casting] spell
+			[casting] spell of %livingentity%
 	ExprItemCooldown:
 		ID: ExprItemCooldown
 		Description:
@@ -540,7 +921,6 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			item name of %itemstack%
-			%itemstack%'s item name
 	ExprKeepInventory:
 		ID: ExprKeepInventory
 		Description:
@@ -569,8 +949,8 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove
 			remove all
 		Patterns:
-			killer of %livingentity%
 			%livingentity%'s killer
+			killer of %livingentity%
 	ExprLastOpenedAnvilGUI:
 		ID: ExprLastOpenedAnvilGUI
 		Description:
@@ -580,6 +960,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			last opened anvil[ ]gui
+	ExprLastOpenedSignEditor:
+		ID: ExprLastOpenedSignEditor
+		Description:
+			open sign editorの構文を使って最後に開かれたSignEditorを取得します
+		Return type: Sign Editor
+		Changers:
+			none
+		Patterns:
+			last opened sign[ ]editor
 	ExprLunaChatJapanize:
 		ID: ExprLunaChatJapanize
 		Description:
@@ -609,8 +998,17 @@ send "Projectile_Damage: %{_weapondamage}%"
 			set
 			remove
 		Patterns:
-			max[imum] no damage tick[s] of %livingentity%
 			%livingentity%'s max[imum] no damage tick[s]
+			max[imum] no damage tick[s] of %livingentity%
+	ExprNewDamageSource:
+		ID: ExprNewDamageSource
+		Description:
+			指定されたタイプからDamageSourceを作成します(タイプは自由ですがデフォルトにないものを使用した場合に死亡メッセージが通常通り表示されなくなります)
+		Return type: Damage Source
+		Changers:
+			none
+		Patterns:
+			[a] [new] damage[ ]source with type %string%
 	ExprNewEntity:
 		ID: ExprNewEntity
 		Description:
@@ -643,8 +1041,17 @@ send "Projectile_Damage: %{_weapondamage}%"
 			set
 			remove
 		Patterns:
-			no damage tick[s] of %livingentity%
 			%livingentity%'s no damage tick[s]
+			no damage tick[s] of %livingentity%
+	ExprPlayerHead:
+		ID: ExprPlayerHead
+		Description:
+			スキンからプレイヤーヘッドを作成します
+		Return type: Item / Material
+		Changers:
+			none
+		Patterns:
+			player head from [skin] %skin%
 	ExprPluginMessageChannel:
 		ID: ExprPluginMessageChannel
 		Description:
@@ -667,6 +1074,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			delete
 		Patterns:
 			plugin message contents
+	ExprReceivedItem:
+		ID: ExprReceivedItem
+		Description:
+			creative item receiveイベントでクライアント側から送られたアイテム
+		Return type: Item / Material
+		Changers:
+			set
+		Patterns:
+			receive[d] item[stack]
 	ExprReloadDuration:
 		ID: ExprReloadDuration
 		Description:
@@ -678,6 +1094,35 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove
 		Patterns:
 			reload duration
+	ExprShownItem:
+		ID: ExprShownItem
+		Description:
+			show itemイベントで表示されるアイテム
+		Return type: Item / Material
+		Changers:
+			set
+		Patterns:
+			show[n] item[stack]
+	ExprSignEditor:
+		ID: ExprSignEditor
+		Description:
+			プレイヤーに表示されているSignEditor
+		Return type: Sign Editor
+		Changers:
+			none
+		Patterns:
+			%player%'s [opened] sign[ ]editor
+			[opened] sign[ ]editor of %player%
+			[opened] sign[ ]editor from %player%
+	ExprSignEditorLine:
+		ID: ExprSignEditorLine
+		Description:
+			sign editor doneイベントでプレイヤーが入力した文字列を取得します
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			sign[ ]editor (line|text) %number%
 	ExprSkeletonOldAI:
 		ID: ExprSkeletonOldAI
 		Description:
@@ -686,8 +1131,8 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			set
 		Patterns:
-			old ai state of %livingentity%
 			%livingentity%'s old ai state
+			old ai state of %livingentity%
 	ExprSkin:
 		ID: ExprSkin
 		Description:
@@ -696,8 +1141,9 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			skin of %offlineplayer%
 			%offlineplayer%'s skin
+			skin of %offlineplayer%
+			skin from %offlineplayer%
 	ExprSource:
 		ID: ExprSource
 		Description:
@@ -709,6 +1155,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			reset
 		Patterns:
 			(owner|source) of %entity%
+	ExprStringFromBytes:
+		ID: ExprStringFromBytes
+		Description:
+			バイトのリストから文字列を作成します(UTF-8)
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			(string|text) from [bytes] %numbers%
 	ExprTicksLived:
 		ID: ExprTicksLived
 		Description:
@@ -719,8 +1174,8 @@ send "Projectile_Damage: %{_weapondamage}%"
 			set
 			remove
 		Patterns:
-			ticks lived of %entity%
 			%entity%'s ticks lived
+			ticks lived of %entity%
 	ExprTo:
 		ID: ExprTo
 		Description:
@@ -750,11 +1205,19 @@ Types:
 		Usage: absorption, armor, base, blocking, hard hat, magic, resistance
 		Patterns:
 			damage[ ]modifier[s]
+	Damage Source:
+		ID: DamageSourceBuilder
+		Patterns:
+			damage[ ]source[s]
 	Log Level:
 		ID: StandardLevel
 		Usage: off, fatal, error, warn, info, debug, trace, all
 		Patterns:
 			log[ ]level[s]
+	Sign Editor:
+		ID: SignEditor
+		Patterns:
+			sign[ ]editor[s]
 	Skin:
 		ID: Skin
 		Patterns:

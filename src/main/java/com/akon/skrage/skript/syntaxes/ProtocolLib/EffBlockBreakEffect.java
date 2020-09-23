@@ -26,7 +26,7 @@ public class EffBlockBreakEffect extends Effect {
     private Expression<Player> player;
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEffect(EffBlockBreakEffect.class, "show %itemtype% (break[ing]|destroy) effect at %location% [for %-players%]");
+        Skript.registerEffect(EffBlockBreakEffect.class, "show %itemtype% (break[ing]|destroy) effect at %location% [for %-players%]");
     }
 
     @Override

@@ -28,9 +28,7 @@ public class EffClientSideGlowing extends Effect {
     private int matchedPattern;
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEffect(EffClientSideGlowing.class, "make %entities% glow[ing] for %players%", "make %entities% unglow[ing] for %players%");
-        }
+        Skript.registerEffect(EffClientSideGlowing.class, "make %entities% glow[ing] for %players%", "make %entities% unglow[ing] for %players%");
     }
 
     @Override

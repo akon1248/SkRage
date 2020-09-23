@@ -1,15 +1,22 @@
 package com.akon.skrage.utils.damagesource;
 
+import com.akon.skrage.SkRage;
+import com.akon.skrage.utils.NMSUtil;
 import com.akon.skrage.utils.ReflectionUtil;
+import lombok.AccessLevel;
 import lombok.Getter;
-import net.minecraft.server.v1_12_R1.DamageSource;
-import net.minecraft.server.v1_12_R1.EntityDamageSource;
-import net.minecraft.server.v1_12_R1.EntityDamageSourceIndirect;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLightningStrike;
+import org.bukkit.craftbukkit.v1_12_R1.event.CraftEventFactory;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +32,28 @@ public class DamageSourceBuilder {
     private static final WeakHashMap<DamageSource, DamageSourceBuilder> DAMAGE_SOURCE_MAP = new WeakHashMap<>();
     public static DamageSourceBuilder currentDamage;
 
+    public static final DamageSourceBuilder FIRE = new DamageSourceBuilder(DamageSource.FIRE);
+    public static final DamageSourceBuilder LIGHTNING = new DamageSourceBuilder(DamageSource.LIGHTNING);
+    public static final DamageSourceBuilder BURN = new DamageSourceBuilder(DamageSource.BURN);
+    public static final DamageSourceBuilder LAVA = new DamageSourceBuilder(DamageSource.LAVA);
+    public static final DamageSourceBuilder HOT_FLOOR = new DamageSourceBuilder(DamageSource.HOT_FLOOR);
+    public static final DamageSourceBuilder STUCK = new DamageSourceBuilder(DamageSource.STUCK);
+    public static final DamageSourceBuilder CRAMMING = new DamageSourceBuilder(DamageSource.CRAMMING);
+    public static final DamageSourceBuilder DROWN = new DamageSourceBuilder(DamageSource.DROWN);
+    public static final DamageSourceBuilder STARVE = new DamageSourceBuilder(DamageSource.STARVE);
+    public static final DamageSourceBuilder CACTUS = new DamageSourceBuilder(DamageSource.CACTUS);
+    public static final DamageSourceBuilder FALL = new DamageSourceBuilder(DamageSource.FALL);
+    public static final DamageSourceBuilder FLY_INTO_WALL = new DamageSourceBuilder(DamageSource.FLY_INTO_WALL);
+    public static final DamageSourceBuilder OUT_OF_WORLD = new DamageSourceBuilder(DamageSource.OUT_OF_WORLD);
+    public static final DamageSourceBuilder GENERIC = new DamageSourceBuilder(DamageSource.GENERIC);
+    public static final DamageSourceBuilder MAGIC = new DamageSourceBuilder(DamageSource.MAGIC);
+    public static final DamageSourceBuilder WITHER = new DamageSourceBuilder(DamageSource.WITHER);
+    public static final DamageSourceBuilder ANVIL = new DamageSourceBuilder(DamageSource.ANVIL);
+    public static final DamageSourceBuilder FALLING_BLOCK = new DamageSourceBuilder(DamageSource.FALLING_BLOCK);
+    public static final DamageSourceBuilder DRAGON_BREATH = new DamageSourceBuilder(DamageSource.DRAGON_BREATH);
+    public static final DamageSourceBuilder FIREWORKS = new DamageSourceBuilder(DamageSource.t);
+    
+    @Getter(AccessLevel.NONE)
     private DamageSource damageSource;
     private String type;
     private boolean ignoreArmor;
@@ -38,10 +67,13 @@ public class DamageSourceBuilder {
     private boolean explosion;
     private boolean sweep;
     private boolean thorns;
+    private boolean ignoreNoDamageTicks;
+    private boolean preventKnockback;
     private Entity entity;
     private Entity projectile;
 
-    public DamageSourceBuilder(DamageSource damageSource) {
+    //ビルドが完了した状態のインスタンスを作成する
+    private DamageSourceBuilder(DamageSource damageSource) {
         this.type = damageSource.translationIndex;
         this.entity = Optional.of(damageSource).map(DamageSource::getEntity).map(net.minecraft.server.v1_12_R1.Entity::getBukkitEntity).orElse(null);
         if (damageSource instanceof EntityDamageSourceIndirect) {
@@ -147,6 +179,18 @@ public class DamageSourceBuilder {
         return this;
     }
 
+    public DamageSourceBuilder setIgnoreNoDamageTicks(boolean ignoreNoDamageTicks) {
+        this.checkBuilt();
+        this.ignoreNoDamageTicks = ignoreNoDamageTicks;
+        return this;
+    }
+
+    public DamageSourceBuilder setPreventKnockback(boolean preventKnockback) {
+        this.checkBuilt();
+        this.preventKnockback = preventKnockback;
+        return this;
+    }
+
     public DamageSourceBuilder setEntity(Entity entity) {
         this.checkBuilt();
         this.entity = entity;
@@ -159,7 +203,7 @@ public class DamageSourceBuilder {
         return this;
     }
 
-    public DamageSource build() {
+    private DamageSource build() {
         this.checkBuilt();
         try {
             DamageSource damageSource;
@@ -210,19 +254,41 @@ public class DamageSourceBuilder {
         return null;
     }
 
-    public boolean buildAndDamage(Entity entity, float damage, boolean preventKnockback, boolean ignoreNoDamageTicks) {
-        Optional<LivingEntity> livingEntity;
+    public boolean buildAndDamage(Entity entity, float damage) {
+        Optional<LivingEntity> livingEntity = Optional.of(entity).filter(LivingEntity.class::isInstance).map(ent -> ((LivingEntity)ent));
         AtomicInteger noDamageTicks = new AtomicInteger(-1);
-        Optional<AttributeInstance> knockbackAttribute;
-        (knockbackAttribute = (livingEntity = Optional.of(entity).filter(LivingEntity.class::isInstance).map(ent -> ((LivingEntity)ent))).map(ent -> {
-            if (ignoreNoDamageTicks) {
+        Optional<AttributeInstance> knockbackAttribute = livingEntity.map(ent -> {
+            if (this.ignoreNoDamageTicks) {
                 noDamageTicks.set(ent.getNoDamageTicks());
                 ent.setNoDamageTicks(0);
             }
             return ent;
-        }).filter(attribute -> preventKnockback).map(ent -> ent.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE))).ifPresent(attribute -> attribute.addModifier(KNOCKBACK_MODIFIER));
+        }).filter(attribute -> this.preventKnockback).map(ent -> ent.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+        knockbackAttribute.ifPresent(attribute -> attribute.addModifier(KNOCKBACK_MODIFIER));
         currentDamage = this;
-        boolean result = ((CraftEntity)entity).getHandle().damageEntity(this.build(), damage);
+        boolean result;
+        if (this.damageSource == null) {
+            this.build();
+        }
+        Block blockDamage = CraftEventFactory.blockDamage;
+        net.minecraft.server.v1_12_R1.Entity entityDamage = CraftEventFactory.entityDamage;
+        Location loc = entity.getLocation();
+        if (this == LIGHTNING) {
+            CraftEventFactory.entityDamage = ((CraftLightningStrike)NMSUtil.createEntity(entity.getWorld(), EntityType.LIGHTNING)).getHandle();
+            CraftEventFactory.entityDamage.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        } else if (this == HOT_FLOOR || this == CACTUS) {
+            CraftEventFactory.blockDamage = loc.getBlock();
+        } else if (this == ANVIL || this == FALLING_BLOCK) {
+            CraftEventFactory.entityDamage = new EntityFallingBlock(((CraftWorld)loc.getWorld()).getHandle(), loc.getX(), loc.getY(), loc.getZ(), (this == ANVIL ? Blocks.ANVIL : Blocks.SAND).fromLegacyData(0));
+        }
+        try {
+            result = ((CraftEntity)entity).getHandle().damageEntity(this.damageSource, damage);
+        } catch (IllegalStateException ex) {
+            result = false;
+            SkRage.getInstance().getLogger().warning(ex.getMessage());
+        }
+        CraftEventFactory.blockDamage = blockDamage;
+        CraftEventFactory.entityDamage = entityDamage;
         currentDamage = null;
         livingEntity.ifPresent(ent -> Optional.of(noDamageTicks.get()).filter(i -> i > -1).ifPresent(ent::setNoDamageTicks));
         knockbackAttribute.ifPresent(attribute -> attribute.removeModifier(KNOCKBACK_MODIFIER));
@@ -231,6 +297,9 @@ public class DamageSourceBuilder {
 
     @Nullable
     public static DamageSourceBuilder getBuilder(DamageSource damageSource) {
+        if (!DAMAGE_SOURCE_MAP.containsKey(damageSource)) {
+            new DamageSourceBuilder(damageSource);
+        }
         return DAMAGE_SOURCE_MAP.get(damageSource);
     }
 

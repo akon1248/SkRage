@@ -15,7 +15,7 @@ public class EvtCombustBySunlight extends SkriptEvent {
 
 	static {
 		Skript.registerEvent("combust by sunlight", EvtCombustBySunlight.class, EntityCombustEvent.class, "combust[ing] by sunlight")
-			.description("ゾンビやスケルトンなどが日光によって燃えたとき");
+			.description("ゾンビやスケルトンが日光によって燃えたとき");
 	}
 
 	@Override

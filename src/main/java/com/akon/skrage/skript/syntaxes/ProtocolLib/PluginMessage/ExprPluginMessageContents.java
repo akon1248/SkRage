@@ -66,7 +66,7 @@ public class ExprPluginMessageContents extends SimpleExpression<Number> {
 	@Override
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
 		List<Byte> byteList = Lists.newArrayList(Arrays.asList(ArrayUtils.toObject(((PluginMessageEvent)e).getContents())));
-		List<Byte> deltaList = Arrays.stream(delta).map(obj -> ((Number)obj).byteValue()).collect(Collectors.toList());
+		List<Byte> deltaList = Arrays.stream(delta).map(Number.class::cast).map(Number::byteValue).collect(Collectors.toList());
 		switch (mode) {
 			case ADD:
 				byteList.addAll(deltaList);

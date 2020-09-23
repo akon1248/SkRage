@@ -12,9 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtReceiveCreativeItem extends SkriptEvent {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEvent("receive creative item", EvtReceiveCreativeItem.class, CreativeItemReceiveEvent.class, "receive creative item");
-        }
+        Skript.registerEvent("receive creative item", EvtReceiveCreativeItem.class, CreativeItemReceiveEvent.class, "receive creative item");
     }
 
     @Override

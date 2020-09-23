@@ -18,9 +18,7 @@ import java.util.Optional;
 public class ExprLastOpenedSignEditor extends SimpleExpression<SignEditor> {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerExpression(ExprLastOpenedSignEditor.class, SignEditor.class, ExpressionType.SIMPLE, "last opened sign[ ]editor");
-        }
+        Skript.registerExpression(ExprLastOpenedSignEditor.class, SignEditor.class, ExpressionType.SIMPLE, "last opened sign[ ]editor");
     }
 
     @Nullable

@@ -17,9 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprSignEditorLine extends SimpleExpression<String> {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerExpression(ExprSignEditorLine.class, String.class, ExpressionType.COMBINED, "sign[ ]editor (line|text) %number%");
-        }
+        Skript.registerExpression(ExprSignEditorLine.class, String.class, ExpressionType.COMBINED, "sign[ ]editor (line|text) %number%");
     }
 
     private Expression<Number> line;

@@ -1,4 +1,4 @@
-package com.akon.skrage.classes;
+package com.akon.skrage.skript.classes;
 
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;

@@ -3,6 +3,7 @@ package com.akon.skrage;
 import com.akon.skrage.mmextension.MythicListener;
 import com.akon.skrage.utils.anvilgui.AnvilGUIListener;
 import com.akon.skrage.utils.combattracker.CombatTrackerListener;
+import com.akon.skrage.utils.hideentity.EntityVisibilityListener;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonPacketListener;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonTask;
 import com.akon.skrage.utils.signeditor.SignEditorListener;
@@ -50,6 +51,7 @@ public class Registration {
 	public static void registerPacketListeners() {
 		ProtocolLibrary.getProtocolManager().addPacketListener(new OldAISkeletonPacketListener());
 		ProtocolLibrary.getProtocolManager().addPacketListener(new SkinListener());
+		ProtocolLibrary.getProtocolManager().addPacketListener(new EntityVisibilityListener());
 		ProtocolLibrary.getProtocolManager().addPacketListener(AnvilGUIListener.INSTANCE);
 		ProtocolLibrary.getProtocolManager().addPacketListener(SignEditorListener.INSTANCE);
 		registerClasses("com.akon.skrage.listener.packet", clazz -> {

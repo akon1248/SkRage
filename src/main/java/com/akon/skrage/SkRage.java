@@ -2,7 +2,6 @@ package com.akon.skrage;
 
 import ch.njol.skript.Skript;
 import com.comphenix.protocol.ProtocolLibrary;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -21,16 +20,12 @@ public class SkRage extends JavaPlugin {
 		}
 		Registration.registerRepeatingTasks();
 		Registration.registerBukkitListeners();
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-			Registration.registerPacketListeners();
-		}
+		Registration.registerPacketListeners();
 	}
 
 	@Override
 	public void onDisable() {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-			ProtocolLibrary.getProtocolManager().removePacketListeners(this);
-		}
+		ProtocolLibrary.getProtocolManager().removePacketListeners(this);
 	}
 	
 	public static SkRage getInstance() {

@@ -31,7 +31,7 @@ EffPotionBreakEffect extends Effect {
     private boolean isSplash;
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEffect(EffPotionBreakEffect.class, "show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]", "show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]");
+        Skript.registerEffect(EffPotionBreakEffect.class, "show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]", "show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]");
     }
 
     @Override

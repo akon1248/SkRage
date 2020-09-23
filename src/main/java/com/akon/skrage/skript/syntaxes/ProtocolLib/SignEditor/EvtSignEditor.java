@@ -17,19 +17,17 @@ import org.jetbrains.annotations.Nullable;
 public class EvtSignEditor extends SkriptEvent {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEvent("sign editor open", EvtSignEditor.class, SignEditorOpenEvent.class, "sign[ ]editor open").description("SignEditorが開かれたとき(通常の看板では発動しません)");
-            Skript.registerEvent("sign editor done", EvtSignEditor.class, SignEditorDoneEvent.class, "sign[ ]editor done").description("プレイヤーがSignEditorでの編集を終えた時(通常の看板では発動しません)");
-            EventValues.registerEventValue(SignEditorEvent.class, SignEditor.class, new Getter<SignEditor, SignEditorEvent>() {
+        Skript.registerEvent("sign editor open", EvtSignEditor.class, SignEditorOpenEvent.class, "sign[ ]editor open").description("SignEditorが開かれたとき(通常の看板では発動しません)");
+        Skript.registerEvent("sign editor done", EvtSignEditor.class, SignEditorDoneEvent.class, "sign[ ]editor done").description("プレイヤーがSignEditorでの編集を終えた時(通常の看板では発動しません)");
+        EventValues.registerEventValue(SignEditorEvent.class, SignEditor.class, new Getter<SignEditor, SignEditorEvent>() {
 
-                @Nullable
-                @Override
-                public SignEditor get(SignEditorEvent arg) {
-                    return arg.getSignEditor();
-                }
+            @Nullable
+            @Override
+            public SignEditor get(SignEditorEvent arg) {
+                return arg.getSignEditor();
+            }
 
-            }, 0);
-        }
+        }, 0);
     }
 
     @Override

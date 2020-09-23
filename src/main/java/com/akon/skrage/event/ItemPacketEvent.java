@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class ItemPacketEvent extends PlayerEvent{
+public abstract class ItemPacketEvent extends PlayerEvent {
 
     @Getter
     @Setter

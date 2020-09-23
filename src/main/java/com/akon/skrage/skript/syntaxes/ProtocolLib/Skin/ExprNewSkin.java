@@ -15,7 +15,7 @@ import org.bukkit.event.Event;
 public class ExprNewSkin extends SimpleExpression<Skin> {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerExpression(ExprNewSkin.class, Skin.class, ExpressionType.COMBINED, "new skin value %string% signature %string%");
+		Skript.registerExpression(ExprNewSkin.class, Skin.class, ExpressionType.COMBINED, "new skin value %string% signature %string%");
 	}
 
 	private Expression<String> value;

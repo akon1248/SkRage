@@ -21,9 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 public class EffDestroyStage extends Effect {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEffect(EffDestroyStage.class, "set destroy stage with id %string% of %block% to %number%");
-        }
+        Skript.registerEffect(EffDestroyStage.class, "set destroy stage with id %string% of %block% to %number%");
     }
 
     private Expression<String> id;

@@ -1,6 +1,7 @@
 package com.akon.skrage.skript.syntaxes.CrackShot;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
@@ -16,15 +17,15 @@ import org.bukkit.inventory.ItemStack;
 public class ExprCSWeaponName extends SimpleExpression<String> {
     
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("CrackShot")) Skript.registerExpression(ExprCSWeaponName.class, String.class, ExpressionType.COMBINED, "(cs|crackshot) weapon (name|title) (from|of) %item%");
+        if (Bukkit.getPluginManager().isPluginEnabled("CrackShot")) Skript.registerExpression(ExprCSWeaponName.class, String.class, ExpressionType.COMBINED, "(cs|crackshot) weapon (name|title) (from|of) %itemtype%");
     }
     
-    private Expression<ItemStack> item;
+    private Expression<ItemType> item;
     
     @Override
     protected String[] get(Event e) {
         if (this.item != null) {
-            return new String[]{getWeaponTitle(this.item.getSingle(e))};
+            return new String[]{getWeaponTitle(this.item.getSingle(e).getRandom())};
         }
         return null;
     }
@@ -46,7 +47,7 @@ public class ExprCSWeaponName extends SimpleExpression<String> {
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        this.item = (Expression<ItemStack>)exprs[0];
+        this.item = (Expression<ItemType>)exprs[0];
         return true;
     }
     

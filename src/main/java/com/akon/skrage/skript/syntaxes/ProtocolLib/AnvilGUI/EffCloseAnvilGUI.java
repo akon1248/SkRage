@@ -14,7 +14,7 @@ import org.bukkit.event.Event;
 public class EffCloseAnvilGUI extends Effect {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEffect(EffCloseAnvilGUI.class, "close anvil[ ]gui %anvilinv%");
+		Skript.registerEffect(EffCloseAnvilGUI.class, "close anvil[ ]gui %anvilinv%");
 	}
 
 	private Expression<AnvilGUI> anvilGUI;

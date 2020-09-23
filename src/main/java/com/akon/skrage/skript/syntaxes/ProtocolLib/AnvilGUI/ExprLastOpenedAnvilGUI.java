@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ExprLastOpenedAnvilGUI extends SimpleExpression<AnvilGUI> {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerExpression(ExprLastOpenedAnvilGUI.class, AnvilGUI.class, ExpressionType.SIMPLE, "last opened anvil[ ]gui");
+		Skript.registerExpression(ExprLastOpenedAnvilGUI.class, AnvilGUI.class, ExpressionType.SIMPLE, "last opened anvil[ ]gui");
 	}
 
 	@Override

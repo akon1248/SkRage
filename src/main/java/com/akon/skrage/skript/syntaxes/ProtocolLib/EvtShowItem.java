@@ -12,9 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtShowItem extends SkriptEvent {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEvent("show item", EvtShowItem.class, ItemStackShowEvent.class, "(sen(d|t)|show) item[stack]").description("アイテムがプレイヤーに表示されるとき");
-        }
+        Skript.registerEvent("show item", EvtShowItem.class, ItemStackShowEvent.class, "(sen(d|t)|show) item[stack]").description("アイテムがプレイヤーに表示されるとき");
     }
 
     @Override

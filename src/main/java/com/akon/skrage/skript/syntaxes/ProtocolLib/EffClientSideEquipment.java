@@ -23,9 +23,7 @@ import java.util.Arrays;
 public class EffClientSideEquipment extends Effect {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEffect(EffClientSideEquipment.class, "make %entities% (0¦[main]hand|1¦offhand|2¦(boots|feet)|3¦(le[ggin]gs)|4¦chest[plate]|5¦he(lmet|ad)) %itemtype% for %players%");
-        }
+        Skript.registerEffect(EffClientSideEquipment.class, "make %entities% (0¦[main]hand|1¦offhand|2¦(boots|feet)|3¦(le[ggin]gs)|4¦chest[plate]|5¦he(lmet|ad)) %itemtype% for %players%");
     }
 
     private Expression<Entity> entities;

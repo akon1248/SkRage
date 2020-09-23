@@ -27,6 +27,7 @@
     <orderEntry type="library" name="CrackShot" level="project" />
     <orderEntry type="library" name="LibsDisguises" level="project" />
     <orderEntry type="library" name="LunaChat" level="project" />
+    <orderEntry type="library" name="MythicMobs-4.6.5" level="project" />
     <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.github.skriptlang:skript:2.3.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT" level="project" />
@@ -55,6 +56,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.10.3" level="project" />
-    <orderEntry type="library" name="MythicMobs-4.6.5" level="project" />
   </component>
 </module>

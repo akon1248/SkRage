@@ -264,16 +264,20 @@ public class NMSUtil {
 		return Collections.unmodifiableCollection(result);
 	}
 
-	//エンティティを殺害したと認識されているエンティティを取得する
-	public static org.bukkit.entity.Entity getKiller(LivingEntity entity) {
+	public static DamageSource getLastDamage(LivingEntity entity) {
 		try {
 			CombatTracker combatTracker = (((CraftLivingEntity)entity).getHandle()).getCombatTracker();
 			List<CombatEntry> combatEntries = (List<CombatEntry>)ReflectionUtil.getField(CombatTracker.class, combatTracker, "a");
-			return combatEntries.get(combatEntries.size() - 1).a().getEntity().getBukkitEntity();
+			return combatEntries.get(combatEntries.size() - 1).a();
 		} catch (ReflectiveOperationException ex) {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+
+	//エンティティを殺害したと認識されているエンティティを取得する
+	public static org.bukkit.entity.Entity getKiller(LivingEntity entity) {
+		return Optional.ofNullable(getLastDamage(entity)).map(DamageSource::getEntity).map(Entity::getBukkitEntity).orElse(null);
 	}
 
 	//エンティティの死亡メッセージをサーバー全体に流す

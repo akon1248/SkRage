@@ -21,7 +21,7 @@ public class ExprDisplayedSkin extends SimpleExpression<Skin> {
     private Expression<Player> player;
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerExpression(ExprDisplayedSkin.class, Skin.class, ExpressionType.COMBINED, "%player%'s displayed skin", "displayed skin of %player%");
+        Skript.registerExpression(ExprDisplayedSkin.class, Skin.class, ExpressionType.COMBINED, "%player%'s displayed skin", "displayed skin of %player%");
     }
 
     @Override

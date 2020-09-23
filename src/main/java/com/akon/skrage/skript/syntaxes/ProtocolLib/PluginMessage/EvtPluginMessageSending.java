@@ -13,7 +13,7 @@ import org.bukkit.event.Event;
 public class EvtPluginMessageSending extends SkriptEvent {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEvent("plugin message sending", EvtPluginMessageSending.class, PluginMessageEvent.class, "plugin message send[ing]");
+		Skript.registerEvent("plugin message sending", EvtPluginMessageSending.class, PluginMessageEvent.class, "plugin message send[ing]");
 	}
 
 	@Override

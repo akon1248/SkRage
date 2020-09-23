@@ -22,9 +22,7 @@ import java.util.Optional;
 public class EffChestOpenClose extends Effect {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEffect(EffChestOpenClose.class, "make open %block%", "make close %block%");
-        }
+        Skript.registerEffect(EffChestOpenClose.class, "make open %block%", "make close %block%");
     }
 
     private Expression<Block> block;

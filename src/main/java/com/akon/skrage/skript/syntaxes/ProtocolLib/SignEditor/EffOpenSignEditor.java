@@ -19,9 +19,7 @@ import java.util.Optional;
 public class EffOpenSignEditor extends Effect {
 
     static {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Skript.registerEffect(EffOpenSignEditor.class, "open sign[ ]editor named %string% with (line|text) 1 %string% (line|text) 2 %string% (line|text) 3 %string% (line|text) 4 %string% (to|for) %player%");
-        }
+        Skript.registerEffect(EffOpenSignEditor.class, "open sign[ ]editor named %string% with (line|text) 1 %string% (line|text) 2 %string% (line|text) 3 %string% (line|text) 4 %string% (to|for) %player%");
     }
 
     @Getter

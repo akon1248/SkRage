@@ -17,7 +17,7 @@ import org.bukkit.event.Event;
 public class EffOpenAnvilGUI extends Effect {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEffect(EffOpenAnvilGUI.class, "open anvil[ ]gui named %string% with icon %itemtype% text %string% (to|for) %player%");
+		Skript.registerEffect(EffOpenAnvilGUI.class, "open anvil[ ]gui named %string% with icon %itemtype% text %string% (to|for) %player%");
 	}
 
 	@Getter

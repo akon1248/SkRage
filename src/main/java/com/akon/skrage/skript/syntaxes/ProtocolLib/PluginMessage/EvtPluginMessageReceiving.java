@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtPluginMessageReceiving extends SkriptEvent {
 
 	static {
-		if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) Skript.registerEvent("plugin message receiving", EvtPluginMessageReceiving.class, PluginMessageEvent.class, "plugin message receiv(e|ing)");
+		Skript.registerEvent("plugin message receiving", EvtPluginMessageReceiving.class, PluginMessageEvent.class, "plugin message receiv(e|ing)");
 		EventValues.registerEventValue(PluginMessageEvent.class, Player.class, new Getter<Player, PluginMessageEvent>() {
 
 			@Override

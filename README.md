@@ -1,5 +1,7 @@
 # SkRage
  AnvilGUI、SignEditor、Skin、CrackShot、その他実用性皆無な構文が入っているアドオン
+ 
+ Required: ProtocolLib
 
 Document
 ```

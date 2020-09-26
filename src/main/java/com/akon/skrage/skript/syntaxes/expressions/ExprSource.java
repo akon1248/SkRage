@@ -16,7 +16,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 
 
-@Description({"エリアエフェクトクラウド、着火されたTNT、エヴォーカーの牙を発生させたEntityを取得します"})
+@Description({"エリアエフェクトクラウド、着火されたTNT、エヴォーカーの牙を発生させたエンティティを取得します"})
 public class ExprSource extends SimpleExpression<LivingEntity> {
 
     private Expression<Entity> entity;

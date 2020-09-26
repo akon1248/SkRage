@@ -10,7 +10,7 @@ import com.akon.skrage.utils.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 
-@Description({"金床のGUIを閉じます"})
+@Description({"AnvilGUIを閉じます"})
 public class EffCloseAnvilGUI extends Effect {
 
 	static {

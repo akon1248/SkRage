@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-@Description({"プレイヤーに金床のGUIを表示します"})
+@Description({"プレイヤーにAnvilGUIを表示します"})
 public class EffOpenAnvilGUI extends Effect {
 
 	static {

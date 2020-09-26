@@ -11,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;

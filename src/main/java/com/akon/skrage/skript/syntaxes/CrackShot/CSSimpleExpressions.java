@@ -23,6 +23,7 @@ public class CSSimpleExpressions {
             }, null, "CrackShotの弾丸もしくは爆弾から武器の登録名を取得します");
             ExpressionFactory.registerExpression("ExprCSDamage", "(crackshot|cs) [weapon] damage", 0, WeaponDamageEntityEvent.class, Number.class, WeaponDamageEntityEvent::getDamage, (event, number) -> event.setDamage(number.doubleValue()), "CrackShot DamageイベントでEntityの受けた防具等によって軽減される前のダメージ");
             ExpressionFactory.registerExpression("ExprCSDamager", "(crackshot|cs) (attacker|damager)", 0, WeaponDamageEntityEvent.class, Entity.class, WeaponDamageEntityEvent::getDamager, null, "CrackShot Damageイベントでエンティティにダメージを与えたエンティティ");
+            ExpressionFactory.registerExpression("ExprCSVictim", "(crackshot|cs) vicitm", 0, WeaponDamageEntityEvent.class, Entity.class, WeaponDamageEntityEvent::getVictim, null, "CrackShot Damageイベントでダメージを受けたエンティティ");
             ExpressionFactory.registerExpression("ExprCSWeaponDisplayName", "weapon display[ ]name", 0b110, String.class, String.class, str -> ((CSDirector)Bukkit.getServer().getPluginManager().getPlugin("CrackShot")).getString(str + ".Item_Information.Item_Name"), null, "CrackShotの武器の表示名");
             ExpressionFactory.registerExpression("ExprReloadDuration", "reload duration", 0, WeaponReloadEvent.class, Number.class, WeaponReloadEvent::getReloadDuration, (event, number) -> event.setReloadDuration(number.intValue()), "CrackShot Reload Startイベントでの武器のリロード時間");
         }

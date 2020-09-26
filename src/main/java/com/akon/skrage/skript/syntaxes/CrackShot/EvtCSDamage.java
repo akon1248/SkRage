@@ -8,7 +8,6 @@ import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import com.shampaggon.crackshot.events.WeaponDamageEntityEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
@@ -35,15 +34,6 @@ public class EvtCSDamage extends SkriptEvent {
 				@Nullable
 				public Player get(WeaponDamageEntityEvent arg) {
 					return arg.getPlayer();
-				}
-
-			}, 0);
-			EventValues.registerEventValue(WeaponDamageEntityEvent.class, Entity.class, new Getter<Entity, WeaponDamageEntityEvent>() {
-
-				@Override
-				@Nullable
-				public Entity get(WeaponDamageEntityEvent arg) {
-					return arg.getVictim();
 				}
 
 			}, 0);

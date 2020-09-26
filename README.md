@@ -18,7 +18,7 @@ Events:
 	On anvil gui close:
 		ID: anvil_gui_close
 		Description:
-			金床のGUIが閉じられたとき
+			AnvilGUIが閉じられたとき
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
@@ -29,7 +29,7 @@ Events:
 	On anvil gui done:
 		ID: anvil_gui_done
 		Description:
-			金床のGUIにプレイヤーがテキストを入力し終わったとき
+			AnvilGUIにプレイヤーがテキストを入力し終わったとき
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
@@ -41,7 +41,7 @@ Events:
 	On anvil gui open:
 		ID: anvil_gui_open
 		Description:
-			金床のGUIが開かれるとき
+			AnvilGUIが開かれるとき
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
@@ -76,9 +76,8 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
-			event-player
-			event-entity
 			event-projectile
+			event-player
 			event-string
 		Cancellable: true
 	On cs pre shoot:
@@ -108,9 +107,9 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
+			event-projectile
 			event-player
 			event-entity
-			event-projectile
 			event-string
 		Cancellable: false
 	On disguise:
@@ -350,7 +349,7 @@ Effects:
 	EffCloseAnvilGUI:
 		ID: EffCloseAnvilGUI
 		Description:
-			金床のGUIを閉じます
+			AnvilGUIを閉じます
 		Patterns:
 			close anvil[ ]gui %anvilinv%
 	EffDamageSource:
@@ -388,7 +387,7 @@ Effects:
 	EffOpenAnvilGUI:
 		ID: EffOpenAnvilGUI
 		Description:
-			プレイヤーに金床のGUIを表示します
+			プレイヤーにAnvilGUIを表示します
 		Patterns:
 			open anvil[ ]gui named %string% with icon %itemtype% text %string% (to|for) %player%
 	EffOpenSignEditor:
@@ -407,8 +406,8 @@ Effects:
 	EffSpawnEntity:
 		ID: EffSpawnEntity
 		Description:
-			new entity構文で作成したEntityをスポーンさせることができます
-			また、一度死亡したEntityをリスポーンさせることも可能です
+			new entity構文で作成したエンティティをスポーンさせることができます
+			また、一度死亡したエンティティをリスポーンさせることも可能です
 		Patterns:
 			[re]spawn [(a|an)] %entity% at %location%
 	EffUpdateInventory:
@@ -450,7 +449,7 @@ Expressions:
 	ExprAnvilGUIName:
 		ID: ExprAnvilGUIName
 		Description:
-			金床のGUIの名前
+			AnvilGUIの名前
 		Return type: Text
 		Changers:
 			none
@@ -530,6 +529,17 @@ Expressions:
 			none
 		Patterns:
 			(crackshot|cs) (weapon|item) %string%
+	ExprCSVictim:
+		ID: ExprCSVictim
+		Description:
+			CrackShot Damageイベントでダメージを受けたエンティティ
+		Return type: Entity
+		Changers:
+			add
+			remove
+			remove all
+		Patterns:
+			(crackshot|cs) vicitm
 	ExprCSWeaponDisplayName:
 		ID: ExprCSWeaponDisplayName
 		Description:
@@ -956,7 +966,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 	ExprLastOpenedAnvilGUI:
 		ID: ExprLastOpenedAnvilGUI
 		Description:
-			最後に開かれた金床のGUI
+			最後に開かれたAnvilGUI
 		Return type: Anvil GUI
 		Changers:
 			none
@@ -1149,7 +1159,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 	ExprSource:
 		ID: ExprSource
 		Description:
-			エリアエフェクトクラウド、着火されたTNT、エヴォーカーの牙を発生させたEntityを取得します
+			エリアエフェクトクラウド、着火されたTNT、エヴォーカーの牙を発生させたエンティティを取得します
 		Return type: Living Entity
 		Changers:
 			set

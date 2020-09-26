@@ -14,11 +14,11 @@ public class EvtAnvilGUI extends SkriptEvent {
 
 	static {
 		Skript.registerEvent("anvil gui close", EvtAnvilGUI.class, AnvilGUICloseEvent.class, "anvil[ ]gui close")
-			.description("金床のGUIが閉じられたとき");
+			.description("AnvilGUIが閉じられたとき");
 		Skript.registerEvent("anvil gui done", EvtAnvilGUI.class, AnvilGUIDoneEvent.class, "anvil[ ]gui done")
-			.description("金床のGUIにプレイヤーがテキストを入力し終わったとき");
+			.description("AnvilGUIにプレイヤーがテキストを入力し終わったとき");
 		Skript.registerEvent("anvil gui open", EvtAnvilGUI.class, AnvilGUIOpenEvent.class, "anvil[ ]gui open")
-			.description("金床のGUIが開かれるとき");
+			.description("AnvilGUIが開かれるとき");
 		EventValues.registerEventValue(AnvilGUIEvent.class, AnvilGUI.class, new Getter<AnvilGUI, AnvilGUIEvent>() {
 
 			@Nullable

@@ -11,7 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
-@Description({"new entity構文で作成したEntityをスポーンさせることができます","また、一度死亡したEntityをリスポーンさせることも可能です"})
+@Description({"new entity構文で作成したエンティティをスポーンさせることができます","また、一度死亡したエンティティをリスポーンさせることも可能です"})
 public class EffSpawnEntity extends Effect {
 
 	static {

@@ -13,7 +13,7 @@ import org.bukkit.event.Event;
 
 import java.util.Optional;
 
-@Description({"最後に開かれた金床のGUI"})
+@Description({"最後に開かれたAnvilGUI"})
 public class ExprLastOpenedAnvilGUI extends SimpleExpression<AnvilGUI> {
 
 	static {

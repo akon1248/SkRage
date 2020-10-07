@@ -9,7 +9,6 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import com.akon.skrage.SkRage;
 import lombok.Getter;
 import me.dpohvar.powernbt.PowerNBT;
 import me.dpohvar.powernbt.api.NBTCompound;
@@ -21,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Description({"アイテムのNBT"})
 public class ExprItemNBTCompound extends SimpleExpression<NBTCompound> {
@@ -73,29 +71,22 @@ public class ExprItemNBTCompound extends SimpleExpression<NBTCompound> {
 
 	@Override
 	public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-		Logger logger = SkRage.getInstance().getLogger();
 		Optional.ofNullable(this.item).map(expr -> expr.getSingle(e)).ifPresent(item -> {
-			logger.info(this.item.getClass().getName());
 			if (delta == null || !(delta[0] instanceof NBTCompound)) {
 				return;
 			}
 			NBTManager nbtManager = PowerNBT.getApi();
 			NBTCompound compound = (NBTCompound)delta[0];
-			logger.info(mode.name());
 			boolean flag = item.getClass().equals(ItemStack.class);
 			if (flag) {
 				item = ItemStackUtils.itemStackUtils.createCraftItemStack(item);
 			}
 			if (mode == Changer.ChangeMode.ADD) {
-				logger.info("add");
-				logger.info(String.valueOf(item));
 				NBTCompound nbt = nbtManager.read(item);
 				nbt.merge(compound);
 				nbtManager.write(item, nbt);
 
 			} else if (mode == Changer.ChangeMode.SET) {
-				logger.info("set");
-				logger.info(String.valueOf(item));
 				nbtManager.write(item, compound);
 			}
 			if (flag) {

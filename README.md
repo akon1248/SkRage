@@ -11,8 +11,8 @@ Events:
 		Patterns:
 			[on] add tracking player
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-entity
 		Cancellable: true
 	On anvil gui close:
@@ -22,9 +22,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
-			event-anvilinv
-			event-world
 			event-player
+			event-world
+			event-anvilinv
 		Cancellable: false
 	On anvil gui done:
 		ID: anvil_gui_done
@@ -33,9 +33,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
-			event-anvilinv
-			event-world
 			event-player
+			event-world
+			event-anvilinv
 			event-string
 		Cancellable: false
 	On anvil gui open:
@@ -45,9 +45,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
-			event-anvilinv
-			event-world
 			event-player
+			event-world
+			event-anvilinv
 		Cancellable: true
 	On combust by sunlight:
 		ID: combust_by_sunlight
@@ -76,8 +76,8 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
-			event-projectile
 			event-player
+			event-projectile
 			event-string
 		Cancellable: true
 	On cs pre shoot:
@@ -107,10 +107,41 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
-			event-projectile
 			event-player
+			event-projectile
 			event-entity
 			event-string
+		Cancellable: false
+	On cse apply:
+		ID: cse_apply
+		Description:
+			CustomStatusEffectが付与されたとき
+		Patterns:
+			[on] (cse|custom[ ]status[ ]effect) apply %string%
+		Event values:
+			event-world
+			event-customstatuseffect
+			event-entity
+		Cancellable: false
+	On cse remove:
+		ID: cse_remove
+		Description:
+			CustomStatusEffectの効果が切れたとき
+		Patterns:
+			[on] (cse|custom[ ]status[ ]effect) remove %string%
+		Event values:
+			event-world
+			event-customstatuseffect
+			event-entity
+		Cancellable: false
+	On cse tick:
+		ID: cse_tick
+		Patterns:
+			[on] (cse|custom[ ]status[ ]effect) tick %string%
+		Event values:
+			event-world
+			event-customstatuseffect
+			event-entity
 		Cancellable: false
 	On disguise:
 		ID: disguise
@@ -129,8 +160,8 @@ Events:
 		Patterns:
 			[on] jump
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
 	On player velocity:
 		ID: player_velocity
@@ -139,8 +170,8 @@ Events:
 		Patterns:
 			[on] [player] velocity
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-vector
 		Cancellable: true
 	On plugin message receiving:
@@ -148,24 +179,35 @@ Events:
 		Patterns:
 			[on] plugin message receiv(e|ing)
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
 	On plugin message sending:
 		ID: plugin_message_sending
 		Patterns:
 			[on] plugin message send[ing]
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
+	On prepare craft:
+		ID: prepare_craft
+		Patterns:
+			[on] pre[pare] craft[ing]
+		Event values:
+			event-player
+			event-inventory
+			event-itemstack
+			event-slot
+			event-recipe
+		Cancellable: false
 	On receive creative item:
 		ID: receive_creative_item
 		Patterns:
 			[on] receive creative item
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: false
 	On reload complete:
 		ID: reload_complete
@@ -192,8 +234,8 @@ Events:
 		Patterns:
 			[on] remove tracking player
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-entity
 		Cancellable: true
 	On scope:
@@ -213,8 +255,8 @@ Events:
 		Patterns:
 			[on] (sen(d|t)|show) item[stack]
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: false
 	On sign editor done:
 		ID: sign_editor_done
@@ -223,8 +265,8 @@ Events:
 		Patterns:
 			[on] sign[ ]editor done
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-signeditor
 		Cancellable: false
 	On sign editor open:
@@ -234,8 +276,8 @@ Events:
 		Patterns:
 			[on] sign[ ]editor open
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-signeditor
 		Cancellable: true
 	On undisguise:
@@ -290,10 +332,16 @@ Conditions:
 		Patterns:
 			%entity% is [(crackshot|cs)] weapon bullet
 Effects:
+	EffApplyCSE:
+		ID: EffApplyCSE
+		Description:
+			CustomStatusEffectをエンティティに付与します
+		Patterns:
+			(add|apply) (cse|custom[ ]status[ ]effect) %customstatuseffecttype% [[[of] tier] %-number%] to %livingentities% [for %-timespan%] [ambient %-boolean%] [hide particle[s] %-boolean%] [mode (0¦default|1¦force|2¦vanilla)]
 	EffArmSwing:
 		ID: EffArmSwing
 		Patterns:
-			make arm swing %livingentity%
+			make %livingentity% arm swing
 	EffBetterBreakNaturally:
 		ID: EffBetterBreakNaturally
 		Description:
@@ -317,7 +365,7 @@ Effects:
 			force: 条件なしに強制的に付与します
 			vanilla: バニラでポーション効果が付与される条件と同じです
 		Patterns:
-			(add|apply) %potioneffecttype% [potion] [[[of] tier] %number%] to %livingentities% [for %-timespan%] [ambient %-boolean%] [hide particle[s] %-boolean%] [mode (0¦default|1¦force|2¦vanilla)]
+			(add|apply) %potioneffecttype% [potion] [[[of] tier] %number%] to %livingentities% [for %-timespan%] [ambient %-boolean% [hide particle[s] %-boolean% [mode (0¦default|1¦force|2¦vanilla)]]]
 	EffBlockBreakEffect:
 		ID: EffBlockBreakEffect
 		Description:
@@ -339,6 +387,12 @@ Effects:
 		ID: EffClientSideEquipment
 		Patterns:
 			make %entities% (0¦[main]hand|1¦offhand|2¦(boots|feet)|3¦(le[ggin]gs)|4¦chest[plate]|5¦he(lmet|ad)) %itemtype% for %players%
+	EffClientSideFirework:
+		ID: EffClientSideFirework
+		Description:
+			クライアントサイドな花火のエフェクトを表示させます
+		Patterns:
+			show firework[s] [effect] %fireworkeffects% at %location% [for %players%]
 	EffClientSideGlowing:
 		ID: EffClientSideGlowing
 		Description:
@@ -378,6 +432,12 @@ Effects:
 		Patterns:
 			hide entity %entity% from %players%
 			(show|reveal) entity %entity% to %players%
+	EffMakeBreakBlock:
+		ID: EffMakeBreakBlock
+		Description:
+			プレイヤーにブロックを破壊させます
+		Patterns:
+			make %player% (break|destroy) [block] %block%
 	EffMakePlayerAttack:
 		ID: EffMakePlayerAttack
 		Description:
@@ -403,6 +463,31 @@ Effects:
 		Patterns:
 			show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]
 			show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]
+	EffRegisterCSE:
+		ID: EffRegisterCSE
+		Description:
+			CustomStatusEffectを登録/削除します
+		Patterns:
+			register (cse|custom[ ]status[ ]effect) type with id %string% [and] name %string% [and] color (%-color%|%-number%[, %-number%, %-number%])
+			unregister (cse|custom[ ]status[ ]effect) type [id] %string%
+	EffRemoveCSE:
+		ID: EffRemoveCSE
+		Description:
+			CustomStatusEffectをエンティティから削除します
+		Patterns:
+			(clear|remove) (cse|custom[ ]status[ ]effect) %customstatuseffecttypes% from %entities%
+			(clear|remove) [all] [active] (cse|custom[ ]status[ ]effect)[s] from %entities%
+	EffSendPluginMessage:
+		ID: EffSendPluginMessage
+		Patterns:
+			send plugin message with channel %string% [and] contents %numbers% to %player%
+	EffSetPlayerTime:
+		ID: EffSetPlayerTime
+		Description:
+			プレイヤーの時間を変更します
+		Patterns:
+			set (client|player) time of %player% to %number% relative %boolean%
+			set %player%'s (client|player) time to %number% relative %boolean%
 	EffSpawnEntity:
 		ID: EffSpawnEntity
 		Description:
@@ -456,6 +541,91 @@ Expressions:
 		Patterns:
 			%anvilinv%'s anvil[ ]gui name
 			anvil[ ]gui name of %anvilinv%
+	ExprAttribute:
+		ID: ExprAttribute
+		Return type: Attribute Instance
+		Changers:
+			none
+		Patterns:
+			attribute (0¦max health|1¦follow range|2¦knockback resistance|3¦movement speed|4¦flying speed|5¦attack damage|6¦attack speed|7¦armor|8¦armor toughness|9¦luck|10¦horse jump strength|11¦zombie spawn reinforcements) (from|of) %livingentity%
+	ExprAttributeBaseValue:
+		ID: ExprAttributeBaseValue
+		Description:
+			Attributeの基本の値
+		Return type: Number
+		Changers:
+			add
+			set
+			remove
+		Patterns:
+			%attributeinstance%'s attribute base value
+			attribute base value of %attributeinstance%
+			attribute base value from %attributeinstance%
+	ExprAttributeModifierAmount:
+		ID: ExprAttributeModifierAmount
+		Description:
+			AttributeModifierが適用する値
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			%attributemodifier%'s [attribute[ ]]modifier amount
+			[attribute[ ]]modifier amount of %attributemodifier%
+	ExprAttributeModifierName:
+		ID: ExprAttributeModifierName
+		Description:
+			AttributeModifierの名前
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%attributemodifier%'s [attribute[ ]]modifier name
+			[attribute[ ]]modifier name of %attributemodifier%
+	ExprAttributeModifierOperation:
+		ID: ExprAttributeModifierOperation
+		Description:
+			AttributeModifierが適当されるときの値の操作(0: 加算, 1: 1+x倍(値が0.5なら1.5倍される), 2: 乗算)
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			%attributemodifier%'s [attribute[ ]]modifier operation
+			[attribute[ ]]modifier operation of %attributemodifier%
+	ExprAttributeModifierUUID:
+		ID: ExprAttributeModifierUUID
+		Description:
+			AttributeModifierのUUID
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%attributemodifier%'s [attribute[ ]]modifier uuid
+			[attribute[ ]]modifier uuid of %attributemodifier%
+	ExprAttributeModifiers:
+		ID: ExprAttributeModifiers
+		Description:
+			AttributeInstanceに追加されているAttributeModifier
+		Return type: Attribute Modifier
+		Changers:
+			add
+			set
+			remove
+			remove all
+			delete
+		Patterns:
+			attribute[ ]modifier[s] of %attributeinstance%
+			%attributeinstance%'s attribute[ ]modifier[s]
+	ExprAttributeValue:
+		ID: ExprAttributeValue
+		Description:
+			Attributeの値
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			%attributeinstance%'s attribute value
+			attribute value of %attributeinstance%
+			attribute value from %attributeinstance%
 	ExprBetterDropsOfBlock:
 		ID: ExprBetterDropsOfBlock
 		Description:
@@ -520,6 +690,68 @@ Expressions:
 			remove all
 		Patterns:
 			(crackshot|cs) (attacker|damager)
+	ExprCSEAmplifier:
+		ID: ExprCSEAmplifier
+		Description:
+			CustomStatusEffectの効果の強さ
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			%customstatuseffect%'s (cse|custom[ ]status[ ]effect) (amplifier|level|tier)
+			(cse|custom[ ]status[ ]effect) (amplifier|level|tier) of %customstatuseffect%
+	ExprCSEDuration:
+		ID: ExprCSEDuration
+		Description:
+			CustomStatusEffectの効果時間(tick)
+		Return type: Number
+		Changers:
+			add
+			set
+			remove
+		Patterns:
+			%customstatuseffect%'s (cse|custom[ ]status[ ]effect) duration
+			(cse|custom[ ]status[ ]effect) duration of %customstatuseffect%
+	ExprCSEType:
+		ID: ExprCSEType
+		Description:
+			CustomStatusEffectのタイプ
+		Return type: Custom Status Effect Type
+		Changers:
+			none
+		Patterns:
+			%customstatuseffect%'s (cse|custom[ ]status[ ]effect) type
+			(cse|custom[ ]status[ ]effect) type of %customstatuseffect%
+	ExprCSETypeColor:
+		ID: ExprCSETypeColor
+		Description:
+			CustomStatusEffectのタイプから色を取得します
+		Return type: Colour
+		Changers:
+			none
+		Patterns:
+			%customstatuseffecttype%'s (cse|custom[ ]status[ ]effect) type color
+			(cse|custom[ ]status[ ]effect) type color of %customstatuseffecttype%
+	ExprCSETypeId:
+		ID: ExprCSETypeId
+		Description:
+			CustomStatusEffectのタイプからIDを取得します
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%customstatuseffecttype%'s (cse|custom[ ]status[ ]effect) type id
+			(cse|custom[ ]status[ ]effect) type id of %customstatuseffecttype%
+	ExprCSETypeName:
+		ID: ExprCSETypeName
+		Description:
+			CustomStatusEffectのタイプから名前を取得します
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%customstatuseffecttype%'s (cse|custom[ ]status[ ]effect) type name
+			(cse|custom[ ]status[ ]effect) type name of %customstatuseffecttype%
 	ExprCSItem:
 		ID: ExprCSItem
 		Description:
@@ -572,13 +804,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			(cs|crackshot) weapon (name|title) (from|of) %itemtype%
-	ExprCreateItemType:
-		ID: ExprCreateItemType
-		Return type: Item Type
+	ExprColorRGB:
+		ID: ExprColorRGB
+		Return type: Number
 		Changers:
 			none
 		Patterns:
-			[a] [new] item[ ]type %string% [data %-number%]
+			(0¦red|1¦green|2¦blue) (from|of) %color%
 	ExprCustomDamageSource:
 		ID: ExprCustomDamageSource
 		Description:
@@ -598,8 +830,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			[a] [new] player disguise named %string% with skin %skin%
-	ExprDamageModifierDamage:
-		ID: ExprDamageModifierDamage
+	ExprCustomStatusEffect:
+		ID: ExprCustomStatusEffect
+		Return type: Custom Status Effect
+		Changers:
+			none
+		Patterns:
+			(cse|custom[ ]status[ ]effect) %customstatuseffecttype% (from|of) %livingentity%
+	ExprDamageModifier:
+		ID: ExprDamageModifier
 		Description:
 			Damage Modifierによって変化するダメージの量を取得します
 		Return type: Number
@@ -837,6 +1076,19 @@ send "Projectile_Damage: %{_weapondamage}%"
 			%entity%'s height
 			width of %entity%
 			%entity%'s width
+	ExprExplodedBlockList:
+		ID: ExprExplodedBlockList
+		Description:
+			on explodeイベントで爆発によって壊されたブロック
+		Return type: Block
+		Changers:
+			add
+			set
+			remove
+			remove all
+			delete
+		Patterns:
+			explode[d] block list
 	ExprExplosionFire:
 		ID: ExprExplosionFire
 		Description:
@@ -857,6 +1109,16 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove
 		Patterns:
 			explo(de|sion) (radius|yield)
+	ExprFreeze:
+		ID: ExprFreeze
+		Description:
+			プレイヤーの硬直状態
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%player%'s fr(eeze|oze[n]) state
+			fr(eeze|oze[n]) state of %player%
 	ExprFrom:
 		ID: ExprFrom
 		Description:
@@ -876,6 +1138,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			gamerule %string% of %world%
 			%world%'s gamerule %string%
+	ExprGetCSEType:
+		ID: ExprGetCSEType
+		Return type: Custom Status Effect Type
+		Changers:
+			none
+		Patterns:
+			(cse|custom[ ]status[ ]effect) type from [id] %string%
 	ExprHitBlock:
 		ID: ExprHitBlock
 		Description:
@@ -923,6 +1192,16 @@ send "Projectile_Damage: %{_weapondamage}%"
 			reset
 		Patterns:
 			cool[]down of %itemtype% of %player%
+	ExprItemNBTCompound:
+		ID: ExprItemNBTCompound
+		Description:
+			アイテムのNBT
+		Return type: NBT Compound
+		Changers:
+			add
+			set
+		Patterns:
+			nbt[ ]compound (of|from) item %itemstack% 
 	ExprItemName:
 		ID: ExprItemName
 		Description:
@@ -963,6 +1242,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			%livingentity%'s killer
 			killer of %livingentity%
+	ExprLastDamageResult:
+		ID: ExprLastDamageResult
+		Return type: Boolean
+		Changers:
+			none
+		Patterns:
+			このアドオンのdamage構文を使用してダメージを与えられたかどうかの結果を取得します
 	ExprLastOpenedAnvilGUI:
 		ID: ExprLastOpenedAnvilGUI
 		Description:
@@ -1012,6 +1298,65 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			%livingentity%'s max[imum] no damage tick[s]
 			max[imum] no damage tick[s] of %livingentity%
+	ExprMergeNBT:
+		ID: ExprMergeNBT
+		Description:
+			複数のNBTをマージします
+		Return type: NBT Compound
+		Changers:
+			none
+		Patterns:
+			merge nbt[ ]compound[s] %nbtcompounds%
+	ExprNBTCompound:
+		ID: ExprNBTCompound
+		Description:
+			ブロック、エンティティのNBT
+		Return type: NBT Compound
+		Changers:
+			add
+		Patterns:
+			nbt[ ]compound (of|from) %block/entity% 
+	ExprNBTList:
+		ID: ExprNBTList
+		Return type: NBT List
+		Changers:
+			none
+		Patterns:
+			nbt[ ]list from %objects%
+			nbt[ ]list from %objects% with type (1¦byte|2¦short|3¦int[eger]|4¦long|5¦float|6¦double|7¦byte array|8¦string|9¦list|10¦nbt[ ]compound|11¦int[eger] array)
+	ExprNBTListToList:
+		ID: ExprNBTListToList
+		Return type: Object
+		Changers:
+			none
+		Patterns:
+			convert nbt[ ]list %nbtlist% to list
+	ExprNBTTag:
+		ID: ExprNBTTag
+		Description:
+			NBTの指定されたキーに結び付けられている値
+		Return type: Object
+		Changers:
+			set
+			delete
+		Patterns:
+			tag key %string% (from|of) %nbtcompound%
+	ExprNewAttributeModifier:
+		ID: ExprNewAttributeModifier
+		Description:
+			新しくAttributeModifierを作成します
+		Return type: Attribute Modifier
+		Changers:
+			none
+		Patterns:
+			new attribute[ ]modifier with uuid %string% [and] name %string% [and] amount %number% [and] operation (0¦add number|1¦add scalar|2¦multiply scalar one)
+	ExprNewColor:
+		ID: ExprNewColor
+		Return type: Colour
+		Changers:
+			none
+		Patterns:
+			colo[u]r from (0¦[hex] colo[u]r[ ]code %-string%|1¦rgb %-number%[, %-number%, %-number%])
 	ExprNewDamageSource:
 		ID: ExprNewDamageSource
 		Description:
@@ -1034,6 +1379,14 @@ send "Projectile_Damage: %{_weapondamage}%"
 			remove all
 		Patterns:
 			new entity %entitytype%
+	ExprNewItemType:
+		ID: ExprNewItemType
+		Return type: Item Type
+		Changers:
+			none
+		Patterns:
+			[a] [new] item[ ]type %string% [data %-number%]
+			[a] [new] item[ ]type from %itemstacks%
 	ExprNewSkin:
 		ID: ExprNewSkin
 		Description:
@@ -1064,6 +1417,28 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			player head from [skin] %skin%
+	ExprPlayerTime:
+		ID: ExprPlayerTime
+		Description:
+			プレイヤーの時間を変更します
+		Return type: Number
+		Changers:
+			add
+			set
+			remove
+		Patterns:
+			%player%'s (client|player) time
+			(client|player) time of %player%
+	ExprPlayerTimeRelative:
+		ID: ExprPlayerTimeRelative
+		Description:
+			プレイヤーの時間がサーバーの時間と相対的かどうか
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%player%'s (client|player) time relative
+			(client|player) time relative of %player%
 	ExprPluginMessageChannel:
 		ID: ExprPluginMessageChannel
 		Description:
@@ -1212,6 +1587,22 @@ Types:
 		ID: AnvilGUI
 		Patterns:
 			anvil[ ]inv[s]
+	Attribute Instance:
+		ID: AttributeInstance
+		Patterns:
+			attribute[ ]instance[s]
+	Attribute Modifier:
+		ID: AttributeModifier
+		Patterns:
+			attribute[ ]modifier
+	Custom Status Effect:
+		ID: CustomStatusEffect
+		Patterns:
+			(cse|custom[ ]status[ ]effect)[s]
+	Custom Status Effect Type:
+		ID: CSEType
+		Patterns:
+			(cse|custom[ ]status[ ]effect)[ ]type[s]
 	Damage Modifier:
 		ID: DamageModifier
 		Usage: absorption, armor, base, blocking, hard hat, magic, resistance
@@ -1226,6 +1617,17 @@ Types:
 		Usage: off, fatal, error, warn, info, debug, trace, all
 		Patterns:
 			log[ ]level[s]
+	NBT Compound:
+		ID: NBTCompound
+		Description:
+			NBTを表す型
+			parse可
+		Patterns:
+			nbt[ ]compound[s]
+	NBT List:
+		ID: NBTList
+		Patterns:
+			nbt[ ]list[s]
 	Sign Editor:
 		ID: SignEditor
 		Patterns:

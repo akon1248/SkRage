@@ -16,14 +16,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@Description({"ブロック、エンティティのNBT"})
+import java.util.Optional;
+
+@Description({"ブロック、エンティティ、アイテムのNBT"})
 public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 
 	static {
 		if (Bukkit.getPluginManager().isPluginEnabled("PowerNBT")) {
-			Skript.registerExpression(ExprNBTCompound.class, NBTCompound.class, ExpressionType.COMBINED, "nbt[ ]compound (of|from) %block/entity% ");
+			Skript.registerExpression(ExprNBTCompound.class, NBTCompound.class, ExpressionType.COMBINED, "nbt[ ]compound (of|from) %block/entity/itemstack% ");
 		}
 	}
 
@@ -32,14 +35,7 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 	@Nullable
 	@Override
 	protected NBTCompound[] get(Event e) {
-		NBTManager nbtManager = PowerNBT.getApi();
-		Object nbtHolder = this.obj.getSingle(e);
-		if (nbtHolder instanceof Block) {
-			return new NBTCompound[]{nbtManager.read((Block)nbtHolder)};
-		} else if (nbtHolder instanceof Entity) {
-			return new NBTCompound[]{nbtManager.read((Entity)nbtHolder)};
-		}
-		return null;
+		return Optional.ofNullable(this.obj).map(expr -> expr.getSingle(e)).map(ExprNBTCompound::getNBT).map(compound -> new NBTCompound[]{compound}).orElse(null);
 	}
 
 	@Override
@@ -66,7 +62,7 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 	@Nullable
 	@Override
 	public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-		if (mode == Changer.ChangeMode.ADD) {
+		if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.SET) {
 			return CollectionUtils.array(NBTCompound.class);
 		}
 		return null;
@@ -74,16 +70,39 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 
 	@Override
 	public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-		if (delta == null || !(delta[0] instanceof NBTCompound) || mode != Changer.ChangeMode.ADD) {
+		if (delta == null || !(delta[0] instanceof NBTCompound) || (mode != Changer.ChangeMode.ADD && mode != Changer.ChangeMode.SET)) {
 			return;
 		}
+		Optional.ofNullable(this.obj).map(expr -> expr.getSingle(e)).ifPresent(nbtHolder -> {
+			NBTManager nbtManager = PowerNBT.getApi();
+			NBTCompound compound = (NBTCompound)delta[0];
+			if (mode == Changer.ChangeMode.ADD) {
+				NBTCompound nbt = getNBT(nbtHolder);
+				if (nbt != null) {
+					nbt.merge(compound);
+					compound = nbt;
+				}
+			}
+			if (nbtHolder instanceof Block) {
+				nbtManager.write((Block)nbtHolder, compound);
+			} else if (nbtHolder instanceof Entity) {
+				nbtManager.write((Entity)nbtHolder, compound);
+			} else if (nbtHolder instanceof ItemStack) {
+				nbtManager.write((ItemStack)nbtHolder, compound);
+			}
+		});
+	}
+
+	private static NBTCompound getNBT(Object obj) {
 		NBTManager nbtManager = PowerNBT.getApi();
-		NBTCompound compound = (NBTCompound)delta[0];
-		Object nbtHolder = this.obj.getSingle(e);
-		if (nbtHolder instanceof Block) {
-			nbtManager.write((Block)nbtHolder, compound);
-		} else if (nbtHolder instanceof Entity) {
-			nbtManager.write((Entity)nbtHolder, compound);
+		if (obj instanceof Block) {
+			return nbtManager.read((Block)obj);
+		} else if (obj instanceof Entity) {
+			return nbtManager.read((Entity)obj);
+		} else if (obj instanceof ItemStack) {
+			return nbtManager.read((ItemStack)obj);
 		}
+		return null;
+
 	}
 }

@@ -77,13 +77,13 @@ public class ExprNBTTag extends SimpleExpression<Object> {
 					return;
 				}
 				Optional.ofNullable(this.key).map(expr -> expr.getSingle(e)).ifPresent(key -> compound.put(key, delta[0]));
-				if (this.nbt instanceof ExprNBTCompound || this.nbt instanceof ExprItemNBTCompound) {
+				if (this.nbt instanceof ExprNBTCompound) {
 					this.nbt.change(e, new Object[]{compound}, Changer.ChangeMode.ADD);
 				}
 			} else if (mode == Changer.ChangeMode.DELETE) {
 				Optional.ofNullable(this.key).map(expr -> expr.getSingle(e)).ifPresent(key -> {
 					compound.remove(key);
-					if (this.nbt instanceof ExprItemNBTCompound) {
+					if (this.nbt instanceof ExprNBTCompound) {
 						this.nbt.change(e, new Object[]{compound}, Changer.ChangeMode.SET);
 					}
 				});

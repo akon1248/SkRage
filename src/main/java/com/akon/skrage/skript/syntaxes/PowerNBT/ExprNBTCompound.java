@@ -12,6 +12,7 @@ import ch.njol.util.coll.CollectionUtils;
 import me.dpohvar.powernbt.PowerNBT;
 import me.dpohvar.powernbt.api.NBTCompound;
 import me.dpohvar.powernbt.api.NBTManager;
+import me.dpohvar.powernbt.utils.ItemStackUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -30,7 +31,7 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 		}
 	}
 
-	private Expression<?> obj;
+	private Expression<Object> obj;
 
 	@Nullable
 	@Override
@@ -55,7 +56,7 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 
 	@Override
 	public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-		this.obj = exprs[0];
+		this.obj = (Expression<Object>)exprs[0];
 		return true;
 	}
 
@@ -88,7 +89,14 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 			} else if (nbtHolder instanceof Entity) {
 				nbtManager.write((Entity)nbtHolder, compound);
 			} else if (nbtHolder instanceof ItemStack) {
+				boolean flag = nbtHolder.getClass().equals(ItemStack.class);
+				if (flag) {
+					nbtHolder = ItemStackUtils.itemStackUtils.createCraftItemStack((ItemStack)nbtHolder);
+				}
 				nbtManager.write((ItemStack)nbtHolder, compound);
+				if (flag) {
+					this.obj.change(e, new Object[]{nbtHolder}, Changer.ChangeMode.SET);
+				}
 			}
 		});
 	}

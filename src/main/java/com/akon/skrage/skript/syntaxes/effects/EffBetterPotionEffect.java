@@ -24,7 +24,7 @@ public class EffBetterPotionEffect extends Effect {
     private int mode;
 
     static {
-        Skript.registerEffect(EffBetterPotionEffect.class, "(add|apply) %potioneffecttype% [potion] [[[of] tier] %number%] to %livingentities% [for %-timespan%] [ambient %-boolean%] [hide particle[s] %-boolean%] [mode (0¦default|1¦force|2¦vanilla)]");
+        Skript.registerEffect(EffBetterPotionEffect.class, "(add|apply) %potioneffecttype% [potion] [[[of] tier] %number%] to %livingentities% [for %-timespan%] [ambient %-boolean% [hide particle[s] %-boolean% [mode (0¦default|1¦force|2¦vanilla)]]]");
     }
 
     @Override

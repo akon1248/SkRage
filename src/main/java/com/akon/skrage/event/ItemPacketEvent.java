@@ -14,7 +14,7 @@ public abstract class ItemPacketEvent extends PlayerEvent {
 
     public ItemPacketEvent(Player who, ItemStack itemStack) {
         super(who);
-        this.itemStack = itemStack;
+        this.itemStack = itemStack.clone();
     }
 
 }

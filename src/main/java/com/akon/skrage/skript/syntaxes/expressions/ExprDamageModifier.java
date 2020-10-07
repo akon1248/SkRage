@@ -16,10 +16,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.Nullable;
 
 @Description({"Damage Modifierによって変化するダメージの量を取得します"})
-public class ExprDamageModifierDamage extends SimpleExpression<Number> {
+public class ExprDamageModifier extends SimpleExpression<Number> {
 	
 	static {
-	    Skript.registerExpression(ExprDamageModifierDamage.class, Number.class, ExpressionType.COMBINED, "damage modifier %damagemodifier%");
+	    Skript.registerExpression(ExprDamageModifier.class, Number.class, ExpressionType.COMBINED, "damage modifier %damagemodifier%");
 	}
 	
 	private Expression<EntityDamageEvent.DamageModifier> damageModifier;

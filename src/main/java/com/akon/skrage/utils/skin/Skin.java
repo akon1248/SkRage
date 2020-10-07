@@ -11,7 +11,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.UUID;
 
 @Data
@@ -32,9 +31,7 @@ public class Skin {
 
 	@Nullable
 	public static Skin fromGameProfile(WrappedGameProfile profile) {
-		Iterator<WrappedSignedProperty> iterator = profile.getProperties().get("textures").iterator();
-		if (iterator.hasNext()) {
-			WrappedSignedProperty property = iterator.next();
+		for (WrappedSignedProperty property: profile.getProperties().get("textures")) {
 			return new Skin(property.getValue(), property.getSignature());
 		}
 		return null;

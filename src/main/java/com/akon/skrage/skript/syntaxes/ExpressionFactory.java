@@ -13,6 +13,7 @@ import ch.njol.util.coll.CollectionUtils;
 import com.akon.skrage.SkRage;
 import com.akon.skrage.utils.ReflectionUtil;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
@@ -28,7 +29,6 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
-import sun.reflect.Reflection;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -49,12 +49,13 @@ public class ExpressionFactory {
 	//010: of
 	//100: from
 	public static <T, U> void registerExpression(String className, String pattern, int patterns, Class<T> type, Class<U> returnType, Function<T, U> getter, @Nullable BiConsumer<T, U> setter, @Nullable String... description) {
-		ExpressionMethodInterceptor<T, U> methodInterceptor = new ExpressionMethodInterceptor<>(pattern, patterns, type, returnType, getter, setter);
-		if (methodInterceptor.getPatterns().length > 0) {
+		ExpressionInfo<T, U> exprInfo = new ExpressionInfo<>(pattern, patterns, type, returnType, getter, setter);
+		if (exprInfo.getPatterns().length > 0) {
 			try {
+				Class<?> caller = Class.forName(new Throwable().getStackTrace()[1].getClassName());
 				DynamicType.Builder<?> builder = new ByteBuddy()
-						.subclass(TypeDescription.Generic.Builder.parameterizedType(SimpleExpression.class, methodInterceptor.getSingleReturnType()).build())
-						.name(Reflection.getCallerClass(2).getPackage().getName() + "." + className);
+					.subclass(TypeDescription.Generic.Builder.parameterizedType(SimpleExpression.class, exprInfo.getSingleReturnType()).build())
+					.name(caller.getPackage().getName() + "." + className);
 				if (description != null) {
 					builder = builder.annotateType(AnnotationDescription.Builder.ofType(Description.class).defineArray("value", description).build());
 				}
@@ -63,41 +64,36 @@ public class ExpressionFactory {
 					elementMatcher = elementMatcher.or(ElementMatchers.named("acceptChange")).or(ElementMatchers.named("change"));
 				}
 				Class<?> clazz = builder
-						.method(elementMatcher)
-						.intercept(MethodDelegation.to(methodInterceptor))
-						.make()
-						.load(ExpressionFactory.class.getClassLoader())
-						.getLoaded();
-				ReflectionUtil.invokeStaticMethod(Skript.class, "registerExpression", new Class[]{Class.class, Class.class, ExpressionType.class, String[].class}, new Object[]{clazz, methodInterceptor.getSingleReturnType(), ExpressionType.COMBINED, methodInterceptor.getPatterns()});
+					.method(elementMatcher)
+					.intercept(MethodDelegation.to(exprInfo))
+					.make()
+					.load(caller.getClassLoader())
+					.getLoaded();
+				ReflectionUtil.invokeStaticMethod(Skript.class, "registerExpression", new Class[]{Class.class, Class.class, ExpressionType.class, String[].class}, new Object[]{clazz, exprInfo.getSingleReturnType(), ExpressionType.COMBINED, exprInfo.getPatterns()});
 			} catch (Exception ex) {
 				StringWriter writer = new StringWriter();
 				ex.printStackTrace(new PrintWriter(writer));
 				Logger logger = SkRage.getInstance().getLogger();
-				logger.warning("Expressionの登録に失敗しました: " + methodInterceptor.getPatterns()[0]);
+				logger.warning("Expressionの登録に失敗しました: " + exprInfo.getPatterns()[0]);
 				Arrays.stream(writer.toString().split(System.lineSeparator())).forEach(logger::warning);
 			}
 		}
 	}
 
-	public static class ExpressionMethodInterceptor<T, U> {
+	@Getter
+	public static class ExpressionInfo<T, U> {
 
-		@Getter
 		private final String[] patterns;
-		@Getter
 		private final boolean isEvent;
-		@Getter
 		private final Function<T, U> getter;
-		@Getter
 		private final BiConsumer<T, U> setter;
-		@Getter
 		private final Class<T> type;
-		@Getter
 		private final Class<U> returnType;
-		@Getter
-		private Class<?> singleReturnType;
-		private WeakHashMap<SimpleExpression<?>, Expression<?>> exprs = new WeakHashMap<>();
+		private final Class<?> singleReturnType;
+		@Getter(AccessLevel.NONE)
+		private final WeakHashMap<SimpleExpression<?>, Expression<?>> exprs = new WeakHashMap<>();
 
-		public ExpressionMethodInterceptor(String pattern, int patterns, Class<T> type, Class<U> returnType, Function<T, U> getter, BiConsumer<T, U> setter) {
+		public ExpressionInfo(String pattern, int patterns, Class<T> type, Class<U> returnType, Function<T, U> getter, BiConsumer<T, U> setter) {
 			this.isEvent = Event.class.isAssignableFrom(type);
 			if (this.isEvent) {
 				this.patterns = new String[]{pattern};

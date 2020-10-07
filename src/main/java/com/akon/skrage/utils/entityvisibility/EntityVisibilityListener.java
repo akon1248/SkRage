@@ -1,4 +1,4 @@
-package com.akon.skrage.utils.hideentity;
+package com.akon.skrage.utils.entityvisibility;
 
 import com.akon.skrage.SkRage;
 import com.comphenix.protocol.PacketType;

@@ -21,11 +21,12 @@ public class EffDamageSource extends Effect {
     private Expression<Entity> entity;
     private Expression<Number> damage;
     private Expression<DamageSourceBuilder> damageSource;
+    private static boolean lastResult;
 
     @Override
     protected void execute(Event e) {
         if (this.entity != null && this.damage != null && this.damageSource != null) {
-            this.damageSource.getSingle(e).buildAndDamage(this.entity.getSingle(e), this.damage.getSingle(e).floatValue());
+            lastResult = this.damageSource.getSingle(e).buildAndDamage(this.entity.getSingle(e), this.damage.getSingle(e).floatValue());
         }
     }
 
@@ -40,5 +41,9 @@ public class EffDamageSource extends Effect {
         this.damage = (Expression<Number>)exprs[1];
         this.damageSource = (Expression<DamageSourceBuilder>)exprs[2];
         return true;
+    }
+
+    public static boolean getLastResult() {
+        return lastResult;
     }
 }

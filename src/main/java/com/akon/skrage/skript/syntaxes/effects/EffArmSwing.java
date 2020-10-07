@@ -17,7 +17,7 @@ import java.util.Optional;
 public class EffArmSwing extends Effect {
 
     static {
-        Skript.registerEffect(EffArmSwing.class, "make arm swing %livingentity%");
+        Skript.registerEffect(EffArmSwing.class, "make %livingentity% arm swing");
     }
 
     private Expression<LivingEntity> entity;

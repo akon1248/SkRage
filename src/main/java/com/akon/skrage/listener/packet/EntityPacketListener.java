@@ -4,7 +4,7 @@ import com.akon.skrage.SkRage;
 import com.akon.skrage.event.EntityAddTrackingPlayerEvent;
 import com.akon.skrage.event.EntityRemoveTrackingPlayerEvent;
 import com.akon.skrage.event.TrackingEvent;
-import com.akon.skrage.utils.hideentity.EntityVisibilityManager;
+import com.akon.skrage.utils.entityvisibility.EntityVisibilityManager;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;

@@ -9,9 +9,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Skeleton;
 
 //OldAIが有効だった場合腕が常に上がっているように見せる
-public class OldAISkeletonPacketListener extends PacketAdapter {
+public class OldAISkeletonListener extends PacketAdapter {
 
-	public OldAISkeletonPacketListener() {
+	public OldAISkeletonListener() {
 		super(SkRage.getInstance(), PacketType.Play.Server.ENTITY_METADATA);
 	}
 

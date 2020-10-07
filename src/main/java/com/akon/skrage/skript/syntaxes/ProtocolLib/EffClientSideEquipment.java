@@ -6,11 +6,11 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import com.akon.skrage.utils.exceptionsafe.ExceptionSafe;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -41,13 +41,7 @@ public class EffClientSideEquipment extends Effect {
                 packet.getItemSlots().write(0, this.itemSlot);
                 packet.getItemModifier().write(0, item);
                 return packet;
-            }).forEach(packet -> Arrays.stream(this.players.getAll(e)).forEach(player -> {
-                try {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-                } catch (InvocationTargetException ex) {
-                    ex.printStackTrace();
-                }
-            }));
+            }).forEach(packet -> Arrays.stream(this.players.getAll(e)).forEach(ExceptionSafe.<Player, InvocationTargetException>consumer(player -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet)).caught(ExceptionSafe.PRINT_STACK_TRACE)));
         }
     }
 

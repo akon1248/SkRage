@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import com.akon.skrage.utils.hideentity.EntityVisibilityManager;
+import com.akon.skrage.utils.entityvisibility.EntityVisibilityManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

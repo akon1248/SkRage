@@ -76,7 +76,7 @@ public class NMSUtil {
 	}
 
 	//爆発を起こしたEntityを指定して爆発を発生させる
-	public static void createExplosion(org.bukkit.entity.Entity entity, Location location, float power, boolean isSafe, boolean fire) {
+	public static void createExplosion(org.bukkit.entity.Entity entity, Location location, float power, boolean fire, boolean isSafe) {
 		net.minecraft.server.v1_12_R1.WorldServer nmsWorld = ((CraftWorld)location.getWorld()).getHandle();
 		net.minecraft.server.v1_12_R1.Entity nmsEntity = entity == null ? null : ((CraftEntity)entity).getHandle();
 		nmsWorld.createExplosion(nmsEntity, location.getX(), location.getY(), location.getZ(), power, fire, !isSafe);
@@ -129,6 +129,7 @@ public class NMSUtil {
 			BarStyle style;
 			switch (bossBar.style) {
 				case PROGRESS:
+				default:
 					style = BarStyle.SOLID;
 					break;
 				case NOTCHED_6:
@@ -142,9 +143,6 @@ public class NMSUtil {
 					break;
 				case NOTCHED_20:
 					style = BarStyle.SEGMENTED_20;
-					break;
-				default:
-					style = null;
 			}
 			BossBar bukkitBossBar = Bukkit.createBossBar(bossBar.title.getText(), BarColor.valueOf(bossBar.color.name()), style, barFlags.toArray(new BarFlag[0]));
 			try {
@@ -209,7 +207,7 @@ public class NMSUtil {
 	//ウィザーの左右の頭のターゲットを取得する
 	public static org.bukkit.entity.Entity getWitherHeadTarget(Wither wither, int i) {
 		if (i != 0 && i != 1) {
-			throw new IllegalArgumentException("第二引数は0か1である必要がありあす");
+			throw new IllegalArgumentException("第二引数は0か1である必要があります");
 		}
 		EntityWither entityWither = ((CraftWither)wither).getHandle();
 		int entityId = entityWither.m(i + 1);
@@ -225,7 +223,7 @@ public class NMSUtil {
 	//ウィザーの左右の頭のターゲットを変更する
 	public static void setWitherHeadTarget(Wither wither, int i, LivingEntity target) {
 		if (i != 0 && i != 1) {
-			throw new IllegalArgumentException("第二引数は0か1である必要がありあす");
+			throw new IllegalArgumentException("第二引数は0か1である必要があります");
 		}
 		EntityWither entityWither = ((CraftWither)wither).getHandle();
 		entityWither.a(i + 1, target == null ? 0 : target.getEntityId());
@@ -264,20 +262,9 @@ public class NMSUtil {
 		return Collections.unmodifiableCollection(result);
 	}
 
-	public static DamageSource getLastDamage(LivingEntity entity) {
-		try {
-			CombatTracker combatTracker = (((CraftLivingEntity)entity).getHandle()).getCombatTracker();
-			List<CombatEntry> combatEntries = (List<CombatEntry>)ReflectionUtil.getField(CombatTracker.class, combatTracker, "a");
-			return combatEntries.get(combatEntries.size() - 1).a();
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-
 	//エンティティを殺害したと認識されているエンティティを取得する
 	public static org.bukkit.entity.Entity getKiller(LivingEntity entity) {
-		return Optional.ofNullable(getLastDamage(entity)).map(DamageSource::getEntity).map(Entity::getBukkitEntity).orElse(null);
+		return Optional.of(entity).map(CraftLivingEntity.class::cast).map(CraftLivingEntity::getHandle).map(EntityLiving::getCombatTracker).map(CombatTracker::c).map(Entity::getBukkitEntity).orElse(null);
 	}
 
 	//エンティティの死亡メッセージをサーバー全体に流す

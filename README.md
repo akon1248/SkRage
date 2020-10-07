@@ -35,8 +35,8 @@ Events:
 		Event values:
 			event-player
 			event-world
-			event-anvilinv
 			event-string
+			event-anvilinv
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -1192,16 +1192,6 @@ send "Projectile_Damage: %{_weapondamage}%"
 			reset
 		Patterns:
 			cool[]down of %itemtype% of %player%
-	ExprItemNBTCompound:
-		ID: ExprItemNBTCompound
-		Description:
-			アイテムのNBT
-		Return type: NBT Compound
-		Changers:
-			add
-			set
-		Patterns:
-			nbt[ ]compound (of|from) item %itemstack% 
 	ExprItemName:
 		ID: ExprItemName
 		Description:
@@ -1310,12 +1300,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 	ExprNBTCompound:
 		ID: ExprNBTCompound
 		Description:
-			ブロック、エンティティのNBT
+			ブロック、エンティティ、アイテムのNBT
 		Return type: NBT Compound
 		Changers:
 			add
+			set
 		Patterns:
-			nbt[ ]compound (of|from) %block/entity% 
+			nbt[ ]compound (of|from) %block/entity/itemstack% 
 	ExprNBTList:
 		ID: ExprNBTList
 		Return type: NBT List

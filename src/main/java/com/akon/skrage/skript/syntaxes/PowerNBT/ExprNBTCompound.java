@@ -108,6 +108,9 @@ public class ExprNBTCompound extends SimpleExpression<NBTCompound> {
 		} else if (obj instanceof Entity) {
 			return nbtManager.read((Entity)obj);
 		} else if (obj instanceof ItemStack) {
+			if (((ItemStack)obj).getItemMeta() == null) {
+				return null;
+			}
 			return nbtManager.read((ItemStack)obj);
 		}
 		return null;

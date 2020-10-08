@@ -6,10 +6,13 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -56,6 +59,13 @@ public class CSEListener extends PacketAdapter implements Listener {
 	@EventHandler
 	public void onDeath(EntityDeathEvent e) {
 		removeAllCSEs(e.getEntity());
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onConsume(PlayerItemConsumeEvent e) {
+		if (e.getItem().getType() == Material.MILK_BUCKET) {
+			removeAllCSEs(e.getPlayer());
+		}
 	}
 
 	@EventHandler

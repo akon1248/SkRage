@@ -67,7 +67,7 @@ public class CSEManager {
 	}
 
 	private static boolean apply0(LivingEntity entity, CustomStatusEffect effect, ApplyCondition condition) {
-		if (condition.test(entity, effect)) {
+		if (!entity.isDead() && condition.test(entity, effect)) {
 			Optional.ofNullable(Optional.ofNullable(getActiveCSEs0(entity)).orElseGet(() -> {
 				HashMap<CSEType, CustomStatusEffect> map = Maps.newHashMap();
 				entity.setMetadata("CustomStatusEffects", new FixedMetadataValue(SkRage.getInstance(), map));

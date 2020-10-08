@@ -12,8 +12,8 @@ Events:
 			[on] add tracking player
 		Event values:
 			event-player
-			event-world
 			event-entity
+			event-world
 		Cancellable: true
 	On anvil gui close:
 		ID: anvil_gui_close
@@ -23,8 +23,8 @@ Events:
 			[on] anvil[ ]gui close
 		Event values:
 			event-player
-			event-world
 			event-anvilinv
+			event-world
 		Cancellable: false
 	On anvil gui done:
 		ID: anvil_gui_done
@@ -34,9 +34,9 @@ Events:
 			[on] anvil[ ]gui done
 		Event values:
 			event-player
-			event-world
 			event-string
 			event-anvilinv
+			event-world
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -46,8 +46,8 @@ Events:
 			[on] anvil[ ]gui open
 		Event values:
 			event-player
-			event-world
 			event-anvilinv
+			event-world
 		Cancellable: true
 	On combust by sunlight:
 		ID: combust_by_sunlight
@@ -56,8 +56,8 @@ Events:
 		Patterns:
 			[on] combust[ing] by sunlight
 		Event values:
-			event-world
 			event-entity
+			event-world
 		Cancellable: true
 	On console log:
 		ID: console_log
@@ -108,8 +108,8 @@ Events:
 			[on] (crackshot|cs) shoot
 		Event values:
 			event-player
-			event-projectile
 			event-entity
+			event-projectile
 			event-string
 		Cancellable: false
 	On cse apply:
@@ -119,9 +119,9 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) apply %string%
 		Event values:
-			event-world
-			event-customstatuseffect
 			event-entity
+			event-customstatuseffect
+			event-world
 		Cancellable: false
 	On cse remove:
 		ID: cse_remove
@@ -130,18 +130,18 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) remove %string%
 		Event values:
-			event-world
-			event-customstatuseffect
 			event-entity
+			event-customstatuseffect
+			event-world
 		Cancellable: false
 	On cse tick:
 		ID: cse_tick
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) tick %string%
 		Event values:
-			event-world
-			event-customstatuseffect
 			event-entity
+			event-customstatuseffect
+			event-world
 		Cancellable: false
 	On disguise:
 		ID: disguise
@@ -150,8 +150,8 @@ Events:
 		Patterns:
 			[on] disguise
 		Event values:
-			event-disguise
 			event-entity
+			event-disguise
 		Cancellable: true
 	On jump:
 		ID: jump
@@ -171,8 +171,8 @@ Events:
 			[on] [player] velocity
 		Event values:
 			event-player
-			event-world
 			event-vector
+			event-world
 		Cancellable: true
 	On plugin message receiving:
 		ID: plugin_message_receiving
@@ -196,10 +196,10 @@ Events:
 			[on] pre[pare] craft[ing]
 		Event values:
 			event-player
-			event-inventory
 			event-itemstack
-			event-slot
 			event-recipe
+			event-slot
+			event-inventory
 		Cancellable: false
 	On receive creative item:
 		ID: receive_creative_item
@@ -235,8 +235,8 @@ Events:
 			[on] remove tracking player
 		Event values:
 			event-player
-			event-world
 			event-entity
+			event-world
 		Cancellable: true
 	On scope:
 		ID: scope
@@ -266,8 +266,8 @@ Events:
 			[on] sign[ ]editor done
 		Event values:
 			event-player
-			event-world
 			event-signeditor
+			event-world
 		Cancellable: false
 	On sign editor open:
 		ID: sign_editor_open
@@ -277,8 +277,8 @@ Events:
 			[on] sign[ ]editor open
 		Event values:
 			event-player
-			event-world
 			event-signeditor
+			event-world
 		Cancellable: true
 	On undisguise:
 		ID: undisguise
@@ -287,8 +287,8 @@ Events:
 		Patterns:
 			[on] undisguise
 		Event values:
-			event-disguise
 			event-entity
+			event-disguise
 		Cancellable: true
 	On unscope:
 		ID: unscope
@@ -470,13 +470,6 @@ Effects:
 		Patterns:
 			register (cse|custom[ ]status[ ]effect) type with id %string% [and] name %string% [and] color (%-color%|%-number%[, %-number%, %-number%])
 			unregister (cse|custom[ ]status[ ]effect) type [id] %string%
-	EffRemoveCSE:
-		ID: EffRemoveCSE
-		Description:
-			CustomStatusEffectをエンティティから削除します
-		Patterns:
-			(clear|remove) (cse|custom[ ]status[ ]effect) %customstatuseffecttypes% from %entities%
-			(clear|remove) [all] [active] (cse|custom[ ]status[ ]effect)[s] from %entities%
 	EffSendPluginMessage:
 		ID: EffSendPluginMessage
 		Patterns:
@@ -495,6 +488,12 @@ Effects:
 			また、一度死亡したエンティティをリスポーンさせることも可能です
 		Patterns:
 			[re]spawn [(a|an)] %entity% at %location%
+	EffUpdateBlock:
+		ID: EffUpdateBlock
+		Description:
+			ブロックを更新します
+		Patterns:
+			update block %block%
 	EffUpdateInventory:
 		ID: EffUpdateInventory
 		Description:
@@ -503,6 +502,25 @@ Effects:
 			update %player%'s inventory
 			update inventory of %player%
 Expressions:
+	ExprActiveCSEs:
+		ID: ExprActiveCSEs
+		Description:
+			エンティティに付与されているすべてのCustomStatusEffect
+		Return type: Custom Status Effect
+		Changers:
+			remove
+			delete
+		Patterns:
+			[all] [active] (cse|custom[ ]status[ ]effect)[s] of %livingentity%
+	ExprAllCSETypes:
+		ID: ExprAllCSETypes
+		Description:
+			登録されているすべてのCustomStatusEffect
+		Return type: Custom Status Effect Type
+		Changers:
+			none
+		Patterns:
+			all (cse|custom[ ]status[ ]effect) types
 	ExprAllCSWeapons:
 		ID: ExprAllCSWeapons
 		Return type: Text

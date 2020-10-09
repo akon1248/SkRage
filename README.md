@@ -11,8 +11,8 @@ Events:
 		Patterns:
 			[on] add tracking player
 		Event values:
-			event-player
 			event-entity
+			event-player
 			event-world
 		Cancellable: true
 	On anvil gui close:
@@ -22,8 +22,8 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
-			event-player
 			event-anvilinv
+			event-player
 			event-world
 		Cancellable: false
 	On anvil gui done:
@@ -33,9 +33,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
+			event-anvilinv
 			event-player
 			event-string
-			event-anvilinv
 			event-world
 		Cancellable: false
 	On anvil gui open:
@@ -45,8 +45,8 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
-			event-player
 			event-anvilinv
+			event-player
 			event-world
 		Cancellable: true
 	On combust by sunlight:
@@ -77,8 +77,8 @@ Events:
 			[on] (crackshot|cs) damage
 		Event values:
 			event-player
-			event-projectile
 			event-string
+			event-projectile
 		Cancellable: true
 	On cs pre shoot:
 		ID: cs_pre_shoot
@@ -107,10 +107,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
-			event-player
 			event-entity
-			event-projectile
+			event-player
 			event-string
+			event-projectile
 		Cancellable: false
 	On cse apply:
 		ID: cse_apply
@@ -119,8 +119,8 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) apply %string%
 		Event values:
-			event-entity
 			event-customstatuseffect
+			event-entity
 			event-world
 		Cancellable: false
 	On cse remove:
@@ -130,8 +130,8 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) remove %string%
 		Event values:
-			event-entity
 			event-customstatuseffect
+			event-entity
 			event-world
 		Cancellable: false
 	On cse tick:
@@ -139,8 +139,8 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) tick %string%
 		Event values:
-			event-entity
 			event-customstatuseffect
+			event-entity
 			event-world
 		Cancellable: false
 	On disguise:
@@ -170,8 +170,8 @@ Events:
 		Patterns:
 			[on] [player] velocity
 		Event values:
-			event-player
 			event-vector
+			event-player
 			event-world
 		Cancellable: true
 	On plugin message receiving:
@@ -195,11 +195,11 @@ Events:
 		Patterns:
 			[on] pre[pare] craft[ing]
 		Event values:
-			event-player
-			event-itemstack
-			event-recipe
 			event-slot
+			event-player
+			event-recipe
 			event-inventory
+			event-itemstack
 		Cancellable: false
 	On receive creative item:
 		ID: receive_creative_item
@@ -234,8 +234,8 @@ Events:
 		Patterns:
 			[on] remove tracking player
 		Event values:
-			event-player
 			event-entity
+			event-player
 			event-world
 		Cancellable: true
 	On scope:
@@ -265,8 +265,8 @@ Events:
 		Patterns:
 			[on] sign[ ]editor done
 		Event values:
-			event-player
 			event-signeditor
+			event-player
 			event-world
 		Cancellable: false
 	On sign editor open:
@@ -276,8 +276,8 @@ Events:
 		Patterns:
 			[on] sign[ ]editor open
 		Event values:
-			event-player
 			event-signeditor
+			event-player
 			event-world
 		Cancellable: true
 	On undisguise:
@@ -365,17 +365,13 @@ Effects:
 			force: 条件なしに強制的に付与します
 			vanilla: バニラでポーション効果が付与される条件と同じです
 		Patterns:
-			(add|apply) %potioneffecttype% [potion] [[[of] tier] %number%] to %livingentities% [for %-timespan%] [ambient %-boolean% [hide particle[s] %-boolean% [mode (0¦default|1¦force|2¦vanilla)]]]
+			(add|apply) %potioneffecttype% [potion] [[[of] tier] %-number%] to %livingentities% [for %-timespan%] [ambient %-boolean%] [hide particle[s] %-boolean%] [mode (0¦default|1¦force|2¦vanilla)]
 	EffBlockBreakEffect:
 		ID: EffBlockBreakEffect
 		Description:
 			ブロックが壊れた時のエフェクトを発生させます
 		Patterns:
 			show %itemtype% (break[ing]|destroy) effect at %location% [for %-players%]
-	EffBroadcastDeathMessage:
-		ID: EffBroadcastDeathMessage
-		Patterns:
-			broadcast death message of %livingentity%
 	EffChestOpenClose:
 		ID: EffChestOpenClose
 		Description:
@@ -470,6 +466,12 @@ Effects:
 		Patterns:
 			register (cse|custom[ ]status[ ]effect) type with id %string% [and] name %string% [and] color (%-color%|%-number%[, %-number%, %-number%])
 			unregister (cse|custom[ ]status[ ]effect) type [id] %string%
+	EffSendDeathMessage:
+		ID: EffSendDeathMessage
+		Description:
+			エンティティの死亡メッセージを送信します
+		Patterns:
+			send death message of %livingentity% to %commandsenders%
 	EffSendPluginMessage:
 		ID: EffSendPluginMessage
 		Patterns:
@@ -512,6 +514,19 @@ Expressions:
 			delete
 		Patterns:
 			[all] [active] (cse|custom[ ]status[ ]effect)[s] of %livingentity%
+	ExprAffectedEntities:
+		ID: ExprAffectedEntities
+		Description:
+			AoE Cloud EffectイベントでArea Effect Cloudをポーション効果を受けたエンティティのリスト
+		Return type: Living Entity
+		Changers:
+			add
+			set
+			remove
+			remove all
+			delete
+		Patterns:
+			affected entities
 	ExprAllCSETypes:
 		ID: ExprAllCSETypes
 		Description:
@@ -1572,6 +1587,25 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			%entity%'s ticks lived
 			ticks lived of %entity%
+	ExprTimespanFromTicks:
+		ID: ExprTimespanFromTicks
+		Description:
+			tick数からtimespanを作成します
+		Return type: Timespan
+		Changers:
+			none
+		Patterns:
+			timespan from %number%
+	ExprTimespanTicks:
+		ID: ExprTimespanTicks
+		Description:
+			timespanをtick数に変換します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			ticks of %timespan%
+			ticks from %timespan%
 	ExprTo:
 		ID: ExprTo
 		Description:

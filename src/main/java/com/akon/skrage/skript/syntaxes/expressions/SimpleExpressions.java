@@ -1,6 +1,7 @@
 package com.akon.skrage.skript.syntaxes.expressions;
 
 import ch.njol.skript.util.Color;
+import ch.njol.skript.util.Timespan;
 import com.akon.skrage.skript.syntaxes.ExpressionFactory;
 import com.akon.skrage.utils.ColorConverter;
 import com.akon.skrage.utils.NMSUtil;
@@ -106,6 +107,8 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprPlayerTimeRelative", "(client|player) time relative", 0b011, Player.class, Boolean.class, Player::isPlayerTimeRelative, (player, bool) -> player.setPlayerTime(player.getPlayerTimeOffset(), bool), "プレイヤーの時間がサーバーの時間と相対的かどうか");
 		ExpressionFactory.registerExpression("ExprSkeletonOldAI", "old ai state", 0b011, LivingEntity.class, Boolean.class, entity -> entity instanceof Skeleton && OldAISkeletonManager.isOldAI((Skeleton)entity), (entity, bool) -> Optional.of(entity).filter(Skeleton.class::isInstance).map(Skeleton.class::cast).ifPresent(skeleton -> OldAISkeletonManager.setOldAI(skeleton, bool)), "スケルトンのAIが1.8以前の状態かどうか");
 		ExpressionFactory.registerExpression("ExprTicksLived", "ticks lived", 0b011, Entity.class, Number.class, Entity::getTicksLived, (entity, number) -> entity.setTicksLived(number.intValue()), "エンティティがワールドにスポーンしてから経過したtick数");
+		ExpressionFactory.registerExpression("ExprTimespanTicks", "ticks", 0b110, Timespan.class, Number.class, Timespan::getTicks_i, null, "timespanをtick数に変換します");
+		ExpressionFactory.registerExpression("ExprTimespanFromTicks", "timespan", 0b100, Number.class, Timespan.class, num -> Timespan.fromTicks_i(num.longValue()), null, "tick数からtimespanを作成します");
 		ExpressionFactory.registerExpression("ExprTo", "move(e|ing) to", 0, PlayerMoveEvent.class, Location.class, PlayerMoveEvent::getTo, PlayerMoveEvent::setTo, "プレイヤーが移動した時の移動先");
 	}
 

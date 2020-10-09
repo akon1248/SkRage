@@ -1,7 +1,10 @@
 package com.akon.skrage.utils;
 
 
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.collect.Lists;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.*;
@@ -267,9 +270,9 @@ public class NMSUtil {
 		return Optional.of(entity).map(CraftLivingEntity.class::cast).map(CraftLivingEntity::getHandle).map(EntityLiving::getCombatTracker).map(CombatTracker::c).map(Entity::getBukkitEntity).orElse(null);
 	}
 
-	//エンティティの死亡メッセージをサーバー全体に流す
-	public static void broadcastDeathMessage(LivingEntity entity) {
-		((CraftServer)Bukkit.getServer()).getServer().getPlayerList().sendMessage((((CraftLivingEntity)entity).getHandle()).getCombatTracker().getDeathMessage());
+	//エンティティの死亡メッセージを取得する
+	public static BaseComponent[] getDeathMessage(LivingEntity entity) {
+		return ComponentSerializer.parse(WrappedChatComponent.fromHandle((((CraftLivingEntity)entity).getHandle()).getCombatTracker().getDeathMessage()).getJson());
 	}
 
 	//エンティティの現在の死亡メッセージのフォーマットを取得する

@@ -1,7 +1,6 @@
 package com.akon.skrage.utils;
 
 import com.google.common.collect.Maps;
-import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -88,15 +87,20 @@ public class ColorConverter {
 	}
 
 	public static ch.njol.skript.util.Color toSkriptColor(Color color) {
-		return new RGBColor(color, toDyeColor(color), toChatColor(color));
+		return new RGBColor(color);
 	}
 
-	@AllArgsConstructor
 	private static class RGBColor implements ch.njol.skript.util.Color {
 
 		private final Color color;
 		private final DyeColor dyeColor;
 		private final ChatColor chatColor;
+
+		public RGBColor(Color color) {
+			this.color = color;
+			this.dyeColor = toDyeColor(color);
+			this.chatColor = toChatColor(color);
+		}
 
 		@Override
 		public Color asBukkitColor() {

@@ -15,7 +15,7 @@ public class EvtCustomStatusEffect extends SkriptEvent {
 	static {
 		Skript.registerEvent("cse apply", EvtCustomStatusEffect.class, CSEApplyEvent.class, "(cse|custom[ ]status[ ]effect) apply %string%").description("CustomStatusEffectが付与されたとき");
 		Skript.registerEvent("cse remove", EvtCustomStatusEffect.class, CSERemoveEvent.class, "(cse|custom[ ]status[ ]effect) remove %string%").description("CustomStatusEffectの効果が切れたとき");
-		Skript.registerEvent("cse tick", EvtCustomStatusEffect.class, CSETickEvent.class, "(cse|custom[ ]status[ ]effect) tick %string%");
+		Skript.registerEvent("cse tick", EvtCustomStatusEffect.class, CSETickEvent.class, "(cse|custom[ ]status[ ]effect) tick %string%").description("CustomStatusEffectが更新されるとき");
 		EventValues.registerEventValue(CSEEvent.class, CustomStatusEffect.class, new Getter<CustomStatusEffect, CSEEvent>() {
 
 			@Nullable

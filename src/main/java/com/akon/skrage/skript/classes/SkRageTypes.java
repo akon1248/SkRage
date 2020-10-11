@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
+import java.util.Random;
 
 public class SkRageTypes {
 	
@@ -73,6 +74,18 @@ public class SkRageTypes {
 		Classes.registerClass(new ClassInfo<>(AttributeModifier.class, "attributemodifier")
 			.user("attribute ?modifier")
 			.name("Attribute Modifier")
+			.parser(new UnparsableParser<>()));
+		Classes.registerClass(new ClassInfo<>(Random.class, "random")
+			.user("randoms?")
+			.name("Random")
+			.parser(new UnparsableParser<>()));
+		Classes.registerClass(new ClassInfo<>(Throwable.class, "throwable")
+			.user("throwables?")
+			.user("Throwable")
+			.parser(new UnparsableParser<>()));
+		Classes.registerClass(new ClassInfo<>(StackTraceElement.class, "stacktraceelement")
+			.user("stack ?trace ?elements?")
+			.user("Stack Trace Element")
 			.parser(new UnparsableParser<>()));
 		if (Bukkit.getPluginManager().isPluginEnabled("PowerNBT")) {
 			Classes.registerClass(new ClassInfo<>(NBTCompound.class, "nbtcompound")

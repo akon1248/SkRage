@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.Random;
 
 public class SimpleExpressions {
 
@@ -40,6 +41,10 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprAttributeValue", "attribute value", 0b111 , AttributeInstance.class, Number.class, AttributeInstance::getValue, null, "Attributeの値");
 		ExpressionFactory.registerExpression("ExprBossBarFromEntity", "boss[ ]bar", 0b111, Entity.class, BossBar.class, NMSUtil::getBossBar, null, "エンダードラゴン、ウィザーのボスバー", "SkellettもしくはskRayFallを導入しないとボスバーを扱うことはできません");
 		ExpressionFactory.registerExpression("ExprBytes", "bytes", 0b110, String.class, Number[].class, str -> ArrayUtils.toObject(str.getBytes(StandardCharsets.UTF_8)), null, "文字列をバイトのリストに変換します");
+		ExpressionFactory.registerExpression("ExprErrorCause", "error cause", 0b011, Throwable.class, Throwable.class, Throwable::getCause, null, "エラーの原因となった別のエラー");
+		ExpressionFactory.registerExpression("ExprErrorMessage", "error message", 0b011, Throwable.class, String.class, Throwable::getMessage, null, "エラーメッセージ");
+		ExpressionFactory.registerExpression("ExprErrorName", "error name", 0b011, Throwable.class, String.class, throwable -> throwable.getClass().getName(), null, "エラー名");
+		ExpressionFactory.registerExpression("ExprChatColorCode", "chat color code", 0b100, Color.class, String.class, Color::getFormattedChat, null, "Colorからテキストのカラーコードに変換します");
 		ExpressionFactory.registerExpression("ExprCSEAmplifier", "(cse|custom[ ]status[ ]effect) (amplifier|level|tier)", 0b011, CustomStatusEffect.class, Number.class, CustomStatusEffect::getAmplifier, null, "CustomStatusEffectの効果の強さ");
 		ExpressionFactory.registerExpression("ExprCSEDuration", "(cse|custom[ ]status[ ]effect) duration", 0b011, CustomStatusEffect.class, Number.class, CustomStatusEffect::getDuration, (effect, num) -> effect.setDuration(num.intValue()), "CustomStatusEffectの効果時間(tick)");
 		ExpressionFactory.registerExpression("ExprCSEType", "(cse|custom[ ]status[ ]effect) type", 0b011, CustomStatusEffect.class, CSEType.class, CustomStatusEffect::getType, null, "CustomStatusEffectのタイプ");
@@ -105,7 +110,17 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprNoDamageTicks", "no damage tick[s]", 0b011, LivingEntity.class, Number.class, LivingEntity::getNoDamageTicks, (entity, number) -> entity.setNoDamageTicks(number.intValue()), "ダメージを受けた後の無敵時間");
 		ExpressionFactory.registerExpression("ExprPlayerTime", "(client|player) time", 0b011, Player.class, Number.class, Player::getPlayerTimeOffset, (player, num) -> player.setPlayerTime(num.longValue(), player.isPlayerTimeRelative()), "プレイヤーの時間を変更します");
 		ExpressionFactory.registerExpression("ExprPlayerTimeRelative", "(client|player) time relative", 0b011, Player.class, Boolean.class, Player::isPlayerTimeRelative, (player, bool) -> player.setPlayerTime(player.getPlayerTimeOffset(), bool), "プレイヤーの時間がサーバーの時間と相対的かどうか");
+		ExpressionFactory.registerExpression("ExprRandomBoolean", "random boolean", 0b100, Random.class, Boolean.class, Random::nextBoolean, null, "ランダムな真偽値を生成します");
+		ExpressionFactory.registerExpression("ExprRandomGaussian", "random gauss[ian]", 0b100, Random.class, Number.class, Random::nextGaussian, null, "平均0、標準偏差1.0のガウス分布の乱数を生成します");
+		ExpressionFactory.registerExpression("ExprRandomLong", "random long", 0b100, Random.class, Number.class, Random::nextLong, null, "ランダムな整数(64bitの範囲)を生成します");
+		ExpressionFactory.registerExpression("ExprRandomNumber", "random number", 0b100, Random.class, Number.class, Random::nextDouble, null, "ランダムな0~1の小数を生成します");
+		ExpressionFactory.registerExpression("ExprSimpleErrorName", "simple error name", 0b011, Throwable.class, String.class, throwable -> throwable.getClass().getSimpleName(), null, "エラーのシンプルな名前");
 		ExpressionFactory.registerExpression("ExprSkeletonOldAI", "old ai state", 0b011, LivingEntity.class, Boolean.class, entity -> entity instanceof Skeleton && OldAISkeletonManager.isOldAI((Skeleton)entity), (entity, bool) -> Optional.of(entity).filter(Skeleton.class::isInstance).map(Skeleton.class::cast).ifPresent(skeleton -> OldAISkeletonManager.setOldAI(skeleton, bool)), "スケルトンのAIが1.8以前の状態かどうか");
+		ExpressionFactory.registerExpression("ExprStackTrace", "stack[ ]trace", 0b111, Throwable.class, StackTraceElement[].class, Throwable::getStackTrace, null, "エラーのスタックトレース");
+		ExpressionFactory.registerExpression("ExprStackTraceClass", "stack[ ]trace class", 0b011, StackTraceElement.class, String.class, StackTraceElement::getClassName, null, "スタックトーレスのクラス名");
+		ExpressionFactory.registerExpression("ExprStackTraceFile", "stack[ ]trace file", 0b011, StackTraceElement.class, String.class, StackTraceElement::getFileName, null, "スタックトレースのファイル名");
+		ExpressionFactory.registerExpression("ExprStackTraceLine", "stack[ ]trace line", 0b011, StackTraceElement.class, Number.class, StackTraceElement::getLineNumber, null, "スタックトーレスの行数");
+		ExpressionFactory.registerExpression("ExprStackTraceMethod", "stack[ ]trace method", 0b011, StackTraceElement.class, String.class, StackTraceElement::getMethodName, null, "スタックトレースのメソッド名");
 		ExpressionFactory.registerExpression("ExprTicksLived", "ticks lived", 0b011, Entity.class, Number.class, Entity::getTicksLived, (entity, number) -> entity.setTicksLived(number.intValue()), "エンティティがワールドにスポーンしてから経過したtick数");
 		ExpressionFactory.registerExpression("ExprTimespanTicks", "ticks", 0b110, Timespan.class, Number.class, Timespan::getTicks_i, null, "timespanをtick数に変換します");
 		ExpressionFactory.registerExpression("ExprTimespanFromTicks", "timespan", 0b100, Number.class, Timespan.class, num -> Timespan.fromTicks_i(num.longValue()), null, "tick数からtimespanを作成します");

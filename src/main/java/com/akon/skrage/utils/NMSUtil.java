@@ -175,9 +175,9 @@ public class NMSUtil {
 		PathfinderGoal angerOther = null;
 		PathfinderGoal anger = null;
 		for (PathfinderGoal pathfinderGoal: getTargetSelectors(pigZombie)) {
-			if (pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAngerOther")) {
+			if (pathfinderGoal.getClass().getName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAngerOther")) {
 				angerOther = pathfinderGoal;
-			} else if (pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAnger")) {
+			} else if (pathfinderGoal.getClass().getName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAnger")) {
 				anger = pathfinderGoal;
 			}
 		}
@@ -187,23 +187,26 @@ public class NMSUtil {
 	//ゾンビピッグマンのAIを操作してAIをゾンビと同様にする
 	public static void setAlwaysAngry(PigZombie pigZombie, boolean alwaysAngry) {
 		EntityPigZombie entityPigZombie = ((CraftPigZombie)pigZombie).getHandle();
-		if (!alwaysAngry && isAlwaysAngry(pigZombie)) {
-			try {
-				getTargetSelectors(pigZombie).stream()
-					.filter(pathfinderGoal -> pathfinderGoal instanceof PathfinderGoalHurtByTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget)
-					.forEach(entityPigZombie.targetSelector::a);
-				entityPigZombie.targetSelector.a(1, (PathfinderGoal)ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAngerOther"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
-				entityPigZombie.targetSelector.a(2, (PathfinderGoal)ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAnger"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
-			} catch (ReflectiveOperationException ex) {
-				ex.printStackTrace();
-			}
-		} else {
+		if (alwaysAngry) {
 			getTargetSelectors(pigZombie).stream()
-				.filter(pathfinderGoal -> pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie.PathfinderGoalAngerOther") || pathfinderGoal.getClass().getCanonicalName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie.PathfinderGoalAnger"))
+				.filter(pathfinderGoal -> pathfinderGoal.getClass().getName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAngerOther") || pathfinderGoal.getClass().getName().equals("net.minecraft.server.v1_12_R1.EntityPigZombie$PathfinderGoalAnger"))
 				.forEach(entityPigZombie.targetSelector::a);
 			entityPigZombie.targetSelector.a(1, new PathfinderGoalHurtByTarget(entityPigZombie, true, EntityPigZombie.class));
 			entityPigZombie.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(entityPigZombie, EntityHuman.class, true));
 			entityPigZombie.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(entityPigZombie, EntityIronGolem.class, true));
+		}
+		else if (isAlwaysAngry(pigZombie)) {
+			if (isAlwaysAngry(pigZombie)) {
+				try {
+					getTargetSelectors(pigZombie).stream()
+						.filter(pathfinderGoal -> pathfinderGoal instanceof PathfinderGoalHurtByTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget)
+						.forEach(entityPigZombie.targetSelector::a);
+					entityPigZombie.targetSelector.a(1, (PathfinderGoal) ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAngerOther"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
+					entityPigZombie.targetSelector.a(2, (PathfinderGoal) ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAnger"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
+				} catch (ReflectiveOperationException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -327,6 +330,8 @@ public class NMSUtil {
 		}
 		return LocaleI18n.get(language);
 	}
+
+
 
 
 }

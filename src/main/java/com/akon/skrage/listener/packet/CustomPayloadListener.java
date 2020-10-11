@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import org.bukkit.Bukkit;
 
 public class CustomPayloadListener extends PacketAdapter {
 
@@ -22,6 +23,7 @@ public class CustomPayloadListener extends PacketAdapter {
 			byte[] contents = new byte[buffer.readableBytes()];
 			buffer.readBytes(contents);
 			PluginMessageEvent e = new PluginMessageEvent(event.getPlayer(), event.getPacket().getStrings().read(0), contents, false);
+			Bukkit.getPluginManager().callEvent(e);
 			if (!e.isCancelled()) {
 				contents = e.getContents();
 				buffer = Unpooled.copiedBuffer(contents);
@@ -37,6 +39,7 @@ public class CustomPayloadListener extends PacketAdapter {
 			byte[] contents = new byte[buffer.readableBytes()];
 			buffer.readBytes(contents);
 			PluginMessageEvent e = new PluginMessageEvent(event.getPlayer(), event.getPacket().getStrings().read(0), contents, true);
+			Bukkit.getPluginManager().callEvent(e);
 			if (!e.isCancelled()) {
 				contents = e.getContents();
 				buffer = Unpooled.copiedBuffer(contents);

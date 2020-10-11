@@ -1,33 +1,16 @@
 package com.akon.skrage.skript.syntaxes.ProtocolLib.PluginMessage;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import com.akon.skrage.event.PluginMessageEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import org.jetbrains.annotations.Nullable;
-
-@Description({"プラグインメッセージをクライアントから受け取ったときに呼び出されます"})
 public class EvtPluginMessageReceiving extends SkriptEvent {
 
 	static {
-		Skript.registerEvent("plugin message receiving", EvtPluginMessageReceiving.class, PluginMessageEvent.class, "plugin message receiv(e|ing)");
-		EventValues.registerEventValue(PluginMessageEvent.class, Player.class, new Getter<Player, PluginMessageEvent>() {
-
-			@Override
-			@Nullable
-			public Player get(PluginMessageEvent arg) {
-				return arg.getPlayer();
-			}
-
-		}, 0);
+		Skript.registerEvent("plugin message receiving", EvtPluginMessageReceiving.class, PluginMessageEvent.class, "plugin message receiv(e|ing)").description("プラグインメッセージをクライアントから受け取ったときに呼び出されます");
 	}
 
 	@Override

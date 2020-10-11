@@ -11,9 +11,9 @@ Events:
 		Patterns:
 			[on] add tracking player
 		Event values:
+			event-world
 			event-entity
 			event-player
-			event-world
 		Cancellable: true
 	On anvil gui close:
 		ID: anvil_gui_close
@@ -22,9 +22,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
-			event-anvilinv
-			event-player
 			event-world
+			event-player
+			event-anvilinv
 		Cancellable: false
 	On anvil gui done:
 		ID: anvil_gui_done
@@ -33,10 +33,10 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
-			event-anvilinv
-			event-player
-			event-string
 			event-world
+			event-player
+			event-anvilinv
+			event-string
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -45,9 +45,9 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
-			event-anvilinv
-			event-player
 			event-world
+			event-player
+			event-anvilinv
 		Cancellable: true
 	On combust by sunlight:
 		ID: combust_by_sunlight
@@ -56,8 +56,8 @@ Events:
 		Patterns:
 			[on] combust[ing] by sunlight
 		Event values:
-			event-entity
 			event-world
+			event-entity
 		Cancellable: true
 	On console log:
 		ID: console_log
@@ -76,9 +76,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
+			event-projectile
+			event-entity
 			event-player
 			event-string
-			event-projectile
 		Cancellable: true
 	On cs pre shoot:
 		ID: cs_pre_shoot
@@ -107,10 +108,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
+			event-projectile
 			event-entity
 			event-player
 			event-string
-			event-projectile
 		Cancellable: false
 	On cse apply:
 		ID: cse_apply
@@ -120,8 +121,8 @@ Events:
 			[on] (cse|custom[ ]status[ ]effect) apply %string%
 		Event values:
 			event-customstatuseffect
-			event-entity
 			event-world
+			event-entity
 		Cancellable: false
 	On cse remove:
 		ID: cse_remove
@@ -131,17 +132,19 @@ Events:
 			[on] (cse|custom[ ]status[ ]effect) remove %string%
 		Event values:
 			event-customstatuseffect
-			event-entity
 			event-world
+			event-entity
 		Cancellable: false
 	On cse tick:
 		ID: cse_tick
+		Description:
+			CustomStatusEffectが更新されるとき
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) tick %string%
 		Event values:
 			event-customstatuseffect
-			event-entity
 			event-world
+			event-entity
 		Cancellable: false
 	On disguise:
 		ID: disguise
@@ -160,8 +163,8 @@ Events:
 		Patterns:
 			[on] jump
 		Event values:
-			event-player
 			event-world
+			event-player
 		Cancellable: true
 	On player velocity:
 		ID: player_velocity
@@ -170,44 +173,37 @@ Events:
 		Patterns:
 			[on] [player] velocity
 		Event values:
-			event-vector
-			event-player
 			event-world
+			event-player
+			event-vector
 		Cancellable: true
 	On plugin message receiving:
 		ID: plugin_message_receiving
+		Description:
+			プラグインメッセージをクライアントから受け取ったときに呼び出されます
 		Patterns:
 			[on] plugin message receiv(e|ing)
 		Event values:
-			event-player
 			event-world
+			event-player
 		Cancellable: true
 	On plugin message sending:
 		ID: plugin_message_sending
+		Description:
+			プラグインメッセージをクライアントから受け取ったときに呼び出されます
 		Patterns:
 			[on] plugin message send[ing]
 		Event values:
-			event-player
 			event-world
-		Cancellable: true
-	On prepare craft:
-		ID: prepare_craft
-		Patterns:
-			[on] pre[pare] craft[ing]
-		Event values:
-			event-slot
 			event-player
-			event-recipe
-			event-inventory
-			event-itemstack
-		Cancellable: false
+		Cancellable: true
 	On receive creative item:
 		ID: receive_creative_item
 		Patterns:
 			[on] receive creative item
 		Event values:
-			event-player
 			event-world
+			event-player
 		Cancellable: false
 	On reload complete:
 		ID: reload_complete
@@ -227,6 +223,7 @@ Events:
 			[on] [(crackshot|cs)] reload [start]
 		Event values:
 			event-player
+			event-number
 			event-string
 		Cancellable: false
 	On remove tracking player:
@@ -234,9 +231,9 @@ Events:
 		Patterns:
 			[on] remove tracking player
 		Event values:
+			event-world
 			event-entity
 			event-player
-			event-world
 		Cancellable: true
 	On scope:
 		ID: scope
@@ -255,8 +252,8 @@ Events:
 		Patterns:
 			[on] (sen(d|t)|show) item[stack]
 		Event values:
-			event-player
 			event-world
+			event-player
 		Cancellable: false
 	On sign editor done:
 		ID: sign_editor_done
@@ -266,8 +263,8 @@ Events:
 			[on] sign[ ]editor done
 		Event values:
 			event-signeditor
-			event-player
 			event-world
+			event-player
 		Cancellable: false
 	On sign editor open:
 		ID: sign_editor_open
@@ -277,8 +274,8 @@ Events:
 			[on] sign[ ]editor open
 		Event values:
 			event-signeditor
-			event-player
 			event-world
+			event-player
 		Cancellable: true
 	On undisguise:
 		ID: undisguise
@@ -331,6 +328,18 @@ Conditions:
 			EntityがCrackShotの武器によって放たれたものかどうかを判定します
 		Patterns:
 			%entity% is [(crackshot|cs)] weapon bullet
+	SecCatch:
+		ID: SecCatch
+		Patterns:
+			catch in %object%
+	SecRunLater:
+		ID: SecRunLater
+		Patterns:
+			(execute|run) (1¦async|) [(code|section)] in %timespan%
+	SecTry:
+		ID: SecTry
+		Patterns:
+			try
 Effects:
 	EffApplyCSE:
 		ID: EffApplyCSE
@@ -459,6 +468,12 @@ Effects:
 		Patterns:
 			show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]
 			show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]
+	EffPrintStackTrace:
+		ID: EffPrintStackTrace
+		Description:
+			エラーのスタックトーレスを出力します
+		Patterns:
+			print stack[ ]trace of %throwable%
 	EffRegisterCSE:
 		ID: EffRegisterCSE
 		Description:
@@ -466,6 +481,12 @@ Effects:
 		Patterns:
 			register (cse|custom[ ]status[ ]effect) type with id %string% [and] name %string% [and] color (%-color%|%-number%[, %-number%, %-number%])
 			unregister (cse|custom[ ]status[ ]effect) type [id] %string%
+	EffResetCustomTarget:
+		ID: EffResetCustomTarget
+		Description:
+			エンティティの敵対するmobをデフォルトに戻します
+		Patterns:
+			reset custom target of %livingentity%
 	EffSendDeathMessage:
 		ID: EffSendDeathMessage
 		Description:
@@ -476,6 +497,15 @@ Effects:
 		ID: EffSendPluginMessage
 		Patterns:
 			send plugin message with channel %string% [and] contents %numbers% to %player%
+	EffSetCustomTarget:
+		ID: EffSetCustomTarget
+		Description:
+			エンティティが敵対するmobをカスタマイズします
+		Examples:
+			on spawn of iron golem:
+			    set custom target of event-entity to [entity input is a player]
+		Patterns:
+			set custom target of %livingentity% to %predicate%
 	EffSetPlayerTime:
 		ID: EffSetPlayerTime
 		Description:
@@ -837,6 +867,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			(cs|crackshot) weapon (name|title) (from|of) %itemtype%
+	ExprChatColorCode:
+		ID: ExprChatColorCode
+		Description:
+			Colorからテキストのカラーコードに変換します
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			chat color code from %color%
 	ExprColorRGB:
 		ID: ExprColorRGB
 		Return type: Number
@@ -844,6 +883,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			(0¦red|1¦green|2¦blue) (from|of) %color%
+	ExprCurrentStackTrace:
+		ID: ExprCurrentStackTrace
+		Return type: stacktraceelement
+		Changers:
+			none
+		Patterns:
+			current stack[ ]trace
 	ExprCustomDamageSource:
 		ID: ExprCustomDamageSource
 		Description:
@@ -1109,6 +1155,36 @@ send "Projectile_Damage: %{_weapondamage}%"
 			%entity%'s height
 			width of %entity%
 			%entity%'s width
+	ExprErrorCause:
+		ID: ExprErrorCause
+		Description:
+			エラーの原因となった別のエラー
+		Return type: throwable
+		Changers:
+			none
+		Patterns:
+			%throwable%'s error cause
+			error cause of %throwable%
+	ExprErrorMessage:
+		ID: ExprErrorMessage
+		Description:
+			エラーメッセージ
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%throwable%'s error message
+			error message of %throwable%
+	ExprErrorName:
+		ID: ExprErrorName
+		Description:
+			エラー名
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%throwable%'s error name
+			error name of %throwable%
 	ExprExplodedBlockList:
 		ID: ExprExplodedBlockList
 		Description:
@@ -1411,6 +1487,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			[a] [new] item[ ]type %string% [data %-number%]
 			[a] [new] item[ ]type from %itemstacks%
+	ExprNewRandom:
+		ID: ExprNewRandom
+		Description:
+			新しいランダムオブジェクトを生成します
+		Return type: Random
+		Changers:
+			none
+		Patterns:
+			new random [with seed %-number%]
 	ExprNewSkin:
 		ID: ExprNewSkin
 		Description:
@@ -1485,6 +1570,52 @@ send "Projectile_Damage: %{_weapondamage}%"
 			delete
 		Patterns:
 			plugin message contents
+	ExprRandomBoolean:
+		ID: ExprRandomBoolean
+		Description:
+			ランダムな真偽値を生成します
+		Return type: Boolean
+		Changers:
+			none
+		Patterns:
+			random boolean from %random%
+	ExprRandomGaussian:
+		ID: ExprRandomGaussian
+		Description:
+			平均0、標準偏差1.0のガウス分布の乱数を生成します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			random gauss[ian] from %random%
+	ExprRandomInt:
+		ID: ExprRandomInt
+		Description:
+			ランダムな整数(32bitの範囲)を生成します
+			boundを指定した場合0 ~ bound-1の範囲のランダムな整数が生成されます
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			random int[eger] from %random% [with bound %-number%]
+	ExprRandomLong:
+		ID: ExprRandomLong
+		Description:
+			ランダムな整数(64bitの範囲)を生成します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			random long from %random%
+	ExprRandomNumber:
+		ID: ExprRandomNumber
+		Description:
+			ランダムな0~1の小数を生成します
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			random number from %random%
 	ExprReceivedItem:
 		ID: ExprReceivedItem
 		Description:
@@ -1534,6 +1665,16 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			sign[ ]editor (line|text) %number%
+	ExprSimpleErrorName:
+		ID: ExprSimpleErrorName
+		Description:
+			エラーのシンプルな名前
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%throwable%'s simple error name
+			simple error name of %throwable%
 	ExprSkeletonOldAI:
 		ID: ExprSkeletonOldAI
 		Description:
@@ -1566,6 +1707,57 @@ send "Projectile_Damage: %{_weapondamage}%"
 			reset
 		Patterns:
 			(owner|source) of %entity%
+	ExprStackTrace:
+		ID: ExprStackTrace
+		Description:
+			エラーのスタックトレース
+		Return type: stacktraceelement
+		Changers:
+			none
+		Patterns:
+			%throwable%'s stack[ ]trace
+			stack[ ]trace of %throwable%
+			stack[ ]trace from %throwable%
+	ExprStackTraceClass:
+		ID: ExprStackTraceClass
+		Description:
+			スタックトーレスのクラス名
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%stacktraceelement%'s stack[ ]trace class
+			stack[ ]trace class of %stacktraceelement%
+	ExprStackTraceFile:
+		ID: ExprStackTraceFile
+		Description:
+			スタックトレースのファイル名
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%stacktraceelement%'s stack[ ]trace file
+			stack[ ]trace file of %stacktraceelement%
+	ExprStackTraceLine:
+		ID: ExprStackTraceLine
+		Description:
+			スタックトーレスの行数
+		Return type: Number
+		Changers:
+			none
+		Patterns:
+			%stacktraceelement%'s stack[ ]trace line
+			stack[ ]trace line of %stacktraceelement%
+	ExprStackTraceMethod:
+		ID: ExprStackTraceMethod
+		Description:
+			スタックトレースのメソッド名
+		Return type: Text
+		Changers:
+			none
+		Patterns:
+			%stacktraceelement%'s stack[ ]trace method
+			stack[ ]trace method of %stacktraceelement%
 	ExprStringFromBytes:
 		ID: ExprStringFromBytes
 		Description:
@@ -1671,6 +1863,10 @@ Types:
 		ID: NBTList
 		Patterns:
 			nbt[ ]list[s]
+	Random:
+		ID: Random
+		Patterns:
+			random[s]
 	Sign Editor:
 		ID: SignEditor
 		Patterns:

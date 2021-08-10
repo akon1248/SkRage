@@ -39,7 +39,7 @@ public class EffRegisterCSE extends Effect {
 					if (CSEManager.get(id) != null) {
 						CSEManager.unregister(id);
 					}
-					org.bukkit.Color bukkitColor = Optional.ofNullable(this.color).map(expr -> expr.getSingle(e)).map(Color::asBukkitColor).orElseGet(() -> this.green == null ? org.bukkit.Color.fromRGB(this.red.getSingle(e).intValue()) : org.bukkit.Color.fromRGB(this.red.getSingle(e).intValue(), this.green.getSingle(e).intValue(), this.blue.getSingle(e).intValue()));
+					org.bukkit.Color bukkitColor = Optional.ofNullable(this.color).map(expr -> expr.getSingle(e)).map(Color::getBukkitColor).orElseGet(() -> this.green == null ? org.bukkit.Color.fromRGB(this.red.getSingle(e).intValue()) : org.bukkit.Color.fromRGB(this.red.getSingle(e).intValue(), this.green.getSingle(e).intValue(), this.blue.getSingle(e).intValue()));
 					CSEManager.register(new CSEType(id, this.name.getSingle(e), bukkitColor));
 				}
 			}

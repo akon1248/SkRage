@@ -50,6 +50,36 @@ public class BitCalcFunctions {
 			}
 
 		});
+		Functions.registerFunction(new JavaFunction<Number>("rightShift", new Parameter[]{new Parameter<>("val1", numberClass, true, null), new Parameter<>("val2", numberClass, true, null)}, numberClass, true) {
+
+			@Override
+			public Number[] execute(FunctionEvent e, Object[][] params) {
+				long param1 = ((Number)params[0][0]).longValue();
+				long param2 = ((Number)params[0][1]).longValue();
+				return new Number[]{param1 >> param2};
+			}
+
+		});
+		Functions.registerFunction(new JavaFunction<Number>("leftShift", new Parameter[]{new Parameter<>("val1", numberClass, true, null), new Parameter<>("val2", numberClass, true, null)}, numberClass, true) {
+
+			@Override
+			public Number[] execute(FunctionEvent e, Object[][] params) {
+				long param1 = ((Number)params[0][0]).longValue();
+				long param2 = ((Number)params[0][1]).longValue();
+				return new Number[]{param1 << param2};
+			}
+
+		});
+		Functions.registerFunction(new JavaFunction<Number>("unsignedRightShift", new Parameter[]{new Parameter<>("val1", numberClass, true, null), new Parameter<>("val2", numberClass, true, null)}, numberClass, true) {
+
+			@Override
+			public Number[] execute(FunctionEvent e, Object[][] params) {
+				long param1 = ((Number)params[0][0]).longValue();
+				long param2 = ((Number)params[0][1]).longValue();
+				return new Number[]{param1 >>> param2};
+			}
+
+		});
 	}
 
 }

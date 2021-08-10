@@ -3,7 +3,6 @@ package com.akon.skrage.skript.syntaxes.expressions;
 import ch.njol.skript.util.Color;
 import ch.njol.skript.util.Timespan;
 import com.akon.skrage.skript.syntaxes.ExpressionFactory;
-import com.akon.skrage.utils.ColorConverter;
 import com.akon.skrage.utils.NMSUtil;
 import com.akon.skrage.utils.customstatuseffect.CSEType;
 import com.akon.skrage.utils.customstatuseffect.CustomStatusEffect;
@@ -44,11 +43,11 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprErrorCause", "error cause", 0b011, Throwable.class, Throwable.class, Throwable::getCause, null, "エラーの原因となった別のエラー");
 		ExpressionFactory.registerExpression("ExprErrorMessage", "error message", 0b011, Throwable.class, String.class, Throwable::getMessage, null, "エラーメッセージ");
 		ExpressionFactory.registerExpression("ExprErrorName", "error name", 0b011, Throwable.class, String.class, throwable -> throwable.getClass().getName(), null, "エラー名");
-		ExpressionFactory.registerExpression("ExprChatColorCode", "chat color code", 0b100, Color.class, String.class, Color::getFormattedChat, null, "Colorからテキストのカラーコードに変換します");
+		ExpressionFactory.registerExpression("ExprChatColorCode", "chat color code", 0b100, Color.class, String.class, color -> color.asChatColor().toString(), null, "Colorからテキストのカラーコードに変換します");
 		ExpressionFactory.registerExpression("ExprCSEAmplifier", "(cse|custom[ ]status[ ]effect) (amplifier|level|tier)", 0b011, CustomStatusEffect.class, Number.class, CustomStatusEffect::getAmplifier, null, "CustomStatusEffectの効果の強さ");
 		ExpressionFactory.registerExpression("ExprCSEDuration", "(cse|custom[ ]status[ ]effect) duration", 0b011, CustomStatusEffect.class, Number.class, CustomStatusEffect::getDuration, (effect, num) -> effect.setDuration(num.intValue()), "CustomStatusEffectの効果時間(tick)");
 		ExpressionFactory.registerExpression("ExprCSEType", "(cse|custom[ ]status[ ]effect) type", 0b011, CustomStatusEffect.class, CSEType.class, CustomStatusEffect::getType, null, "CustomStatusEffectのタイプ");
-		ExpressionFactory.registerExpression("ExprCSETypeColor", "(cse|custom[ ]status[ ]effect) type color", 0b011, CSEType.class, Color.class, type -> ColorConverter.toSkriptColor(type.getColor()), null, "CustomStatusEffectのタイプから色を取得します");
+		ExpressionFactory.registerExpression("ExprCSETypeColor", "(cse|custom[ ]status[ ]effect) type color", 0b011, CSEType.class, Number.class, type -> type.getColor().asRGB(), null, "CustomStatusEffectのタイプから色を取得します");
 		ExpressionFactory.registerExpression("ExprCSETypeId", "(cse|custom[ ]status[ ]effect) type id", 0b011, CSEType.class, String.class, CSEType::getId, null, "CustomStatusEffectのタイプからIDを取得します");
 		ExpressionFactory.registerExpression("ExprCSETypeName", "(cse|custom[ ]status[ ]effect) type name", 0b011, CSEType.class, String.class, CSEType::getName, null, "CustomStatusEffectのタイプから名前を取得します");
 		/*DamageSource expressions start*/

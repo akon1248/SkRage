@@ -19,8 +19,7 @@ import org.bukkit.event.Event;
 import java.lang.reflect.InvocationTargetException;
 
 @Description({"ポーションが割れた時のエフェクトを発生させます"})
-public class
-EffPotionBreakEffect extends Effect {
+public class EffPotionBreakEffect extends Effect {
 
     private Expression<Location> location;
     private Expression<Color> color;
@@ -31,7 +30,7 @@ EffPotionBreakEffect extends Effect {
     private boolean isSplash;
 
     static {
-        Skript.registerEffect(EffPotionBreakEffect.class, "show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]", "show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]");
+        Skript.registerEffect(EffPotionBreakEffect.class, "show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %-players%]", "show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %-players%]");
     }
 
     @Override
@@ -49,7 +48,7 @@ EffPotionBreakEffect extends Effect {
             int x = this.location.getSingle(e).getBlockX();
             int y = this.location.getSingle(e).getBlockY();
             int z = this.location.getSingle(e).getBlockZ();
-            int color = this.color != null ? this.color.getSingle(e).asBukkitColor().asRGB() : (this.colorParam1 != null && this.colorParam2 != null && this.colorParam3 != null) ? this.colorParam1.getSingle(e).intValue() * 65536 + this.colorParam2.getSingle(e).intValue() * 256 + this.colorParam3.getSingle(e).intValue() : this.colorParam1.getSingle(e).intValue();
+            int color = this.color != null ? this.color.getSingle(e).getBukkitColor().asRGB() : (this.colorParam1 != null && this.colorParam2 != null && this.colorParam3 != null) ? this.colorParam1.getSingle(e).intValue() * 65536 + this.colorParam2.getSingle(e).intValue() * 256 + this.colorParam3.getSingle(e).intValue() : this.colorParam1.getSingle(e).intValue();
             packet.getBlockPositionModifier().write(0, new BlockPosition(x, y, z));
             packet.getIntegers().write(1, color);
             for (Player player : players) {
@@ -73,15 +72,12 @@ EffPotionBreakEffect extends Effect {
         this.location = (Expression<Location>)exprs[0];
         if (matchedPattern == 0) {
             this.color = (Expression<Color>)exprs[1];
-            if (exprs[2] != null) this.player = (Expression<Player>) exprs[2];
+            this.player = (Expression<Player>)exprs[2];
         } else if (matchedPattern == 1) {
-            this.colorParam1 = (Expression<Number>) exprs[1];
-            if (exprs[2] != null && exprs[2].getReturnType() == Player.class) {
-                this.player = (Expression<Player>) exprs[2];
-            } else if (exprs[2] != null && exprs[3] != null && Number.class.isAssignableFrom(exprs[2].getReturnType()) && Number.class.isAssignableFrom(exprs[3].getReturnType())) {
-                this.colorParam2 = (Expression<Number>) exprs[2];
-                this.colorParam3 = (Expression<Number>) exprs[3];
-            }
+            this.colorParam1 = (Expression<Number>)exprs[1];
+            this.colorParam2 = (Expression<Number>)exprs[2];
+            this.colorParam3 = (Expression<Number>)exprs[3];
+            this.player = (Expression<Player>)exprs[4];
         }
         this.isSplash = parseResult.mark == 1;
         return true;

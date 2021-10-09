@@ -42,7 +42,7 @@ public class Skin {
 		SkullMeta meta = (SkullMeta)head.getItemMeta();
 		WrappedGameProfile profile = this.toGameProfile(UUID.nameUUIDFromBytes(this.value.getBytes(StandardCharsets.UTF_8)), StringUtils.EMPTY);
 		try {
-			ReflectionUtil.setField(meta, "profile", profile);
+			ReflectionUtil.setField(meta, "profile", profile.getHandle());
 		} catch (ReflectiveOperationException ex) {
 			ex.printStackTrace();
 		}

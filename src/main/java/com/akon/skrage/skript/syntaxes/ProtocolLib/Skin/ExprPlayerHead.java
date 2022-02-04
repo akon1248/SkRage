@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprPlayerHead extends SimpleExpression<ItemStack> {
 
     static {
-        Skript.registerExpression(ExprPlayerHead.class, ItemStack.class, ExpressionType.COMBINED, "player head from [skin] %skin%");
+        Skript.registerExpression(ExprPlayerHead.class, ItemStack.class, ExpressionType.COMBINED, "player head from [skin] %playerskin%");
     }
 
     private Expression<Skin> skin;

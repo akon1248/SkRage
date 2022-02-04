@@ -51,9 +51,9 @@ public class SkRageTypes {
 			.user("anvil ?invs?")
 			.name("Anvil GUI")
 			.parser(new UnparsableParser<>()));
-		Classes.registerClass(new ClassInfo<>(Skin.class, "skin")
-			.user("skins?")
-			.name("Skin")
+		Classes.registerClass(new ClassInfo<>(Skin.class, "playerskin")
+			.user("player ?skins?")
+			.name("Player Skin")
 			.parser(new UnparsableParser<>()));
 		Classes.registerClass(new ClassInfo<>(SignEditor.class, "signeditor")
 			.user("sign ?editors?")

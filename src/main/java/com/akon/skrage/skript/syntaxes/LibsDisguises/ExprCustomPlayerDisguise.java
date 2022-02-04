@@ -20,7 +20,7 @@ public class ExprCustomPlayerDisguise extends SimpleExpression<Disguise> {
 
 	static {
 		if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-			Skript.registerExpression(ExprCustomPlayerDisguise.class, Disguise.class, ExpressionType.COMBINED, "[a] [new] player disguise named %string% with skin %skin%");
+			Skript.registerExpression(ExprCustomPlayerDisguise.class, Disguise.class, ExpressionType.COMBINED, "[a] [new] player disguise named %string% with skin %playerskin%");
 		}
 	}
 

@@ -75,10 +75,6 @@ public class SkRageTypes {
 			.user("attribute ?modifier")
 			.name("Attribute Modifier")
 			.parser(new UnparsableParser<>()));
-		Classes.registerClass(new ClassInfo<>(Random.class, "random")
-			.user("randoms?")
-			.name("Random")
-			.parser(new UnparsableParser<>()));
 		Classes.registerClass(new ClassInfo<>(Throwable.class, "throwable")
 			.user("throwables?")
 			.user("Throwable")

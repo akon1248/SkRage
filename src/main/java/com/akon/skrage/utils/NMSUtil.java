@@ -33,12 +33,12 @@ public class NMSUtil {
 		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	}
 
-	public static Class<?> getNMSClass(String name) throws ClassNotFoundException {
-		return Class.forName("net.minecraft.server." + getVersion() + "." + name);
+	public static Class<?> getNMSClass(String name) {
+		return ReflectionUtil.getClass("net.minecraft.server." + getVersion() + "." + name);
 	}
 
-	public static Class<?> getOBCClass(String name) throws ClassNotFoundException {
-		return Class.forName("org.bukkit.craftbukkit." + getVersion() + "." + name);
+	public static Class<?> getOBCClass(String name) {
+		return ReflectionUtil.getClass("org.bukkit.craftbukkit." + getVersion() + "." + name);
 	}
 
 	//ブロックを壊した時のアイテムを取得
@@ -148,24 +148,16 @@ public class NMSUtil {
 					style = BarStyle.SEGMENTED_20;
 			}
 			BossBar bukkitBossBar = Bukkit.createBossBar(bossBar.title.getText(), BarColor.valueOf(bossBar.color.name()), style, barFlags.toArray(new BarFlag[0]));
-			try {
-				ReflectionUtil.setField(bukkitBossBar, "handle", bossBar);
-			} catch (ReflectiveOperationException ex) {
-				ex.printStackTrace();
-			}
+			ReflectionUtil.DEFAULT.setField(bukkitBossBar, "handle", bossBar);
 			return bukkitBossBar;
 		};
-		try {
-			if (entity instanceof EnderDragon) {
-				Object enderDragonBattle = ReflectionUtil.getField(EntityEnderDragon.class, ((CraftEnderDragon)entity).getHandle(), "bK");
-				if (enderDragonBattle != null) {
-					return convertToBukkitBossBar.apply((BossBattleServer)ReflectionUtil.getField(enderDragonBattle, "c"));
-				}
-			} else if (entity instanceof Wither) {
-				return convertToBukkitBossBar.apply((BossBattleServer)ReflectionUtil.getField(EntityWither.class, ((CraftWither)entity).getHandle(), "bG"));
+		if (entity instanceof EnderDragon) {
+			Object enderDragonBattle = ReflectionUtil.DEFAULT.getField(EntityEnderDragon.class, ((CraftEnderDragon)entity).getHandle(), "bK");
+			if (enderDragonBattle != null) {
+				return convertToBukkitBossBar.apply((BossBattleServer)ReflectionUtil.DEFAULT.getField(enderDragonBattle, "c"));
 			}
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
+		} else if (entity instanceof Wither) {
+			return convertToBukkitBossBar.apply((BossBattleServer)ReflectionUtil.DEFAULT.getField(EntityWither.class, ((CraftWither)entity).getHandle(), "bG"));
 		}
 		return null;
 	}
@@ -197,15 +189,11 @@ public class NMSUtil {
 		}
 		else if (isAlwaysAngry(pigZombie)) {
 			if (isAlwaysAngry(pigZombie)) {
-				try {
-					getTargetSelectors(pigZombie).stream()
-						.filter(pathfinderGoal -> pathfinderGoal instanceof PathfinderGoalHurtByTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget)
-						.forEach(entityPigZombie.targetSelector::a);
-					entityPigZombie.targetSelector.a(1, (PathfinderGoal) ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAngerOther"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
-					entityPigZombie.targetSelector.a(2, (PathfinderGoal) ReflectionUtil.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAnger"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
-				} catch (ReflectiveOperationException ex) {
-					ex.printStackTrace();
-				}
+				getTargetSelectors(pigZombie).stream()
+					.filter(pathfinderGoal -> pathfinderGoal instanceof PathfinderGoalHurtByTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget)
+					.forEach(entityPigZombie.targetSelector::a);
+				entityPigZombie.targetSelector.a(1, (PathfinderGoal) ReflectionUtil.DEFAULT.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAngerOther"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
+				entityPigZombie.targetSelector.a(2, (PathfinderGoal) ReflectionUtil.DEFAULT.invokeConstructor(getNMSClass("EntityPigZombie$PathfinderGoalAnger"), new Class[]{EntityPigZombie.class}, new Object[]{entityPigZombie}));
 			}
 		}
 	}
@@ -240,12 +228,8 @@ public class NMSUtil {
 		ArrayList<PathfinderGoal> result = Lists.newArrayList();
 		EntityLiving nmsEntity = ((CraftLivingEntity)entity).getHandle();
 		if (nmsEntity instanceof EntityInsentient) {
-			try {
-				for (Object selectorItem: (Set<?>)ReflectionUtil.getField(PathfinderGoalSelector.class, ((EntityInsentient)nmsEntity).goalSelector, "b")) {
-					result.add((PathfinderGoal)ReflectionUtil.getField(selectorItem, "a"));
-				}
-			} catch (ReflectiveOperationException ex) {
-				ex.printStackTrace();
+			for (Object selectorItem: (Set<?>)ReflectionUtil.DEFAULT.getField(PathfinderGoalSelector.class, ((EntityInsentient)nmsEntity).goalSelector, "b")) {
+				result.add((PathfinderGoal)ReflectionUtil.DEFAULT.getField(selectorItem, "a"));
 			}
 		}
 		return Collections.unmodifiableCollection(result);
@@ -257,12 +241,8 @@ public class NMSUtil {
 		ArrayList<PathfinderGoal> result = Lists.newArrayList();
 		EntityLiving nmsEntity = ((CraftLivingEntity)entity).getHandle();
 		if (nmsEntity instanceof EntityInsentient) {
-			try {
-				for (Object selectorItem: (Set<?>)ReflectionUtil.getField(PathfinderGoalSelector.class, ((EntityInsentient)nmsEntity).targetSelector, "b")) {
-					result.add((PathfinderGoal)ReflectionUtil.getField(selectorItem, "a"));
-				}
-			} catch (ReflectiveOperationException ex) {
-				ex.printStackTrace();
+			for (Object selectorItem: (Set<?>)ReflectionUtil.DEFAULT.getField(PathfinderGoalSelector.class, ((EntityInsentient)nmsEntity).targetSelector, "b")) {
+				result.add((PathfinderGoal)ReflectionUtil.DEFAULT.getField(selectorItem, "a"));
 			}
 		}
 		return Collections.unmodifiableCollection(result);
@@ -280,53 +260,49 @@ public class NMSUtil {
 
 	//エンティティの現在の死亡メッセージのフォーマットを取得する
 	public static String getDeathMessageFormat(LivingEntity entity) {
-		String language = "";
-		try {
-			EntityLiving entityLiving = (((CraftLivingEntity)entity).getHandle());
-			CombatTracker combatTracker = entityLiving.getCombatTracker();
-			List<CombatEntry> combatEntries = (List<CombatEntry>)ReflectionUtil.getField(CombatTracker.class, combatTracker, "a");
-			if (combatEntries.isEmpty()) {
-				language = "death.attack.generic";
-			} else {
-				CombatEntry combatEntry = (CombatEntry)ReflectionUtil.invokeMethod(CombatTracker.class, combatTracker, "j");
-				CombatEntry combatEntry1 = combatEntries.get(combatEntries.size() - 1);
-				IChatBaseComponent chatComponent = combatEntry1.h();
-				Entity lastAttacker = combatEntry1.a().getEntity();
-				if (combatEntry != null && combatEntry1.a() == DamageSource.FALL) {
-					IChatBaseComponent killerName = combatEntry.h();
-					if (combatEntry.a() != DamageSource.FALL && combatEntry.a() != DamageSource.OUT_OF_WORLD) {
-						if (killerName == null || chatComponent != null && killerName.equals(chatComponent)) {
-							if (chatComponent != null) {
-								net.minecraft.server.v1_12_R1.ItemStack weapon = lastAttacker instanceof EntityLiving ? ((EntityLiving) lastAttacker).getItemInMainHand() : net.minecraft.server.v1_12_R1.ItemStack.a;
-								if (!weapon.isEmpty() && weapon.hasName()) {
-									language = "death.fell.finish.item";
-								} else {
-									language = "death.fell.finish";
-								}
+		String language;
+		EntityLiving entityLiving = (((CraftLivingEntity)entity).getHandle());
+		CombatTracker combatTracker = entityLiving.getCombatTracker();
+		List<CombatEntry> combatEntries = (List<CombatEntry>)ReflectionUtil.DEFAULT.getField(CombatTracker.class, combatTracker, "a");
+		if (combatEntries.isEmpty()) {
+			language = "death.attack.generic";
+		} else {
+			CombatEntry combatEntry = (CombatEntry)ReflectionUtil.DEFAULT.invokeMethod(CombatTracker.class, combatTracker, "j");
+			CombatEntry combatEntry1 = combatEntries.get(combatEntries.size() - 1);
+			IChatBaseComponent chatComponent = combatEntry1.h();
+			Entity lastAttacker = combatEntry1.a().getEntity();
+			if (combatEntry != null && combatEntry1.a() == DamageSource.FALL) {
+				IChatBaseComponent killerName = combatEntry.h();
+				if (combatEntry.a() != DamageSource.FALL && combatEntry.a() != DamageSource.OUT_OF_WORLD) {
+					if (killerName == null || chatComponent != null && killerName.equals(chatComponent)) {
+						if (chatComponent != null) {
+							net.minecraft.server.v1_12_R1.ItemStack weapon = lastAttacker instanceof EntityLiving ? ((EntityLiving) lastAttacker).getItemInMainHand() : net.minecraft.server.v1_12_R1.ItemStack.a;
+							if (!weapon.isEmpty() && weapon.hasName()) {
+								language = "death.fell.finish.item";
 							} else {
-								language = "death.fell.killer";
+								language = "death.fell.finish";
 							}
 						} else {
-							Entity killer = combatEntry.a().getEntity();
-							net.minecraft.server.v1_12_R1.ItemStack weapon = killer instanceof EntityLiving ? ((EntityLiving) killer).getItemInMainHand() : net.minecraft.server.v1_12_R1.ItemStack.a;
-							if (!weapon.isEmpty() && weapon.hasName()) {
-								language = "death.fell.assist.item";
-							} else {
-								language = "death.fell.assist";
-							}
+							language = "death.fell.killer";
 						}
 					} else {
-						language = "death.fell.accident.";
+						Entity killer = combatEntry.a().getEntity();
+						net.minecraft.server.v1_12_R1.ItemStack weapon = killer instanceof EntityLiving ? ((EntityLiving) killer).getItemInMainHand() : net.minecraft.server.v1_12_R1.ItemStack.a;
+						if (!weapon.isEmpty() && weapon.hasName()) {
+							language = "death.fell.assist.item";
+						} else {
+							language = "death.fell.assist";
+						}
 					}
 				} else {
-					EntityLiving entityliving1 = entityLiving.ci();
-					String s = "death.attack." + combatEntry1.a().translationIndex;
-					String s1 = s + ".player";
-					language = entityliving1 != null && LocaleI18n.c(s1) ? s1 : s;
+					language = "death.fell.accident.";
 				}
+			} else {
+				EntityLiving entityliving1 = entityLiving.ci();
+				String s = "death.attack." + combatEntry1.a().translationIndex;
+				String s1 = s + ".player";
+				language = entityliving1 != null && LocaleI18n.c(s1) ? s1 : s;
 			}
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
 		}
 		return LocaleI18n.get(language);
 	}

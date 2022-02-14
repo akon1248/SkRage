@@ -6,6 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import com.akon.skrage.utils.ReflectionUtil;
+import com.akon.skrage.utils.UncheckedReflectiveOperationException;
 import org.bukkit.event.Event;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +24,7 @@ public class SecTry extends CustomSection {
 	}
 
 	@Override
-	public boolean execute(Event e, TriggerItem item) {
+	public boolean execute(Event event, TriggerItem item) {
 		if (this.getTriggerSection() != null) {
 			SecCatch catchSection = (SecCatch)Optional.ofNullable(this.getTriggerSection().getNext())
 				.filter(Conditional.class::isInstance)
@@ -33,13 +34,14 @@ public class SecTry extends CustomSection {
 				.orElse(null);
 			try {
 				while (item != null)
-					item = (TriggerItem)ReflectionUtil.invokeMethod(TriggerItem.class, item, "walk", new Class[]{Event.class}, new Object[]{e});
-			} catch (InvocationTargetException err) {
-				if (catchSection != null && err.getCause() != null) {
-					catchSection.caught(e, err.getCause());
+					item = (TriggerItem)ReflectionUtil.DEFAULT.invokeMethod(TriggerItem.class, item, "walk", new Class[]{Event.class}, new Object[]{event});
+			} catch (UncheckedReflectiveOperationException e) {
+				ReflectiveOperationException ex = e.getCause();
+				if (ex instanceof InvocationTargetException) {
+					if (catchSection != null && ex.getCause() != null) {
+						catchSection.caught(event, ex.getCause());
+					}
 				}
-			} catch (NoSuchMethodException | IllegalAccessException ex) {
-				ex.printStackTrace();
 			}
 		}
 		return false;

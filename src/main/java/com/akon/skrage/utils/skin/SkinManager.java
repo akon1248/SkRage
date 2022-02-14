@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -124,7 +125,7 @@ public class SkinManager {
 			for (PacketContainer packet: effects) {
 				ProtocolLibrary.getProtocolManager().sendServerPacket(p, packet);
 			}
-		} catch (ReflectiveOperationException ex) {
+		} catch (InvocationTargetException ex) {
 			ex.printStackTrace();
 		}
 		p.setHealth(p.getHealth());

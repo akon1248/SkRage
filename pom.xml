@@ -84,7 +84,7 @@
             <url>https://ci.emc.gs/nexus/content/groups/aikar/</url>
         </repository>
         <repository>
-            <id>repo</id>
+            <id>jitpack</id>
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
@@ -145,13 +145,6 @@
             <version>2.8.9</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/LunaChat.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine.xikage</groupId>
-            <artifactId>MythicMobs</artifactId>
-            <version>4.6.5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MythicMobs-4.6.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>me.dpohvar</groupId>

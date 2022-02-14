@@ -6,7 +6,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ThrowsBiFunction<T, U, R, X extends Throwable> {
 
-    R apply(T t, U u) throws X;
+    R apply(T t, U u) throws X, NoSuchMethodException;
 
     default <V> ThrowsBiFunction<T, U, V, ? extends Throwable> andThen(ThrowsFunction<? super R, ? extends V, ? extends Throwable> after) {
         Objects.requireNonNull(after);

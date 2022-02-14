@@ -205,53 +205,48 @@ public class DamageSourceBuilder {
 
     private DamageSource build() {
         this.checkBuilt();
-        try {
-            DamageSource damageSource;
-            if (this.projectile != null) {
-                damageSource = new EntityDamageSourceIndirect(this.type, ((CraftEntity)this.projectile).getHandle(), Optional.ofNullable(this.entity).map(entity -> ((CraftEntity)entity).getHandle()).orElse(null));
-            } else if (this.entity != null) {
-                damageSource = new EntityDamageSource(this.type, ((CraftEntity)this.entity).getHandle());
-            } else {
-                damageSource = ReflectionUtil.invokeConstructor(DamageSource.class, new Class[]{String.class}, new Object[]{this.type});
-            }
-            if (this.ignoreArmor) {
-                ReflectionUtil.invokeMethod(damageSource, "setIgnoreArmor");
-            }
-            if (this.ignoreCreativeMode) {
-                ReflectionUtil.invokeMethod(damageSource, "l");
-            }
-            if (this.starvation) {
-                ReflectionUtil.invokeMethod(damageSource, "m");
-            }
-            if (this.fire) {
-                ReflectionUtil.invokeMethod(damageSource, "setExplosion");
-            }
-            if (this.isProjectile) {
-                damageSource.b();
-            }
-            if (this.difficultyScaled) {
-                damageSource.q();
-            }
-            if (this.magic) {
-                damageSource.setMagic();
-            }
-            if (this.explosion) {
-                damageSource.d();
-            }
-            if (this.sweep) {
-                damageSource.sweep();
-            }
-            if (this.thorns && damageSource instanceof EntityDamageSource) {
-                ((EntityDamageSource)damageSource).x();
-            }
-            ReflectionUtil.setField(damageSource, "y", this.exhaustion);
-            DAMAGE_SOURCE_MAP.put(damageSource, this);
-            this.damageSource = damageSource;
-            return damageSource;
-        } catch (ReflectiveOperationException ex) {
-            ex.printStackTrace();
+        DamageSource damageSource;
+        if (this.projectile != null) {
+            damageSource = new EntityDamageSourceIndirect(this.type, ((CraftEntity)this.projectile).getHandle(), Optional.ofNullable(this.entity).map(entity -> ((CraftEntity)entity).getHandle()).orElse(null));
+        } else if (this.entity != null) {
+            damageSource = new EntityDamageSource(this.type, ((CraftEntity)this.entity).getHandle());
+        } else {
+            damageSource = ReflectionUtil.DEFAULT.invokeConstructor(DamageSource.class, new Class[]{String.class}, new Object[]{this.type});
         }
-        return null;
+        if (this.ignoreArmor) {
+            ReflectionUtil.DEFAULT.invokeMethod(damageSource, "setIgnoreArmor");
+        }
+        if (this.ignoreCreativeMode) {
+            ReflectionUtil.DEFAULT.invokeMethod(damageSource, "l");
+        }
+        if (this.starvation) {
+            ReflectionUtil.DEFAULT.invokeMethod(damageSource, "m");
+        }
+        if (this.fire) {
+            ReflectionUtil.DEFAULT.invokeMethod(damageSource, "setExplosion");
+        }
+        if (this.isProjectile) {
+            damageSource.b();
+        }
+        if (this.difficultyScaled) {
+            damageSource.q();
+        }
+        if (this.magic) {
+            damageSource.setMagic();
+        }
+        if (this.explosion) {
+            damageSource.d();
+        }
+        if (this.sweep) {
+            damageSource.sweep();
+        }
+        if (this.thorns && damageSource instanceof EntityDamageSource) {
+            ((EntityDamageSource)damageSource).x();
+        }
+        ReflectionUtil.DEFAULT.setField(damageSource, "y", this.exhaustion);
+        DAMAGE_SOURCE_MAP.put(damageSource, this);
+        this.damageSource = damageSource;
+        return damageSource;
     }
 
     public boolean buildAndDamage(Entity entity, float damage) {

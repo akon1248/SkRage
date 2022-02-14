@@ -20,15 +20,11 @@ public class OldAISkeletonTask implements Runnable {
 			.flatMap(world -> world.getEntitiesByClass(Skeleton.class).stream())
 			.forEach(skeleton -> {
 				if (skeleton.getEquipment().getItemInMainHand().getType() == Material.BOW && OldAISkeletonManager.isOldAI(skeleton)) {
-					try {
-						EntitySkeletonAbstract nmsSkeleton = ((CraftSkeleton)skeleton).getHandle();
-						PathfinderGoalBowShoot<EntitySkeletonAbstract> bowShoot = (PathfinderGoalBowShoot<EntitySkeletonAbstract>)ReflectionUtil.getField(EntitySkeletonAbstract.class, nmsSkeleton, "b");
-						if (NMSUtil.getGoalSelectors(skeleton).contains(bowShoot)) {
-							nmsSkeleton.goalSelector.a(bowShoot);
-							nmsSkeleton.goalSelector.a(4, new PathfinderGoalArrowAttack(nmsSkeleton, 1.0D, 20, 60, 15.0F));
-						}
-					} catch (ReflectiveOperationException ex) {
-						ex.printStackTrace();
+					EntitySkeletonAbstract nmsSkeleton = ((CraftSkeleton)skeleton).getHandle();
+					PathfinderGoalBowShoot<EntitySkeletonAbstract> bowShoot = (PathfinderGoalBowShoot<EntitySkeletonAbstract>)ReflectionUtil.DEFAULT.getField(EntitySkeletonAbstract.class, nmsSkeleton, "b");
+					if (NMSUtil.getGoalSelectors(skeleton).contains(bowShoot)) {
+						nmsSkeleton.goalSelector.a(bowShoot);
+						nmsSkeleton.goalSelector.a(4, new PathfinderGoalArrowAttack(nmsSkeleton, 1.0D, 20, 60, 15.0F));
 					}
 				}
 			});

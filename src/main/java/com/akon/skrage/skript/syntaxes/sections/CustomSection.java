@@ -86,30 +86,15 @@ public abstract class CustomSection extends Condition {
 	}
 
 	protected static TriggerItem getFirst(TriggerSection section) {
-		try {
-			return (TriggerItem)ReflectionUtil.getField(section, "first");
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		return (TriggerItem)ReflectionUtil.DEFAULT.getField(section, "first");
 	}
 
 	protected static TriggerItem getLast(TriggerSection section) {
-		try {
-			return (TriggerItem)ReflectionUtil.getField(section, "last");
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		return (TriggerItem)ReflectionUtil.DEFAULT.getField(section, "last");
 	}
 
 	protected static Condition getCondition(Conditional conditional) {
-		try {
-			return (Condition)ReflectionUtil.getField(conditional, "cond");
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		return (Condition)ReflectionUtil.DEFAULT.getField(conditional, "cond");
 	}
 
 	private static void checkItem(Trigger trigger, TriggerItem item, HashSet<TriggerItem> checkedItems) {
@@ -136,37 +121,32 @@ public abstract class CustomSection extends Condition {
 	}
 
 	private static Stream<Trigger> getAllTriggers() {
-		try {
-			return Stream.of(
-				((Map<Class<? extends Event>, List<Trigger>>)ReflectionUtil.getStaticField(SkriptEventHandler.class, "triggers"))
-					.values()
-					.stream()
-					.flatMap(List::stream),
-				((List<Trigger>)ReflectionUtil.getStaticField(SkriptEventHandler.class, "selfRegisteredTriggers")).stream(),
-				((Map<String, ScriptCommand>)ReflectionUtil.getStaticField(Commands.class, "commands"))
-					.values()
-					.stream()
-					.map(ExceptionSafe.function(command -> (Trigger)ReflectionUtil.getField(command, "trigger"))
-						.caught(ExceptionSafe.PRINT_STACK_TRACE)
-						.andThen(optional -> optional.orElse(null))
-					),
-				((Map<String, ?>)ReflectionUtil.getStaticField(Functions.class, "functions"))
-					.values()
-					.stream()
-					.map(ExceptionSafe.function(functionData -> (Function<?>)ReflectionUtil.getField(functionData, "function"))
-						.caught(ExceptionSafe.PRINT_STACK_TRACE)
-						.andThen(optional -> optional.orElse(null))
-					)
-					.filter(ScriptFunction.class::isInstance)
-					.map(ExceptionSafe.function(function -> (Trigger)ReflectionUtil.getField(function, "trigger"))
-						.caught(ExceptionSafe.PRINT_STACK_TRACE)
-						.andThen(optional -> optional.orElse(null))
-					)
-			).flatMap(stream -> stream).filter(Objects::nonNull);
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
-		return Stream.empty();
+		return Stream.of(
+			((Map<Class<? extends Event>, List<Trigger>>)ReflectionUtil.DEFAULT.getStaticField(SkriptEventHandler.class, "triggers"))
+				.values()
+				.stream()
+				.flatMap(List::stream),
+			((List<Trigger>)ReflectionUtil.DEFAULT.getStaticField(SkriptEventHandler.class, "selfRegisteredTriggers")).stream(),
+			((Map<String, ScriptCommand>)ReflectionUtil.DEFAULT.getStaticField(Commands.class, "commands"))
+				.values()
+				.stream()
+				.map(ExceptionSafe.function(command -> (Trigger)ReflectionUtil.DEFAULT.getField(command, "trigger"))
+					.caught(ExceptionSafe.PRINT_STACK_TRACE)
+					.andThen(optional -> optional.orElse(null))
+				),
+			((Map<String, ?>)ReflectionUtil.DEFAULT.getStaticField(Functions.class, "functions"))
+				.values()
+				.stream()
+				.map(ExceptionSafe.function(functionData -> (Function<?>)ReflectionUtil.DEFAULT.getField(functionData, "function"))
+					.caught(ExceptionSafe.PRINT_STACK_TRACE)
+					.andThen(optional -> optional.orElse(null))
+				)
+				.filter(ScriptFunction.class::isInstance)
+				.map(ExceptionSafe.function(function -> (Trigger)ReflectionUtil.DEFAULT.getField(function, "trigger"))
+					.caught(ExceptionSafe.PRINT_STACK_TRACE)
+					.andThen(optional -> optional.orElse(null))
+				)
+		).flatMap(stream -> stream).filter(Objects::nonNull);
 	}
 
 }

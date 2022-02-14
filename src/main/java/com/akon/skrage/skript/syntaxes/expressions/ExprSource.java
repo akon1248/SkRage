@@ -73,14 +73,10 @@ public class ExprSource extends SimpleExpression<LivingEntity> {
                     ((AreaEffectCloud) entity).setSource((LivingEntity) delta[0]);
                 }
             } else if ((entity = this.entity.getSingle(e)) instanceof TNTPrimed) {
-                try {
-                    if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET || (mode == Changer.ChangeMode.SET && delta[0] == null)) {
-                        ReflectionUtil.setField(((CraftEntity)entity).getHandle(), "source", null);
-                    } else if (mode == Changer.ChangeMode.SET && delta[0] instanceof LivingEntity) {
-                        ReflectionUtil.setField(((CraftEntity)entity).getHandle(), "source", ((CraftLivingEntity)delta[0]).getHandle());
-                    }
-                } catch (ReflectiveOperationException ex) {
-                    ex.printStackTrace();
+                if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET || (mode == Changer.ChangeMode.SET && delta[0] == null)) {
+                    ReflectionUtil.DEFAULT.setField(((CraftEntity)entity).getHandle(), "source", null);
+                } else if (mode == Changer.ChangeMode.SET && delta[0] instanceof LivingEntity) {
+                    ReflectionUtil.DEFAULT.setField(((CraftEntity)entity).getHandle(), "source", ((CraftLivingEntity)delta[0]).getHandle());
                 }
             } else if ((entity = this.entity.getSingle(e)) instanceof EvokerFangs) {
                 if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET || (mode == Changer.ChangeMode.SET && delta[0] == null)) {

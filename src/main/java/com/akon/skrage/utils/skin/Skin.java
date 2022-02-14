@@ -41,11 +41,7 @@ public class Skin {
 		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
 		SkullMeta meta = (SkullMeta)head.getItemMeta();
 		WrappedGameProfile profile = this.toGameProfile(UUID.nameUUIDFromBytes(this.value.getBytes(StandardCharsets.UTF_8)), StringUtils.EMPTY);
-		try {
-			ReflectionUtil.setField(meta, "profile", profile.getHandle());
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
+		ReflectionUtil.DEFAULT.setField(meta, "profile", profile.getHandle());
 		head.setItemMeta(meta);
 		return head;
 	}

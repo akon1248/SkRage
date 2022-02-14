@@ -69,7 +69,7 @@ public class ExpressionFactory {
 					.make()
 					.load(caller.getClassLoader())
 					.getLoaded();
-				ReflectionUtil.invokeStaticMethod(Skript.class, "registerExpression", new Class[]{Class.class, Class.class, ExpressionType.class, String[].class}, new Object[]{clazz, exprInfo.getSingleReturnType(), ExpressionType.COMBINED, exprInfo.getPatterns()});
+				ReflectionUtil.DEFAULT.invokeStaticMethod(Skript.class, "registerExpression", new Class[]{Class.class, Class.class, ExpressionType.class, String[].class}, new Object[]{clazz, exprInfo.getSingleReturnType(), ExpressionType.COMBINED, exprInfo.getPatterns()});
 			} catch (Exception ex) {
 				StringWriter writer = new StringWriter();
 				ex.printStackTrace(new PrintWriter(writer));

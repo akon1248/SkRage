@@ -21,11 +21,7 @@ public class CustomCombatTracker extends CombatTracker {
 	
 	public CombatTracker getOrigin() {
 		CombatTracker combatTracker = new CombatTracker(this.h());
-		try {
-			ReflectionUtil.copyFields(CombatTracker.class, this, combatTracker);
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
+		ReflectionUtil.DEFAULT.shallowCopyFields(CombatTracker.class, this, combatTracker);
 		return combatTracker;
 	}
 	
@@ -35,11 +31,7 @@ public class CustomCombatTracker extends CombatTracker {
 		}
 		Class<CombatTracker> clazz = CombatTracker.class;
 		CustomCombatTracker custom = new CustomCombatTracker(combatTracker.h());
-		try {
-			ReflectionUtil.copyFields(clazz, combatTracker, custom);
-		} catch (ReflectiveOperationException ex) {
-			ex.printStackTrace();
-		}
+		ReflectionUtil.DEFAULT.shallowCopyFields(clazz, combatTracker, custom);
 		return custom;
 	}
 

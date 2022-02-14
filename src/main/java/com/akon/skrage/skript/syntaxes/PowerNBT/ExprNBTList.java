@@ -32,11 +32,7 @@ public class ExprNBTList extends SimpleExpression<NBTList> {
 		return Optional.ofNullable(this.obj).map(expr -> expr.getAll(e)).map(Arrays::asList).map(list -> {
 			NBTList nbtList = new NBTList();
 			if (this.type != null) {
-				try {
-					ReflectionUtil.invokeMethod(nbtList, "setType", new Class[]{byte.class}, new Object[]{this.type});
-				} catch (ReflectiveOperationException ex) {
-					ex.printStackTrace();
-				}
+				ReflectionUtil.DEFAULT.invokeMethod(nbtList, "setType", new Class[]{byte.class}, new Object[]{this.type});
 			}
 			nbtList.addAll(list);
 			return nbtList;

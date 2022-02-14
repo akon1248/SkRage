@@ -23,10 +23,10 @@ public class CustomTargetManager {
 			return false;
 		}
 		Optional.ofNullable(entity).map(CraftLivingEntity.class::cast).map(CraftLivingEntity::getHandle).filter(EntityInsentient.class::isInstance).map(EntityInsentient.class::cast).ifPresent(ExceptionSafe.<EntityInsentient, Exception>consumer(nmsEntity -> {
-			Set<?> tasks = (Set<?>)ReflectionUtil.getField(nmsEntity.targetSelector, "b");
-			Set<?> executingTasks = (Set<?>)ReflectionUtil.getField(nmsEntity.targetSelector, "c");
+			Set<?> tasks = (Set<?>)ReflectionUtil.DEFAULT.getField(nmsEntity.targetSelector, "b");
+			Set<?> executingTasks = (Set<?>)ReflectionUtil.DEFAULT.getField(nmsEntity.targetSelector, "c");
 			for (Object item: Sets.newHashSet(tasks)) {
-				PathfinderGoal pathfinderGoal = (PathfinderGoal)ReflectionUtil.getField(item, "a");
+				PathfinderGoal pathfinderGoal = (PathfinderGoal)ReflectionUtil.DEFAULT.getField(item, "a");
 				if (pathfinderGoal instanceof PathfinderGoalNearestAttackableTarget || pathfinderGoal instanceof PathfinderGoalNearestAttackableTargetInsentient || pathfinderGoal instanceof PathfinderGoalTargetNearestPlayer) {
 					tasks.remove(item);
 					executingTasks.remove(item);
@@ -57,8 +57,8 @@ public class CustomTargetManager {
 		}
 		Optional.ofNullable(entity).map(CraftLivingEntity.class::cast).map(CraftLivingEntity::getHandle).filter(EntityInsentient.class::isInstance).map(EntityInsentient.class::cast).ifPresent(ExceptionSafe.<EntityInsentient, Exception>consumer(nmsEntity -> {
 			nmsEntity.targetSelector.a((PathfinderGoal)targetAI);
-			Set<Object> tasks = (Set<Object>)ReflectionUtil.getField(nmsEntity.targetSelector, "b");
-			Optional.ofNullable(REMOVED_AI_MAP.remove(entity)).ifPresent(set -> set.forEach(ExceptionSafe.consumer(item -> ReflectionUtil.invokeMethod(tasks, "add", new Class[]{Object.class}, new Object[]{item}))));
+			Set<Object> tasks = (Set<Object>)ReflectionUtil.DEFAULT.getField(nmsEntity.targetSelector, "b");
+			Optional.ofNullable(REMOVED_AI_MAP.remove(entity)).ifPresent(set -> set.forEach(ExceptionSafe.consumer(item -> ReflectionUtil.DEFAULT.invokeMethod(tasks, "add", new Class[]{Object.class}, new Object[]{item}))));
 		}).caught(ExceptionSafe.PRINT_STACK_TRACE));
 		return true;
 	}

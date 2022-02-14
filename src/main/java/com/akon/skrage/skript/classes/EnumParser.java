@@ -3,34 +3,34 @@ package com.akon.skrage.skript.classes;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import com.akon.skrage.utils.ReflectionUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.ParameterizedType;
 
 public class EnumParser<T extends Enum<T>> extends Parser<T> {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public T parse(String s, ParseContext context) {
+	public T parse(String s, @NotNull ParseContext context) {
 		if (s.matches("[^_A-Z]")) {
-			try {
-				Class<T> clazz = (Class<T>)((ParameterizedType)EnumParser.class.getGenericSuperclass()).getActualTypeArguments()[0];
-				return (T) ReflectionUtil.getStaticField(clazz, s.toLowerCase().replace(" ", "_"));
-			} catch (IllegalArgumentException | NoSuchFieldException | IllegalAccessException ignored) {}
+			Class<T> clazz = (Class<T>)((ParameterizedType)EnumParser.class.getGenericSuperclass()).getActualTypeArguments()[0];
+			return (T) ReflectionUtil.DEFAULT.getStaticField(clazz, s.toLowerCase().replace(" ", "_"));
 		}
 		return null;
 	}
 
 	@Override
-	public String toString(T value, int flags) {
+	public @NotNull String toString(T value, int flags) {
 		return value.name().toLowerCase();
 	}
 
 	@Override
-	public String toVariableNameString(T value) {
+	public @NotNull String toVariableNameString(T value) {
 		return value.name();
 	}
 
 	@Override
-	public String getVariableNamePattern() {
+	public @NotNull String getVariableNamePattern() {
 		return "[a-z0-9_-]+";
 	}
 

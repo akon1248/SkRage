@@ -1,6 +1,5 @@
 package com.akon.skrage;
 
-import com.akon.skrage.mmextension.MythicListener;
 import com.akon.skrage.utils.anvilgui.AnvilGUIListener;
 import com.akon.skrage.utils.combattracker.CombatTrackerListener;
 import com.akon.skrage.utils.customstatuseffect.CSEListener;
@@ -36,9 +35,6 @@ public class Registration {
 	}
 
 	public static void registerBukkitListeners() {
-		if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs") && Bukkit.getPluginManager().isPluginEnabled("MythicSkriptAddon")) {
-			Bukkit.getPluginManager().registerEvents(new MythicListener(), PLUGIN);
-		}
 		Bukkit.getPluginManager().registerEvents(new CombatTrackerListener(), PLUGIN);
 		Bukkit.getPluginManager().registerEvents(AnvilGUIListener.INSTANCE, PLUGIN);
 		Bukkit.getPluginManager().registerEvents(SignEditorListener.INSTANCE, PLUGIN);

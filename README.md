@@ -11,9 +11,9 @@ Events:
 		Patterns:
 			[on] add tracking player
 		Event values:
-			event-world
 			event-entity
 			event-player
+			event-world
 		Cancellable: true
 	On anvil gui close:
 		ID: anvil_gui_close
@@ -22,8 +22,8 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui close
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-anvilinv
 		Cancellable: false
 	On anvil gui done:
@@ -33,10 +33,10 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui done
 		Event values:
-			event-world
 			event-player
-			event-anvilinv
+			event-world
 			event-string
+			event-anvilinv
 		Cancellable: false
 	On anvil gui open:
 		ID: anvil_gui_open
@@ -45,8 +45,8 @@ Events:
 		Patterns:
 			[on] anvil[ ]gui open
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-anvilinv
 		Cancellable: true
 	On combust by sunlight:
@@ -56,8 +56,8 @@ Events:
 		Patterns:
 			[on] combust[ing] by sunlight
 		Event values:
-			event-world
 			event-entity
+			event-world
 		Cancellable: true
 	On console log:
 		ID: console_log
@@ -76,10 +76,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
-			event-projectile
 			event-entity
 			event-player
 			event-string
+			event-projectile
 		Cancellable: true
 	On cs pre shoot:
 		ID: cs_pre_shoot
@@ -108,10 +108,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
-			event-projectile
 			event-entity
 			event-player
 			event-string
+			event-projectile
 		Cancellable: false
 	On cse apply:
 		ID: cse_apply
@@ -120,9 +120,9 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) apply %string%
 		Event values:
-			event-customstatuseffect
-			event-world
 			event-entity
+			event-world
+			event-customstatuseffect
 		Cancellable: false
 	On cse remove:
 		ID: cse_remove
@@ -131,9 +131,9 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) remove %string%
 		Event values:
-			event-customstatuseffect
-			event-world
 			event-entity
+			event-world
+			event-customstatuseffect
 		Cancellable: false
 	On cse tick:
 		ID: cse_tick
@@ -142,9 +142,9 @@ Events:
 		Patterns:
 			[on] (cse|custom[ ]status[ ]effect) tick %string%
 		Event values:
-			event-customstatuseffect
-			event-world
 			event-entity
+			event-world
+			event-customstatuseffect
 		Cancellable: false
 	On disguise:
 		ID: disguise
@@ -163,8 +163,8 @@ Events:
 		Patterns:
 			[on] jump
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
 	On player velocity:
 		ID: player_velocity
@@ -173,8 +173,8 @@ Events:
 		Patterns:
 			[on] [player] velocity
 		Event values:
-			event-world
 			event-player
+			event-world
 			event-vector
 		Cancellable: true
 	On plugin message receiving:
@@ -184,8 +184,8 @@ Events:
 		Patterns:
 			[on] plugin message receiv(e|ing)
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
 	On plugin message sending:
 		ID: plugin_message_sending
@@ -194,16 +194,16 @@ Events:
 		Patterns:
 			[on] plugin message send[ing]
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: true
 	On receive creative item:
 		ID: receive_creative_item
 		Patterns:
 			[on] receive creative item
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: false
 	On reload complete:
 		ID: reload_complete
@@ -222,8 +222,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] reload [start]
 		Event values:
-			event-player
 			event-number
+			event-player
 			event-string
 		Cancellable: false
 	On remove tracking player:
@@ -231,9 +231,9 @@ Events:
 		Patterns:
 			[on] remove tracking player
 		Event values:
-			event-world
 			event-entity
 			event-player
+			event-world
 		Cancellable: true
 	On scope:
 		ID: scope
@@ -252,8 +252,8 @@ Events:
 		Patterns:
 			[on] (sen(d|t)|show) item[stack]
 		Event values:
-			event-world
 			event-player
+			event-world
 		Cancellable: false
 	On sign editor done:
 		ID: sign_editor_done
@@ -262,9 +262,9 @@ Events:
 		Patterns:
 			[on] sign[ ]editor done
 		Event values:
-			event-signeditor
-			event-world
 			event-player
+			event-world
+			event-signeditor
 		Cancellable: false
 	On sign editor open:
 		ID: sign_editor_open
@@ -273,9 +273,9 @@ Events:
 		Patterns:
 			[on] sign[ ]editor open
 		Event values:
-			event-signeditor
-			event-world
 			event-player
+			event-world
+			event-signeditor
 		Cancellable: true
 	On undisguise:
 		ID: undisguise
@@ -466,8 +466,8 @@ Effects:
 		Description:
 			ポーションが割れた時のエフェクトを発生させます
 		Patterns:
-			show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %players%]
-			show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %players%]
+			show (1¦splash|) potion break[ing] effect at %location% with [color] %color% [(for|to) %-players%]
+			show (1¦splash|) potion break[ing] effect at %location% with [color] %number%[, %-number%(,| and) %-number%] [(for|to) %-players%]
 	EffPrintStackTrace:
 		ID: EffPrintStackTrace
 		Description:
@@ -789,7 +789,7 @@ Expressions:
 		ID: ExprCSETypeColor
 		Description:
 			CustomStatusEffectのタイプから色を取得します
-		Return type: Colour
+		Return type: Number
 		Changers:
 			none
 		Patterns:
@@ -876,16 +876,9 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			chat color code from %color%
-	ExprColorRGB:
-		ID: ExprColorRGB
-		Return type: Number
-		Changers:
-			none
-		Patterns:
-			(0¦red|1¦green|2¦blue) (from|of) %color%
 	ExprCurrentStackTrace:
 		ID: ExprCurrentStackTrace
-		Return type: stacktraceelement
+		Return type: Stack Trace Element
 		Changers:
 			none
 		Patterns:
@@ -908,7 +901,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			[a] [new] player disguise named %string% with skin %skin%
+			[a] [new] player disguise named %string% with skin %playerskin%
 	ExprCustomStatusEffect:
 		ID: ExprCustomStatusEffect
 		Return type: Custom Status Effect
@@ -1125,13 +1118,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprDisplayedSkin
 		Description:
 			プレイヤーに表示されているスキン
-		Return type: Skin
+		Return type: Player Skin
 		Changers:
 			set
 			reset
 		Patterns:
-			%player%'s displayed skin
-			displayed skin of %player%
+			%player%'s displayed [player] skin
+			displayed [player] skin of %player%
 	ExprEntityName:
 		ID: ExprEntityName
 		Description:
@@ -1159,7 +1152,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprErrorCause
 		Description:
 			エラーの原因となった別のエラー
-		Return type: throwable
+		Return type: Throwable
 		Changers:
 			none
 		Patterns:
@@ -1401,7 +1394,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprMergeNBT
 		Description:
 			複数のNBTをマージします
-		Return type: NBT Compound
+		Return type: Object
 		Changers:
 			none
 		Patterns:
@@ -1410,15 +1403,14 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprNBTCompound
 		Description:
 			ブロック、エンティティ、アイテムのNBT
-		Return type: NBT Compound
+		Return type: Object
 		Changers:
-			add
-			set
+			none
 		Patterns:
 			nbt[ ]compound (of|from) %block/entity/itemstack% 
 	ExprNBTList:
 		ID: ExprNBTList
-		Return type: NBT List
+		Return type: Object
 		Changers:
 			none
 		Patterns:
@@ -1450,13 +1442,6 @@ send "Projectile_Damage: %{_weapondamage}%"
 			none
 		Patterns:
 			new attribute[ ]modifier with uuid %string% [and] name %string% [and] amount %number% [and] operation (0¦add number|1¦add scalar|2¦multiply scalar one)
-	ExprNewColor:
-		ID: ExprNewColor
-		Return type: Colour
-		Changers:
-			none
-		Patterns:
-			colo[u]r from (0¦[hex] colo[u]r[ ]code %-string%|1¦rgb %-number%[, %-number%, %-number%])
 	ExprNewDamageSource:
 		ID: ExprNewDamageSource
 		Description:
@@ -1487,24 +1472,15 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Patterns:
 			[a] [new] item[ ]type %string% [data %-number%]
 			[a] [new] item[ ]type from %itemstacks%
-	ExprNewRandom:
-		ID: ExprNewRandom
-		Description:
-			新しいランダムオブジェクトを生成します
-		Return type: Random
-		Changers:
-			none
-		Patterns:
-			new random [with seed %-number%]
 	ExprNewSkin:
 		ID: ExprNewSkin
 		Description:
 			valueとsignatureから新しいスキンを作成します
-		Return type: Skin
+		Return type: Player Skin
 		Changers:
 			none
 		Patterns:
-			new skin value %string% signature %string%
+			new [player] skin [with] value %string% signature %string%
 	ExprNoDamageTicks:
 		ID: ExprNoDamageTicks
 		Description:
@@ -1525,7 +1501,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			player head from [skin] %skin%
+			player head from [skin] %playerskin%
 	ExprPlayerTime:
 		ID: ExprPlayerTime
 		Description:
@@ -1570,52 +1546,6 @@ send "Projectile_Damage: %{_weapondamage}%"
 			delete
 		Patterns:
 			plugin message contents
-	ExprRandomBoolean:
-		ID: ExprRandomBoolean
-		Description:
-			ランダムな真偽値を生成します
-		Return type: Boolean
-		Changers:
-			none
-		Patterns:
-			random boolean from %random%
-	ExprRandomGaussian:
-		ID: ExprRandomGaussian
-		Description:
-			平均0、標準偏差1.0のガウス分布の乱数を生成します
-		Return type: Number
-		Changers:
-			none
-		Patterns:
-			random gauss[ian] from %random%
-	ExprRandomInt:
-		ID: ExprRandomInt
-		Description:
-			ランダムな整数(32bitの範囲)を生成します
-			boundを指定した場合0 ~ bound-1の範囲のランダムな整数が生成されます
-		Return type: Number
-		Changers:
-			none
-		Patterns:
-			random int[eger] from %random% [with bound %-number%]
-	ExprRandomLong:
-		ID: ExprRandomLong
-		Description:
-			ランダムな整数(64bitの範囲)を生成します
-		Return type: Number
-		Changers:
-			none
-		Patterns:
-			random long from %random%
-	ExprRandomNumber:
-		ID: ExprRandomNumber
-		Description:
-			ランダムな0~1の小数を生成します
-		Return type: Number
-		Changers:
-			none
-		Patterns:
-			random number from %random%
 	ExprReceivedItem:
 		ID: ExprReceivedItem
 		Description:
@@ -1689,13 +1619,13 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprSkin
 		Description:
 			プレイヤーが使用しているスキン
-		Return type: Skin
+		Return type: Player Skin
 		Changers:
 			none
 		Patterns:
-			%offlineplayer%'s skin
-			skin of %offlineplayer%
-			skin from %offlineplayer%
+			%offlineplayer%'s [player] skin
+			[player] skin of %offlineplayer%
+			[player] skin from %offlineplayer%
 	ExprSource:
 		ID: ExprSource
 		Description:
@@ -1707,11 +1637,21 @@ send "Projectile_Damage: %{_weapondamage}%"
 			reset
 		Patterns:
 			(owner|source) of %entity%
+	ExprSpectator:
+		ID: ExprSpectator
+		Description:
+			ブロックに衝突するスペクテイター状態
+		Return type: Boolean
+		Changers:
+			set
+		Patterns:
+			%player%'s [clipping] spectator state
+			[clipping] spectator state of %player%
 	ExprStackTrace:
 		ID: ExprStackTrace
 		Description:
 			エラーのスタックトレース
-		Return type: stacktraceelement
+		Return type: Stack Trace Element
 		Changers:
 			none
 		Patterns:
@@ -1852,34 +1792,23 @@ Types:
 		Usage: off, fatal, error, warn, info, debug, trace, all
 		Patterns:
 			log[ ]level[s]
-	NBT Compound:
-		ID: NBTCompound
-		Description:
-			NBTを表す型
-			parse可
+	Player Skin:
+		ID: Skin
 		Patterns:
-			nbt[ ]compound[s]
-	NBT List:
-		ID: NBTList
-		Patterns:
-			nbt[ ]list[s]
-	Random:
-		ID: Random
-		Patterns:
-			random[s]
+			player[ ]skin[s]
 	Sign Editor:
 		ID: SignEditor
 		Patterns:
 			sign[ ]editor[s]
-	Skin:
-		ID: Skin
-		Patterns:
-			skin[s]
 Functions:
 	and:
 		Return type: Number
 		Patterns:
 			and(val1: number, val2: number)
+	leftShift:
+		Return type: Number
+		Patterns:
+			leftShift(val1: number, val2: number)
 	not:
 		Return type: Number
 		Patterns:
@@ -1888,6 +1817,14 @@ Functions:
 		Return type: Number
 		Patterns:
 			or(val1: number, val2: number)
+	rightShift:
+		Return type: Number
+		Patterns:
+			rightShift(val1: number, val2: number)
+	unsignedRightShift:
+		Return type: Number
+		Patterns:
+			unsignedRightShift(val1: number, val2: number)
 	xor:
 		Return type: Number
 		Patterns:

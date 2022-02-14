@@ -1,11 +1,12 @@
 package com.akon.skrage.utils.customstatuseffect;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
-public class CSEUpdateTask implements Runnable {
+@UtilityClass
+public class CSEUpdater {
 
-	@Override
-	public void run() {
+	public void update() {
 		Bukkit.getWorlds()
 			.stream()
 			.flatMap(world -> world.getLivingEntities().stream())

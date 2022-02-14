@@ -11,7 +11,9 @@ import org.bukkit.entity.Skeleton;
 //OldAIが有効だった場合腕が常に上がっているように見せる
 public class OldAISkeletonListener extends PacketAdapter {
 
-	public OldAISkeletonListener() {
+	public static final OldAISkeletonListener INSTANCE = new OldAISkeletonListener();
+
+	private OldAISkeletonListener() {
 		super(SkRage.getInstance(), PacketType.Play.Server.ENTITY_METADATA);
 	}
 

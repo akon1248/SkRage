@@ -9,7 +9,9 @@ import java.util.Optional;
 
 public class EntityVisibilityListener extends PacketAdapter {
 
-    public EntityVisibilityListener() {
+    public static final EntityVisibilityListener INSTANCE = new EntityVisibilityListener();
+
+    private EntityVisibilityListener() {
         super(SkRage.getInstance(), PacketType.Play.Server.NAMED_ENTITY_SPAWN, PacketType.Play.Server.SPAWN_ENTITY, PacketType.Play.Server.SPAWN_ENTITY_EXPERIENCE_ORB, PacketType.Play.Server.SPAWN_ENTITY_LIVING, PacketType.Play.Server.SPAWN_ENTITY_PAINTING, PacketType.Play.Server.SPAWN_ENTITY_WEATHER);
     }
 

@@ -1,14 +1,15 @@
 package com.akon.skrage.utils.freeze;
 
 import com.akon.skrage.SkRage;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.metadata.MetadataValue;
 
-public class FreezeTask implements Runnable {
+@UtilityClass
+public class FreezeUpdater {
 
-	@Override
-	public void run() {
+	public void update() {
 		Bukkit.getOnlinePlayers().stream().filter(FreezeManager::isFrozen).forEach(player -> {
 			if (player.isOnGround()) {
 				player.teleport(player.getLocation().add(0, 0.01, 0));

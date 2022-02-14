@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 
 public class SkinListener extends PacketAdapter {
 
-	public SkinListener() {
+	public static final SkinListener INSTANCE = new SkinListener();
+
+	private SkinListener() {
 		super(SkRage.getInstance(), PacketType.Play.Server.PLAYER_INFO);
 	}
 

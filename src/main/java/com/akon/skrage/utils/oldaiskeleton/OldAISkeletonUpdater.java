@@ -2,6 +2,7 @@ package com.akon.skrage.utils.oldaiskeleton;
 
 import com.akon.skrage.utils.NMSUtil;
 import com.akon.skrage.utils.ReflectionUtil;
+import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_12_R1.EntitySkeletonAbstract;
 import net.minecraft.server.v1_12_R1.PathfinderGoalArrowAttack;
 import net.minecraft.server.v1_12_R1.PathfinderGoalBowShoot;
@@ -11,10 +12,10 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftSkeleton;
 import org.bukkit.entity.Skeleton;
 
 //OldAIが有効なスケルトンのAIを書き換える
-public class OldAISkeletonTask implements Runnable {
+@UtilityClass
+public class OldAISkeletonUpdater {
 
-	@Override
-	public void run() {
+	public void update() {
 		Bukkit.getWorlds()
 			.stream()
 			.flatMap(world -> world.getEntitiesByClass(Skeleton.class).stream())

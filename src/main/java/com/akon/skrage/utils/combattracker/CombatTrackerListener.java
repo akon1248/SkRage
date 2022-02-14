@@ -18,6 +18,10 @@ import org.bukkit.event.server.PluginEnableEvent;
 
 public class CombatTrackerListener implements Listener {
 
+	public static final CombatTrackerListener INSTANCE = new CombatTrackerListener();
+
+	private CombatTrackerListener() {}
+
 	@EventHandler
 	public void onEnable(PluginEnableEvent e) {
 		if (e.getPlugin() == SkRage.getInstance()) {

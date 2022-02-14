@@ -10,6 +10,7 @@ import com.akon.skrage.utils.damagesource.DamageSourceBuilder;
 import com.akon.skrage.utils.exceptionsafe.ExceptionSafe;
 import com.akon.skrage.utils.freeze.FreezeManager;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonManager;
+import com.akon.skrage.utils.spectator.SpectatorManager;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
@@ -115,6 +116,7 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprPlayerTimeRelative", "(client|player) time relative", POSS | OF, Player.class, Boolean.class, Player::isPlayerTimeRelative, (player, bool) -> player.setPlayerTime(player.getPlayerTimeOffset(), bool), "プレイヤーの時間がサーバーの時間と相対的かどうか");
 		ExpressionFactory.registerExpression("ExprSimpleErrorName", "simple error name", POSS | OF, Throwable.class, String.class, throwable -> throwable.getClass().getSimpleName(), null, "エラーのシンプルな名前");
 		ExpressionFactory.registerExpression("ExprSkeletonOldAI", "old ai state", POSS | OF, LivingEntity.class, Boolean.class, entity -> entity instanceof Skeleton && OldAISkeletonManager.isOldAI((Skeleton)entity), (entity, bool) -> Optional.of(entity).filter(Skeleton.class::isInstance).map(Skeleton.class::cast).ifPresent(skeleton -> OldAISkeletonManager.setOldAI(skeleton, bool)), "スケルトンのAIが1.8以前の状態かどうか");
+		ExpressionFactory.registerExpression("ExprSpectator", "[clipping] spectator state", POSS | OF, Player.class, Boolean.class, SpectatorManager::isSpectator, SpectatorManager::setSpectator, "ブロックに衝突するスペクテイター状態");
 		ExpressionFactory.registerExpression("ExprStackTrace", "stack[ ]trace", POSS | OF | FROM, Throwable.class, StackTraceElement[].class, Throwable::getStackTrace, null, "エラーのスタックトレース");
 		ExpressionFactory.registerExpression("ExprStackTraceClass", "stack[ ]trace class", POSS | OF, StackTraceElement.class, String.class, StackTraceElement::getClassName, null, "スタックトーレスのクラス名");
 		ExpressionFactory.registerExpression("ExprStackTraceFile", "stack[ ]trace file", POSS | OF, StackTraceElement.class, String.class, StackTraceElement::getFileName, null, "スタックトレースのファイル名");

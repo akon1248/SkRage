@@ -8,14 +8,13 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.akon.skrage.utils.skin.Skin;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 
 @Description({"valueとsignatureから新しいスキンを作成します"})
 public class ExprNewSkin extends SimpleExpression<Skin> {
 
 	static {
-		Skript.registerExpression(ExprNewSkin.class, Skin.class, ExpressionType.COMBINED, "new skin value %string% signature %string%");
+		Skript.registerExpression(ExprNewSkin.class, Skin.class, ExpressionType.COMBINED, "new [player] skin [with] value %string% signature %string%");
 	}
 
 	private Expression<String> value;

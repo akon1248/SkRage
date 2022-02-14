@@ -11,7 +11,6 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import com.akon.skrage.utils.skin.Skin;
 import com.akon.skrage.utils.skin.SkinManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -21,7 +20,7 @@ public class ExprDisplayedSkin extends SimpleExpression<Skin> {
     private Expression<Player> player;
 
     static {
-        Skript.registerExpression(ExprDisplayedSkin.class, Skin.class, ExpressionType.COMBINED, "%player%'s displayed skin", "displayed skin of %player%");
+        Skript.registerExpression(ExprDisplayedSkin.class, Skin.class, ExpressionType.COMBINED, "%player%'s displayed [player] skin", "displayed [player] skin of %player%");
     }
 
     @Override

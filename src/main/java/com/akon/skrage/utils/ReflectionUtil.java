@@ -31,39 +31,40 @@ public class ReflectionUtil {
 
 	private static <R, C, V, X extends Throwable> V computeIfAbsent(Table<R, C, V> table, R row, C column, ThrowsBiFunction<? super R, ? super C, ? extends V, ? extends X> mappingFunction) throws X, NoSuchMethodException {
 		Validate.notNull(mappingFunction);
-		if (table.contains(row, column)) {
-			return table.get(row, column);
+		V value = table.get(row, column);
+		if (value == null) {
+			value = mappingFunction.apply(row, column);
+			table.put(row, column, value);
 		}
-		V value = mappingFunction.apply(row, column);
-		table.put(row, column, value);
 		return value;
 	}
 
 	private static String toTypeDescription(Class<?> clazz) {
 		Validate.notNull(clazz);
-		if (clazz == void.class) {
-			return "V";
-		} else if (clazz == byte.class) {
-			return "B";
-		} else if (clazz == short.class) {
-			return "S";
-		} else if (clazz == int.class) {
-			return "I";
-		} else if (clazz == long.class) {
-			return "J";
-		} else if (clazz == float.class) {
-			return "F";
-		} else if (clazz == double.class) {
-			return "D";
-		} else if (clazz == char.class) {
-			return "C";
-		} else if (clazz == boolean.class) {
-			return "Z";
+		if (clazz.isPrimitive()) {
+			if (clazz == void.class) {
+				return "V";
+			} else if (clazz == byte.class) {
+				return "B";
+			} else if (clazz == short.class) {
+				return "S";
+			} else if (clazz == int.class) {
+				return "I";
+			} else if (clazz == long.class) {
+				return "J";
+			} else if (clazz == float.class) {
+				return "F";
+			} else if (clazz == double.class) {
+				return "D";
+			} else if (clazz == char.class) {
+				return "C";
+			} else if (clazz == boolean.class) {
+				return "Z";
+			}
 		} else if (clazz.isArray()) {
 			return '[' + toTypeDescription(clazz.getComponentType());
-		} else {
-			return 'L' + clazz.getName().replace('.', '/') + ';';
 		}
+		return 'L' + clazz.getName().replace('.', '/') + ';';
 	}
 
 	private static String methodInfo(String name, Class<?>[] params) {

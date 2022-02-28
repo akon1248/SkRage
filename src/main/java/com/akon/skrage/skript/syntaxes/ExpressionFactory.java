@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 //ByteBuddyを使って動的にExpressionを作成、登録する
 public class ExpressionFactory {
 
-	//pattenrs
+	//patterns
 	//001: 's
 	//010: of
 	//100: from

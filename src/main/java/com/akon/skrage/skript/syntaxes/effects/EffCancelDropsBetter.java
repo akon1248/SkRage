@@ -39,7 +39,7 @@ public class EffCancelDropsBetter extends Effect {
     @Override
     public boolean init(Expression<?>[] expressions, int matched, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         if (!ScriptLoader.isCurrentEvent(EntityDeathEvent.class) && !ScriptLoader.isCurrentEvent(BlockBreakEvent.class)) {
-            Skript.error("on breakまたはon deathイベントでのみ子の構文は使用可能です");
+            Skript.error("on breakまたはon deathイベントでのみこの構文は使用可能です");
             return false;
         }
         return true;

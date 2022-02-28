@@ -9,17 +9,13 @@ import ch.njol.skript.util.Getter;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.event.EventFactionsChunkChangeType;
 import com.massivecraft.factions.event.EventFactionsChunksChange;
-import com.massivecraft.factions.event.EventFactionsDisband;
-import com.massivecraft.massivecore.ps.PS;
 import lombok.val;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class EvtFactionsChunkChange extends SkriptEvent {
 

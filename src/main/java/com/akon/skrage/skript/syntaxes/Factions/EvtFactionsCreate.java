@@ -15,7 +15,7 @@ public class EvtFactionsCreate extends SkriptEvent {
 
     static {
         if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
-            Skript.registerEvent("factions create", EvtFactionsCreate.class, EventFactionsCreate.class, "faction[s] create[ed]")
+            Skript.registerEvent("factions create", EvtFactionsCreate.class, EventFactionsCreate.class, "faction[s] create[d]")
                     .description("あるFactionが作成されたとき");
             EventValues.registerEventValue(EventFactionsCreate.class, String.class, new Getter<String, EventFactionsCreate>() {
 

@@ -4,4 +4,4 @@ main: com.akon.skrage.SkRage
 author: akon
 api-version: 1.12.2
 depend: [Skript, ProtocolLib]
-softdepend: [CrackShot, LibsDisguises, LunaChat, SkQuery]
+softdepend: [CrackShot, LibsDisguises, LunaChat, MundoSK, SkQuery]

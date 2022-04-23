@@ -88,7 +88,7 @@ public class ReflectionUtil {
 		}
 	}
 
-	private Field getField(Class<?> clazz, String fieldName) throws ReflectiveOperationException {
+	private synchronized Field getField(Class<?> clazz, String fieldName) throws ReflectiveOperationException {
 		return getDeclaredField(computeIfAbsent(classDeclaringFieldCache, clazz, fieldName, (c, name) -> {
 			Field field = null;
 			do {
@@ -105,7 +105,7 @@ public class ReflectionUtil {
 		}), fieldName);
 	}
 
-	private Field getDeclaredField(Class<?> clazz, String fieldName) throws ReflectiveOperationException {
+	private synchronized Field getDeclaredField(Class<?> clazz, String fieldName) throws ReflectiveOperationException {
 		return computeIfAbsent(fieldCache, clazz, fieldName, (c, name) -> {
 			Field field = c.getDeclaredField(name);
 			field.setAccessible(true);
@@ -114,7 +114,7 @@ public class ReflectionUtil {
 		});
 	}
 
-	private Method getMethod(Class<?> clazz, String methodName, Class<?>... params) throws ReflectiveOperationException {
+	private synchronized Method getMethod(Class<?> clazz, String methodName, Class<?>... params) throws ReflectiveOperationException {
 		return getDeclaredMethod(computeIfAbsent(classDeclaringMethodCache, clazz, methodInfo(methodName, params), (c, methodInfo) -> {
 			Method method = null;
 			do {
@@ -131,7 +131,7 @@ public class ReflectionUtil {
 		}), methodName, params);
 	}
 
-	private Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>... params) throws ReflectiveOperationException {
+	private synchronized Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>... params) throws ReflectiveOperationException {
 		return (Method)computeIfAbsent(methodCache, clazz, methodInfo(methodName, params), (c, methodInfo) -> {
 			Method method = c.getDeclaredMethod(methodName, params);
 			method.setAccessible(true);
@@ -140,7 +140,7 @@ public class ReflectionUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... params) throws ReflectiveOperationException {
+	private synchronized  <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... params) throws ReflectiveOperationException {
 		return (Constructor<T>)computeIfAbsent(methodCache, clazz, methodInfo("<init>", params), (c, methodInfo) -> {
 			Constructor<?> constructor = c.getDeclaredConstructor(params);
 			constructor.setAccessible(true);

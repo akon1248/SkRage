@@ -51,9 +51,9 @@ public class ExprCSWeaponModule extends SimpleExpression<Object> {
 			return null;
 		} else {
 			Object result = CSDirector.dubs.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
-			if (result == null) CSDirector.bools.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
-			if (result == null) CSDirector.ints.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
-			if (result == null) CSDirector.strings.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
+			if (result == null) result = CSDirector.bools.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
+			if (result == null) result = CSDirector.ints.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
+			if (result == null) result = CSDirector.strings.get(this.weaponName.getSingle(e) + "." + this.node.getSingle(e));
 			return new Object[]{result};
 		}
 	}

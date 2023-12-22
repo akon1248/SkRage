@@ -11,6 +11,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.coll.CollectionUtils;
 import com.akon.skrage.SkRage;
+import com.akon.skrage.utils.LogUtil;
 import com.akon.skrage.utils.ReflectionUtil;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
@@ -71,11 +72,8 @@ public class ExpressionFactory {
 					.getLoaded();
 				ReflectionUtil.DEFAULT.invokeStaticMethod(Skript.class, "registerExpression", new Class[]{Class.class, Class.class, ExpressionType.class, String[].class}, new Object[]{clazz, exprInfo.getSingleReturnType(), ExpressionType.COMBINED, exprInfo.getPatterns()});
 			} catch (Exception ex) {
-				StringWriter writer = new StringWriter();
-				ex.printStackTrace(new PrintWriter(writer));
-				Logger logger = SkRage.getInstance().getLogger();
-				logger.warning("Expressionの登録に失敗しました: " + exprInfo.getPatterns()[0]);
-				Arrays.stream(writer.toString().split(System.lineSeparator())).forEach(logger::warning);
+				SkRage.getInstance().getLogger().warning("Expressionの登録に失敗しました: " + exprInfo.getPatterns()[0]);
+				LogUtil.logThrowable(ex);
 			}
 		}
 	}

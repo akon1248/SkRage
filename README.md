@@ -11,8 +11,8 @@ Events:
 		Patterns:
 			[on] add tracking player
 		Event values:
-			event-entity
 			event-player
+			event-entity
 			event-world
 		Cancellable: true
 	On anvil gui close:
@@ -63,6 +63,10 @@ Events:
 		ID: console_log
 		Description:
 			コンソールにログが出力されたとき
+		Examples:
+			on console log:
+			    set {_level} to capitalized "%event-loglevel%"
+			    send "[CONSOLE] [%{_level}%] %event-string%" to all players
 		Patterns:
 			[on] console log
 		Event values:
@@ -76,10 +80,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) damage
 		Event values:
-			event-entity
 			event-player
-			event-string
 			event-projectile
+			event-entity
+			event-string
 		Cancellable: true
 	On cs pre shoot:
 		ID: cs_pre_shoot
@@ -108,10 +112,10 @@ Events:
 		Patterns:
 			[on] (crackshot|cs) shoot
 		Event values:
-			event-entity
 			event-player
-			event-string
 			event-projectile
+			event-entity
+			event-string
 		Cancellable: false
 	On cse apply:
 		ID: cse_apply
@@ -222,8 +226,8 @@ Events:
 		Patterns:
 			[on] [(crackshot|cs)] reload [start]
 		Event values:
-			event-number
 			event-player
+			event-number
 			event-string
 		Cancellable: false
 	On remove tracking player:
@@ -231,8 +235,8 @@ Events:
 		Patterns:
 			[on] remove tracking player
 		Event values:
-			event-entity
 			event-player
+			event-entity
 			event-world
 		Cancellable: true
 	On scope:
@@ -249,6 +253,29 @@ Events:
 		ID: show_item
 		Description:
 			アイテムがプレイヤーに表示されるとき
+		Examples:
+			on show item:
+			    set {_nbt} to nbt compound of shown item
+			    {_nbt} is set
+			    set {_nbtlist} to tag key "AttributeModifiers" of {_nbt}
+			    loop convert nbt list {_nbtlist} to list:
+			        set {_modifiernbt} to loop-value
+			        tag key "AttributeName" of {_modifiernbt} is "generic.attackDamage"
+			        tag key "Slot" of {_modifiernbt} is "mainhand"
+			        tag key "Operation" of {_modifiernbt} is 0
+			        set {_amount} to tag key "Amount" of {_modifiernbt}
+			        add {_amount} to {_sum}
+			    {_sum} is set
+			    set {_item} to shown item
+			    set tag key "AttributeModifiers" of nbt compound of {_item} to nbt literal []
+			    set tag key "TrueNBT" of nbt compound of {_item} to {_nbt}
+			    set lore of {_item} to "" and "&c攻撃力: &6%{_sum}%"
+			    set shown item to {_item}
+			on receive creative item:
+			    set {_nbt} to nbt compound of received item
+			    set {_truenbt} to tag key "TrueNBT" of {_nbt}
+			    {_truenbt} is set
+			    set nbt compound of received item to {_truenbt}
 		Patterns:
 			[on] (sen(d|t)|show) item[stack]
 		Event values:
@@ -321,7 +348,7 @@ Conditions:
 		Description:
 			大文字と小文字を無視せずに文字列を比較します
 		Patterns:
-			%string% equals strict %string%
+			%string% equals strictly %string%
 	CondWeaponBullet:
 		ID: CondWeaponBullet
 		Description:
@@ -335,7 +362,7 @@ Conditions:
 	SecRunLater:
 		ID: SecRunLater
 		Patterns:
-			(execute|run) (1¦async|) [(code|section)] in %timespan%
+			(execute|run) [(code|section|task)] (0¦[sync[hronously]]|1¦async[hronously]) [in %-timespan%]
 	SecTry:
 		ID: SecTry
 		Patterns:
@@ -350,7 +377,7 @@ Effects:
 	EffArmSwing:
 		ID: EffArmSwing
 		Patterns:
-			make %livingentity% arm swing
+			make %livingentity% swing (0¦(main[ ]hand|arm)|1¦off[ ]hand)
 	EffBetterBreakNaturally:
 		ID: EffBetterBreakNaturally
 		Description:
@@ -392,16 +419,14 @@ Effects:
 		ID: EffClientSideEquipment
 		Patterns:
 			make %entities% (0¦[main]hand|1¦offhand|2¦(boots|feet)|3¦(le[ggin]gs)|4¦chest[plate]|5¦he(lmet|ad)) %itemtype% for %players%
-	EffClientSideFirework:
-		ID: EffClientSideFirework
-		Description:
-			クライアントサイドな花火のエフェクトを表示させます
-		Patterns:
-			show firework[s] [effect] %fireworkeffects% at %location% [for %players%]
 	EffClientSideGlowing:
 		ID: EffClientSideGlowing
 		Description:
 			特定のプレイヤーに対してEntityが発光しているように見せます
+		Examples:
+			on add tracking player:
+			    wait until the end of this tick
+			    make tracked entity glow for event-player
 		Patterns:
 			make %entities% glow[ing] for %players%
 			make %entities% unglow[ing] for %players%
@@ -520,6 +545,10 @@ Effects:
 			また、一度死亡したエンティティをリスポーンさせることも可能です
 		Patterns:
 			[re]spawn [(a|an)] %entity% at %location%
+	EffSync:
+		ID: EffSync
+		Patterns:
+			(sync[hronize]|wait until [the] end of [(the|this)] tick)
 	EffUpdateBlock:
 		ID: EffUpdateBlock
 		Description:
@@ -875,7 +904,7 @@ send "Projectile_Damage: %{_weapondamage}%"
 		Changers:
 			none
 		Patterns:
-			chat color code from %color%
+			chat color code from %number%
 	ExprCurrentStackTrace:
 		ID: ExprCurrentStackTrace
 		Return type: Stack Trace Element
@@ -1394,23 +1423,32 @@ send "Projectile_Damage: %{_weapondamage}%"
 		ID: ExprMergeNBT
 		Description:
 			複数のNBTをマージします
-		Return type: Object
+		Return type: NBT Compound
 		Changers:
 			none
 		Patterns:
 			merge nbt[ ]compound[s] %nbtcompounds%
-	ExprNBTCompound:
-		ID: ExprNBTCompound
-		Description:
-			ブロック、エンティティ、アイテムのNBT
+	ExprNBT:
+		ID: ExprNBT
 		Return type: Object
 		Changers:
 			none
 		Patterns:
+			nbt[[ ]literal] %string%
+			nbt[[ ]literal] (0¦\{<.*>\}|1¦[<.*>])
+	ExprNBTCompound:
+		ID: ExprNBTCompound
+		Description:
+			ブロック、エンティティ、アイテムのNBT
+		Return type: NBT Compound
+		Changers:
+			add
+			set
+		Patterns:
 			nbt[ ]compound (of|from) %block/entity/itemstack% 
 	ExprNBTList:
 		ID: ExprNBTList
-		Return type: Object
+		Return type: NBT List
 		Changers:
 			none
 		Patterns:
@@ -1747,6 +1785,24 @@ send "Projectile_Damage: %{_weapondamage}%"
 			set
 		Patterns:
 			move(e|ing) to
+	ExprTrackedEntity:
+		ID: ExprTrackedEntity
+		Return type: Entity
+		Changers:
+			add
+			remove
+			remove all
+		Patterns:
+			track[ed] entity
+	ExprUntrackedEntity:
+		ID: ExprUntrackedEntity
+		Return type: Entity
+		Changers:
+			add
+			remove
+			remove all
+		Patterns:
+			untrack[ed] entity
 	ExprWitherHeadTarget:
 		ID: ExprWitherHeadTarget
 		Return type: Entity
@@ -1758,48 +1814,26 @@ send "Projectile_Damage: %{_weapondamage}%"
 			(0¦right|1¦left) head target of %livingentity%
 			%livingentity%'s (0¦right|1¦left) head target
 Types:
-	Anvil GUI:
-		ID: AnvilGUI
-		Patterns:
-			anvil[ ]inv[s]
-	Attribute Instance:
-		ID: AttributeInstance
-		Patterns:
-			attribute[ ]instance[s]
-	Attribute Modifier:
-		ID: AttributeModifier
-		Patterns:
-			attribute[ ]modifier
-	Custom Status Effect:
-		ID: CustomStatusEffect
-		Patterns:
-			(cse|custom[ ]status[ ]effect)[s]
-	Custom Status Effect Type:
-		ID: CSEType
-		Patterns:
-			(cse|custom[ ]status[ ]effect)[ ]type[s]
 	Damage Modifier:
 		ID: DamageModifier
 		Usage: absorption, armor, base, blocking, hard hat, magic, resistance
 		Patterns:
 			damage[ ]modifier[s]
-	Damage Source:
-		ID: DamageSourceBuilder
-		Patterns:
-			damage[ ]source[s]
 	Log Level:
 		ID: StandardLevel
 		Usage: off, fatal, error, warn, info, debug, trace, all
 		Patterns:
 			log[ ]level[s]
-	Player Skin:
-		ID: Skin
+	NBT Compound:
+		ID: NBTCompound
+		Description:
+			NBTを表す型
 		Patterns:
-			player[ ]skin[s]
-	Sign Editor:
-		ID: SignEditor
+			nbt[ ]compound[s]
+	NBT List:
+		ID: NBTList
 		Patterns:
-			sign[ ]editor[s]
+			nbt[ ]list[s]
 Functions:
 	and:
 		Return type: Number

@@ -15,7 +15,7 @@ public class CatchableFunction<T, R, X extends Throwable> implements Function<T,
     private Function<T, Optional<R>> caught;
 
     @Override
-    public Function<T, Optional<R>> caught(@Nullable Function<? super X, R> c, @Nullable Consumer<? super T> f) {
+    public Function<T, Optional<R>> onCatch(@Nullable Function<? super X, R> c, @Nullable Consumer<? super T> f) {
         return  t -> {
             try {
                 return Optional.ofNullable(this.throwsFunction.apply(t));
@@ -29,7 +29,7 @@ public class CatchableFunction<T, R, X extends Throwable> implements Function<T,
     }
 
     public Function<T, Optional<R>> caught(@Nullable Consumer<? super X> c, @Nullable Consumer<T> f) {
-        return this.caught(Optional.ofNullable(c).map(consumer -> (Function<? super X, R>)t -> {
+        return this.onCatch(Optional.ofNullable(c).map(consumer -> (Function<? super X, R>) t -> {
             consumer.accept(t);
             return null;
         }).orElse(null), f);
@@ -40,7 +40,7 @@ public class CatchableFunction<T, R, X extends Throwable> implements Function<T,
     }
 
     public Optional<R> applyOptional(T t) {
-        return Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).apply(t);
+        return Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).apply(t);
     }
 
     @Nullable

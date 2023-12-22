@@ -1,6 +1,7 @@
 package com.akon.skrage.utils.freeze;
 
 import com.akon.skrage.SkRage;
+import com.akon.skrage.utils.LogUtil;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.google.common.collect.Maps;
@@ -30,7 +31,7 @@ public class FreezeManager {
 			try {
 				ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
 			} catch (InvocationTargetException ex) {
-				ex.printStackTrace();
+				LogUtil.logThrowable(ex);
 			}
 			player.setMetadata("Freeze_BoundLocation", new FixedMetadataValue(SkRage.getInstance(), player.getLocation()));
 			FROZEN_PLAYERS.put(player.getUniqueId(), bitMask);

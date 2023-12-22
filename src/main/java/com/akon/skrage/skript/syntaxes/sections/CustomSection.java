@@ -63,7 +63,6 @@ public abstract class CustomSection extends Condition {
 	@Override
 	public final boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
 		if (this.error) {
-			Skript.error("先頭にifまたはelse ifを付けることはできません");
 			return false;
 		}
 		Bukkit.getScheduler().runTask(SkRage.getInstance(), () -> {
@@ -82,7 +81,7 @@ public abstract class CustomSection extends Condition {
 	private static void setupCustomSections() {
 		getAllTriggers().forEach(ExceptionSafe.<Trigger, ReflectiveOperationException>consumer(trigger -> {
 			checkItem(trigger, getFirst(trigger), Sets.newHashSet());
-		}).caught(ExceptionSafe.PRINT_STACK_TRACE));
+		}).onCatch(ExceptionSafe.PRINT_STACK_TRACE));
 	}
 
 	protected static TriggerItem getFirst(TriggerSection section) {

@@ -14,7 +14,12 @@ public class EvtConsoleLog extends SkriptEvent {
 
 	static {
 		Skript.registerEvent("console log", EvtConsoleLog.class, ConsoleLogEvent.class, "console log")
-			.description("コンソールにログが出力されたとき");
+			.description("コンソールにログが出力されたとき")
+			.examples(
+				"on console log:",
+				"    set {_level} to capitalized \"%event-loglevel%\"",
+				"    send \"[CONSOLE] [%{_level}%] %event-string%\" to all players"
+			);
 		EventValues.registerEventValue(ConsoleLogEvent.class, String.class, new Getter<String, ConsoleLogEvent>() {
 
 			@Override

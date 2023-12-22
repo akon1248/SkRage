@@ -16,7 +16,7 @@ public class CatchableSupplier<T, X extends Throwable> implements Supplier<T>, C
     private Supplier<Optional<T>> caught;
 
     @Override
-    public Supplier<Optional<T>> caught(@Nullable Function<? super X, T> c, @Nullable Runnable f) {
+    public Supplier<Optional<T>> onCatch(@Nullable Function<? super X, T> c, @Nullable Runnable f) {
         return () -> {
             try {
                 return Optional.ofNullable(this.throwsSupplier.get());
@@ -29,7 +29,7 @@ public class CatchableSupplier<T, X extends Throwable> implements Supplier<T>, C
     }
 
     public Supplier<Optional<T>> caught(@Nullable Consumer<? super X> c, @Nullable Runnable f) {
-        return this.caught(Optional.ofNullable(c).map(consumer -> (Function<X, T>)t -> {
+        return this.onCatch(Optional.ofNullable(c).map(consumer -> (Function<X, T>) t -> {
             consumer.accept(t);
             return null;
         }).orElse(null), f);
@@ -40,7 +40,7 @@ public class CatchableSupplier<T, X extends Throwable> implements Supplier<T>, C
     }
 
     public Optional<T> getOptional() {
-        return Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).get();
+        return Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).get();
     }
 
     @Nullable

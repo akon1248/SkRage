@@ -14,7 +14,7 @@ public class CatchableConsumer<T, X extends Throwable> implements Consumer<T>, C
     private Consumer<T> caught;
 
     @Override
-    public Consumer<T> caught(@Nullable Consumer<? super X> c, @Nullable Consumer<? super T> f) {
+    public Consumer<T> onCatch(@Nullable Consumer<? super X> c, @Nullable Consumer<? super T> f) {
         return t -> {
             try {
                 this.throwsConsumer.accept(t);
@@ -29,6 +29,6 @@ public class CatchableConsumer<T, X extends Throwable> implements Consumer<T>, C
 
     @Override
     public void accept(T t) {
-        Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).accept(t);
+        Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).accept(t);
     }
 }

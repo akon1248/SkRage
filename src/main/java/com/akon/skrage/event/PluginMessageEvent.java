@@ -7,7 +7,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-//呼び出しを行ってるクラス: com.akon.skrage.listener.packet.CustomPayloadListener
 @Getter
 public class PluginMessageEvent extends PlayerEvent implements Cancellable {
 

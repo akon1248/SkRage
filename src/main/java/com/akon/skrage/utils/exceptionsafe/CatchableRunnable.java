@@ -14,7 +14,7 @@ public class CatchableRunnable<X extends Throwable> implements Runnable, Catchab
     private Runnable caught;
 
     @Override
-    public Runnable caught(@Nullable Consumer<? super X> c, @Nullable Runnable f) {
+    public Runnable onCatch(@Nullable Consumer<? super X> c, @Nullable Runnable f) {
         return () -> {
             try {
                 this.throwsRunnable.run();
@@ -28,6 +28,6 @@ public class CatchableRunnable<X extends Throwable> implements Runnable, Catchab
 
     @Override
     public void run() {
-        Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).run();
+        Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).run();
     }
 }

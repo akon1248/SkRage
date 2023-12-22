@@ -12,7 +12,7 @@ import org.bukkit.event.Event;
 public class CondStringEquals extends Condition {
 
     static {
-        Skript.registerCondition(CondStringEquals.class, "%string% equals strict %string%");
+        Skript.registerCondition(CondStringEquals.class, "%string% equals strictly %string%");
     }
 
     private Expression<String> str1;

@@ -1,6 +1,7 @@
 package com.akon.skrage;
 
 import ch.njol.skript.Skript;
+import com.akon.skrage.utils.LogUtil;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,7 +17,7 @@ public class SkRage extends JavaPlugin {
 		try {
 			Skript.registerAddon(this).loadClasses("com.akon.skrage", "skript");
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			LogUtil.logThrowable(ex);
 		}
 		Registration.registerRepeatingTasks();
 		Registration.registerBukkitListeners();

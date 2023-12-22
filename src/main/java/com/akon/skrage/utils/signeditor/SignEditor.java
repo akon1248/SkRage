@@ -1,5 +1,6 @@
 package com.akon.skrage.utils.signeditor;
 
+import com.akon.skrage.utils.LogUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
@@ -77,7 +78,7 @@ public class SignEditor {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, signData);
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, openEditor);
             } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
+                LogUtil.logThrowable(ex);
             }
             SIGN_EDITOR_MAP.put(player.getUniqueId(), this);
             this.viewer = player;

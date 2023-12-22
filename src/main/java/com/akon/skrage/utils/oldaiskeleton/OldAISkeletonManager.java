@@ -1,15 +1,16 @@
 package com.akon.skrage.utils.oldaiskeleton;
 
-import com.google.common.collect.Sets;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftSkeleton;
 import org.bukkit.entity.Skeleton;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 //スケルトンのOldAIが有効かどうかを管理する
 public class OldAISkeletonManager {
 
-	private static final HashSet<Skeleton> OLD_AI_SKELETONS = Sets.newHashSet();
+	private static final Set<Skeleton> OLD_AI_SKELETONS = Collections.newSetFromMap(new WeakHashMap<>());
 
 	public static void setOldAI(Skeleton skeleton, boolean oldAI) {
 		if (oldAI) {

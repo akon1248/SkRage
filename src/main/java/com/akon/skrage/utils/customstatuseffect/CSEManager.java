@@ -105,7 +105,7 @@ public class CSEManager {
 		dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(8, WrappedDataWatcher.Registry.get(Integer.class)), particle.getColor().asRGB());
 		dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(9, WrappedDataWatcher.Registry.get(Boolean.class)), particle.isAmbient());
 		packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
-		Bukkit.getOnlinePlayers().forEach(ExceptionSafe.<Player, InvocationTargetException>consumer(player -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet)).caught(ExceptionSafe.PRINT_STACK_TRACE));
+		Bukkit.getOnlinePlayers().forEach(ExceptionSafe.<Player, InvocationTargetException>consumer(player -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet)).onCatch(ExceptionSafe.PRINT_STACK_TRACE));
 	}
 
 	static PotionParticle getPotionParticle(LivingEntity entity) {

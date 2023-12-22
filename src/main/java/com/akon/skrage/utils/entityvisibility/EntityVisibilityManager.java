@@ -29,7 +29,7 @@ public class EntityVisibilityManager {
             entitySet.add(entity);
             PacketContainer destroy = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
             destroy.getIntegerArrays().write(0, new int[]{entity.getEntityId()});
-            ExceptionSafe.runnable(() -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, destroy)).caught(ExceptionSafe.PRINT_STACK_TRACE).run();
+            ExceptionSafe.runnable(() -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, destroy)).onCatch(ExceptionSafe.PRINT_STACK_TRACE).run();
         }
     }
 

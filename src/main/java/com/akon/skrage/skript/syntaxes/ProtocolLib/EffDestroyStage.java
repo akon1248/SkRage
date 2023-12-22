@@ -6,6 +6,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import com.akon.skrage.utils.LogUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
@@ -39,7 +40,7 @@ public class EffDestroyStage extends Effect {
                 try {
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, breakAnimation);
                 } catch (InvocationTargetException ex) {
-                    ex.printStackTrace();
+                    LogUtil.logThrowable(ex);
                 }
             });
         }

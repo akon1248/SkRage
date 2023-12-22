@@ -15,7 +15,7 @@ public class CatchablePredicate<T, X extends Throwable> implements Predicate<T>,
     private Predicate<T> caught;
 
     @Override
-    public Predicate<T> caught(@Nullable Predicate<? super X> c, @Nullable Consumer<? super T> f) {
+    public Predicate<T> onCatch(@Nullable Predicate<? super X> c, @Nullable Consumer<? super T> f) {
         return t -> {
             try {
                 return this.throwsPredicate.test(t);
@@ -29,7 +29,7 @@ public class CatchablePredicate<T, X extends Throwable> implements Predicate<T>,
     }
 
     public Predicate<T> caught(@Nullable Consumer<? super X> c, @Nullable Consumer<T> f) {
-        return this.caught(Optional.ofNullable(c).map(consumer -> (Predicate<X>)t -> {
+        return this.onCatch(Optional.ofNullable(c).map(consumer -> (Predicate<X>) t -> {
             consumer.accept(t);
             return false;
         }).orElse(null), f);
@@ -41,6 +41,6 @@ public class CatchablePredicate<T, X extends Throwable> implements Predicate<T>,
 
     @Override
     public boolean test(T t) {
-        return Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).test(t);
+        return Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).test(t);
     }
 }

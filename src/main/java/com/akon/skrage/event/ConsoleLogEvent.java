@@ -20,7 +20,6 @@ import org.bukkit.event.HandlerList;
 import java.util.HashMap;
 import java.util.Map;
 
-//呼び出しを行ってるクラス: com.akon.skrage.event.ConsoleLogEvent$1
 @Getter
 public class ConsoleLogEvent extends Event implements Cancellable {
 

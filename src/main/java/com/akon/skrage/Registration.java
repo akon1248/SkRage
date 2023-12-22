@@ -1,5 +1,6 @@
 package com.akon.skrage;
 
+import com.akon.skrage.utils.LogUtil;
 import com.akon.skrage.utils.anvilgui.AnvilGUIListener;
 import com.akon.skrage.utils.combattracker.CombatTrackerListener;
 import com.akon.skrage.utils.customstatuseffect.CSEListener;
@@ -48,7 +49,7 @@ public class Registration {
 					Listener listener = (Listener)clazz.newInstance();
 					Bukkit.getPluginManager().registerEvents(listener, PLUGIN);
 				} catch (ReflectiveOperationException ex) {
-					ex.printStackTrace();
+					LogUtil.logThrowable(ex);
 				}
 			}
 		});
@@ -69,7 +70,7 @@ public class Registration {
 					PacketListener packetListener = (PacketListener)clazz.newInstance();
 					ProtocolLibrary.getProtocolManager().addPacketListener(packetListener);
 				} catch (ReflectiveOperationException ex) {
-					ex.printStackTrace();
+					LogUtil.logThrowable(ex);
 				}
 			}
 		});
@@ -86,7 +87,7 @@ public class Registration {
 							Class<?> clazz = Class.forName(file.toString().substring(1, file.toString().length()-6).replace("/", "."));
 							consumer.accept(clazz);
 						} catch (ClassNotFoundException ex) {
-							ex.printStackTrace();
+							LogUtil.logThrowable(ex);
 						}
 					}
 					return FileVisitResult.CONTINUE;
@@ -94,7 +95,7 @@ public class Registration {
 
 			});
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			LogUtil.logThrowable(ex);
 		}
 	}
 

@@ -25,7 +25,7 @@ public class SpectatorListener extends PacketAdapter implements Listener {
     public static final SpectatorListener INSTANCE = new SpectatorListener();
 
     private SpectatorListener() {
-        super(SkRage.getInstance(), PacketType.Play.Server.GAME_STATE_CHANGE, PacketType.Play.Server.NAMED_ENTITY_SPAWN, PacketType.Play.Server.PLAYER_INFO);
+        super(SkRage.getInstance(), PacketType.Play.Server.GAME_STATE_CHANGE, PacketType.Play.Server.LOGIN, PacketType.Play.Server.NAMED_ENTITY_SPAWN, PacketType.Play.Server.PLAYER_INFO, PacketType.Play.Server.RESPAWN);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -43,6 +43,11 @@ public class SpectatorListener extends PacketAdapter implements Listener {
             if (SpectatorManager.isSpectator(player) && packet.getIntegers().read(0) == 3) {
                 packet.getFloat().write(0, 2.0F);
             }
+        } else if (event.getPacketType() == PacketType.Play.Server.LOGIN || event.getPacketType() == PacketType.Play.Server.RESPAWN) {
+            if (SpectatorManager.isSpectator(player)) {
+                packet.getGameModes().write(0, EnumWrappers.NativeGameMode.ADVENTURE);
+            }
+
         } else if (event.getPacketType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
             Entity entity = packet.getEntityModifier(event).read(0);
             if (entity instanceof Player && SpectatorManager.isSpectator((Player)entity) && !SpectatorManager.isSpectator(player) ) {

@@ -17,7 +17,7 @@ public class CatchableBiFunction<T, U, R, X extends Throwable> implements BiFunc
     private BiFunction<T, U, Optional<R>> caught;
 
     @Override
-    public BiFunction<T, U, Optional<R>> caught(@Nullable Function<? super X, R> c, @Nullable BiConsumer<? super T, ? super U> f) {
+    public BiFunction<T, U, Optional<R>> onCatch(@Nullable Function<? super X, R> c, @Nullable BiConsumer<? super T, ? super U> f) {
         return (t, u) -> {
             try {
                 return Optional.ofNullable(this.throwsBiFunction.apply(t, u));
@@ -32,7 +32,7 @@ public class CatchableBiFunction<T, U, R, X extends Throwable> implements BiFunc
     }
 
     public BiFunction<T, U, Optional<R>> caught(@Nullable Consumer<? super X> c, @Nullable BiConsumer<T, U> f) {
-        return this.caught(Optional.ofNullable(c).map(consumer -> (Function<X, R>)t -> {
+        return this.onCatch(Optional.ofNullable(c).map(consumer -> (Function<X, R>) t -> {
             consumer.accept(t);
             return null;
         }).orElse(null), f);
@@ -43,7 +43,7 @@ public class CatchableBiFunction<T, U, R, X extends Throwable> implements BiFunc
     }
 
     public Optional<R> applyOptional(T t, U u) {
-        return Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).apply(t, u);
+        return Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).apply(t, u);
     }
 
     @Nullable

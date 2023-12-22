@@ -1,5 +1,6 @@
 package com.akon.skrage.skript.syntaxes.sections;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -20,10 +21,12 @@ public class SecCatch extends CustomSection {
 
 	@Override
 	public boolean initialize(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-		if (exprs[0] instanceof Variable) {
+		if (exprs[0] instanceof Variable && ((Variable<?>)exprs[0]).isLocal()) {
 			this.var = (Variable<?>)exprs[0];
+			return true;
 		}
-		return true;
+		Skript.error("ローカル変数のみ利用可能です");
+		return false;
 	}
 
 	@Override
@@ -31,7 +34,7 @@ public class SecCatch extends CustomSection {
 		return false;
 	}
 
-	public void caught(Event e, Throwable throwable) {
+	public void onCatch(Event e, Throwable throwable) {
 		Optional.ofNullable(this.getTriggerSection()).map(CustomSection::getFirst).ifPresent(item -> {
 			this.var.change(e, new Object[]{throwable}, Changer.ChangeMode.SET);
 			TriggerItem.walk(item, e);

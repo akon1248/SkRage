@@ -2,6 +2,7 @@ package com.akon.skrage.skript.syntaxes.ProtocolLib;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Description({"特定のプレイヤーに対してEntityが発光しているように見せます"})
+@Examples({"on add tracking player:", "    wait until the end of this tick", "    make tracked entity glow for event-player"})
 public class EffClientSideGlowing extends Effect {
 
     private Expression<Entity> entities;
@@ -51,7 +53,7 @@ public class EffClientSideGlowing extends Effect {
                 packet.getWatchableCollectionModifier().write(0, dataWatcher.getWatchableObjects());
                 packets.add(packet);
             });
-            Arrays.stream(this.players.getAll(e)).forEach(player -> packets.forEach(ExceptionSafe.<PacketContainer, InvocationTargetException>consumer(packet -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet)).caught(ExceptionSafe.PRINT_STACK_TRACE)));
+            Arrays.stream(this.players.getAll(e)).forEach(player -> packets.forEach(ExceptionSafe.<PacketContainer, InvocationTargetException>consumer(packet -> ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet)).onCatch(ExceptionSafe.PRINT_STACK_TRACE)));
         }
     }
 

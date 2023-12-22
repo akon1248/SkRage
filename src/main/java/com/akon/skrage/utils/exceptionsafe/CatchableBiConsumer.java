@@ -15,7 +15,7 @@ public class CatchableBiConsumer<T, U, X extends Throwable> implements BiConsume
     private BiConsumer<T, U> caught;
 
     @Override
-    public BiConsumer<T, U> caught(@Nullable Consumer<? super X> c, @Nullable BiConsumer<? super T, ? super U> f) {
+    public BiConsumer<T, U> onCatch(@Nullable Consumer<? super X> c, @Nullable BiConsumer<? super T, ? super U> f) {
         return (t, u) -> {
             try {
                 this.throwsBiConsumer.accept(t, u);
@@ -31,6 +31,6 @@ public class CatchableBiConsumer<T, U, X extends Throwable> implements BiConsume
 
     @Override
     public void accept(T t, U u) {
-        Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).accept(t, u);
+        Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).accept(t, u);
     }
 }

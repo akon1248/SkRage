@@ -17,7 +17,7 @@ public class CatchableBiPredicate<T, U, X extends Throwable> implements BiPredic
     private BiPredicate<T, U> caught;
 
     @Override
-    public BiPredicate<T, U> caught(@Nullable Predicate<? super X> c, @Nullable BiConsumer<? super T, ? super U> f) {
+    public BiPredicate<T, U> onCatch(@Nullable Predicate<? super X> c, @Nullable BiConsumer<? super T, ? super U> f) {
         return (t, u) -> {
             try {
                 return this.throwsBiPredicate.test(t, u);
@@ -32,7 +32,7 @@ public class CatchableBiPredicate<T, U, X extends Throwable> implements BiPredic
     }
 
     public BiPredicate<T, U> caught(@Nullable Consumer<? super X> c, @Nullable BiConsumer<T, U> f) {
-        return this.caught(Optional.ofNullable(c).map(consumer -> (Predicate<X>)t -> {
+        return this.onCatch(Optional.ofNullable(c).map(consumer -> (Predicate<X>) t -> {
             consumer.accept(t);
             return false;
         }).orElse(null), f);
@@ -44,6 +44,6 @@ public class CatchableBiPredicate<T, U, X extends Throwable> implements BiPredic
 
     @Override
     public boolean test(T t, U u) {
-        return Optional.ofNullable(this.caught).orElse(this.caught = this.caught()).test(t, u);
+        return Optional.ofNullable(this.caught).orElse(this.caught = this.onCatch()).test(t, u);
     }
 }

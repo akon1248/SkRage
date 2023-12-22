@@ -1,6 +1,5 @@
 package com.akon.skrage.skript.syntaxes.expressions;
 
-import ch.njol.skript.util.Color;
 import ch.njol.skript.util.Timespan;
 import com.akon.skrage.skript.syntaxes.ExpressionFactory;
 import com.akon.skrage.utils.NMSUtil;
@@ -12,6 +11,9 @@ import com.akon.skrage.utils.freeze.FreezeManager;
 import com.akon.skrage.utils.oldaiskeleton.OldAISkeletonManager;
 import com.akon.skrage.utils.spectator.SpectatorManager;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -26,7 +28,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class SimpleExpressions {
 	
@@ -47,7 +53,46 @@ public class SimpleExpressions {
 		ExpressionFactory.registerExpression("ExprErrorCause", "error cause", POSS | OF, Throwable.class, Throwable.class, Throwable::getCause, null, "エラーの原因となった別のエラー");
 		ExpressionFactory.registerExpression("ExprErrorMessage", "error message", POSS | OF, Throwable.class, String.class, Throwable::getMessage, null, "エラーメッセージ");
 		ExpressionFactory.registerExpression("ExprErrorName", "error name", POSS | OF, Throwable.class, String.class, throwable -> throwable.getClass().getName(), null, "エラー名");
-		ExpressionFactory.registerExpression("ExprChatColorCode", "chat color code", FROM, Color.class, String.class, color -> color.asChatColor().toString(), null, "Colorからテキストのカラーコードに変換します");
+		ExpressionFactory.registerExpression("ExprChatColorCode", "chat color code", FROM, Number.class, String.class, new Function<Number, String>(){
+
+			private final List<Pair<Integer, ChatColor>> COLORS = Arrays.asList(
+				ImmutablePair.of(0x000000, ChatColor.BLACK),
+				ImmutablePair.of(0x0000AA, ChatColor.DARK_BLUE),
+				ImmutablePair.of(0x00AA00, ChatColor.DARK_GREEN),
+				ImmutablePair.of(0x00AAAA, ChatColor.DARK_AQUA),
+				ImmutablePair.of(0xAA0000, ChatColor.DARK_RED),
+				ImmutablePair.of(0xAA00AA, ChatColor.DARK_PURPLE),
+				ImmutablePair.of(0xFFAA00, ChatColor.GOLD),
+				ImmutablePair.of(0xAAAAAA, ChatColor.GRAY),
+				ImmutablePair.of(0x555555, ChatColor.DARK_GRAY),
+				ImmutablePair.of(0x5555FF, ChatColor.BLUE),
+				ImmutablePair.of(0x55FF55, ChatColor.GREEN),
+				ImmutablePair.of(0x55FFFF, ChatColor.AQUA),
+				ImmutablePair.of(0xFF5555, ChatColor.RED),
+				ImmutablePair.of(0xFF55FF, ChatColor.LIGHT_PURPLE),
+				ImmutablePair.of(0xFFFF55, ChatColor.YELLOW),
+				ImmutablePair.of(0xFFFFFF, ChatColor.WHITE)
+			);
+
+			private int square(int i) {
+				return i*i;
+			}
+
+			@Override
+			public String apply(Number number) {
+				int i = number.intValue();
+				int red = i >> 16 & 0xFF;
+				int green = i >> 8 & 0xFF;
+				int blue = i & 0xFF;
+				return COLORS.stream().min(Comparator.comparingInt(pair -> {
+					int rgb = pair.getLeft();
+					int rDistSq = square((rgb >> 16 & 0xFF) - red);
+					int gDistSq = square((rgb >> 8 & 0xFF) - green);
+					int bDistSq = square((rgb & 0xFF) - blue);
+					return rDistSq + gDistSq + bDistSq;
+				})).map(Pair::getRight).map(ChatColor::toString).get();
+			}
+		}, null, "Colorからテキストのカラーコードに変換します");
 		ExpressionFactory.registerExpression("ExprCSEAmplifier", "(cse|custom[ ]status[ ]effect) (amplifier|level|tier)", POSS | OF, CustomStatusEffect.class, Number.class, CustomStatusEffect::getAmplifier, null, "CustomStatusEffectの効果の強さ");
 		ExpressionFactory.registerExpression("ExprCSEDuration", "(cse|custom[ ]status[ ]effect) duration", POSS | OF, CustomStatusEffect.class, Number.class, CustomStatusEffect::getDuration, (effect, num) -> effect.setDuration(num.intValue()), "CustomStatusEffectの効果時間(tick)");
 		ExpressionFactory.registerExpression("ExprCSEType", "(cse|custom[ ]status[ ]effect) type", POSS | OF, CustomStatusEffect.class, CSEType.class, CustomStatusEffect::getType, null, "CustomStatusEffectのタイプ");

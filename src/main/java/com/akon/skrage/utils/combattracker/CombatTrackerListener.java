@@ -15,6 +15,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+
+import java.util.Arrays;
 
 public class CombatTrackerListener implements Listener {
 
@@ -27,6 +30,14 @@ public class CombatTrackerListener implements Listener {
 		if (e.getPlugin() == SkRage.getInstance()) {
 			Bukkit.getWorlds().stream().flatMap(world -> world.getEntitiesByClass(LivingEntity.class).stream()).forEach(CombatTrackerListener::replaceCombatTracker);
 		}
+	}
+
+	@EventHandler
+	public void onChunkLoad(ChunkLoadEvent e) {
+		Arrays.stream(e.getChunk().getEntities())
+			.filter(LivingEntity.class::isInstance)
+			.map(LivingEntity.class::cast)
+			.forEach(CombatTrackerListener::replaceCombatTracker);
 	}
 
 	@EventHandler

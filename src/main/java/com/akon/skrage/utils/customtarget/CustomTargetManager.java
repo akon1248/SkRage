@@ -46,7 +46,7 @@ public class CustomTargetManager {
 			}
 			CUSTOM_TARGET_MAP.put(entity, targetAI);
 			nmsEntity.targetSelector.a(1, (PathfinderGoal)targetAI);
-		}).caught(ExceptionSafe.PRINT_STACK_TRACE));
+		}).onCatch(ExceptionSafe.PRINT_STACK_TRACE));
 		return true;
 	}
 
@@ -59,7 +59,7 @@ public class CustomTargetManager {
 			nmsEntity.targetSelector.a((PathfinderGoal)targetAI);
 			Set<Object> tasks = (Set<Object>)ReflectionUtil.DEFAULT.getField(nmsEntity.targetSelector, "b");
 			Optional.ofNullable(REMOVED_AI_MAP.remove(entity)).ifPresent(set -> set.forEach(ExceptionSafe.consumer(item -> ReflectionUtil.DEFAULT.invokeMethod(tasks, "add", new Class[]{Object.class}, new Object[]{item}))));
-		}).caught(ExceptionSafe.PRINT_STACK_TRACE));
+		}).onCatch(ExceptionSafe.PRINT_STACK_TRACE));
 		return true;
 	}
 

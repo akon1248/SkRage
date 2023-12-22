@@ -1,5 +1,6 @@
 package com.akon.skrage.utils.exceptionsafe;
 
+import com.akon.skrage.utils.LogUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
 
 public class ExceptionSafe {
 
-    public static final Consumer<Throwable> PRINT_STACK_TRACE = Throwable::printStackTrace;
+    public static final Consumer<Throwable> PRINT_STACK_TRACE = LogUtil::logThrowable;
     public static final Supplier<CatchableConsumer<Closeable, IOException>> CLOSE = () -> consumer(Closeable::close);
 
     public static <T, U, X extends Throwable> CatchableBiConsumer<T, U, X> biConsumer(ThrowsBiConsumer<T, U, X> throwsBiConsumer) {

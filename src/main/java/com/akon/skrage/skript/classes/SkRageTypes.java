@@ -3,9 +3,7 @@ package com.akon.skrage.skript.classes;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.EnumSerializer;
-import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
-import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
 import com.akon.skrage.utils.anvilgui.AnvilGUI;
@@ -22,7 +20,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
@@ -44,79 +41,41 @@ public class SkRageTypes {
 			.serializer(new EnumSerializer<>(StandardLevel.class)));
 		Classes.registerClass(new ClassInfo<>(DamageSourceBuilder.class, "damagesource")
 			.user("damage ?sources?")
-			.name("Damage Source")
-			.parser(new UnparsableParser<>()));
+			.name("Damage Source"));
 		Classes.registerClass(new ClassInfo<>(AnvilGUI.class, "anvilinv")
 			.user("anvil ?invs?")
-			.name("Anvil GUI")
-			.parser(new UnparsableParser<>()));
+			.name("Anvil GUI"));
 		Classes.registerClass(new ClassInfo<>(Skin.class, "playerskin")
 			.user("player ?skins?")
-			.name("Player Skin")
-			.parser(new UnparsableParser<>()));
+			.name("Player Skin"));
 		Classes.registerClass(new ClassInfo<>(SignEditor.class, "signeditor")
 			.user("sign ?editors?")
-			.name("Sign Editor")
-			.parser(new UnparsableParser<>()));
+			.name("Sign Editor"));
 		Classes.registerClass(new ClassInfo<>(CSEType.class, "customstatuseffecttype")
 			.user("(cse|custom ?status ?effect) ?types?")
-			.name("Custom Status Effect Type")
-			.parser(new UnparsableParser<>()));
+			.name("Custom Status Effect Type"));
 		Classes.registerClass(new ClassInfo<>(CustomStatusEffect.class, "customstatuseffect")
 			.user("(cse|custom ?status ?effect)s?")
-			.name("Custom Status Effect")
-			.parser(new UnparsableParser<>()));
+			.name("Custom Status Effect"));
 		Classes.registerClass(new ClassInfo<>(AttributeInstance.class, "attributeinstance")
 			.user("attribute ?instances?")
-			.name("Attribute Instance")
-			.parser(new UnparsableParser<>()));
+			.name("Attribute Instance"));
 		Classes.registerClass(new ClassInfo<>(AttributeModifier.class, "attributemodifier")
 			.user("attribute ?modifier")
-			.name("Attribute Modifier")
-			.parser(new UnparsableParser<>()));
+			.name("Attribute Modifier"));
 		if (!Bukkit.getPluginManager().isPluginEnabled("MundoSK")) {
 			Classes.registerClass(new ClassInfo<>(Throwable.class, "throwable")
 				.user("throwables?")
-				.user("Throwable")
-				.parser(new UnparsableParser<>()));
+				.user("Throwable"));
 			Classes.registerClass(new ClassInfo<>(StackTraceElement.class, "stacktraceelement")
 				.user("stack ?trace ?elements?")
-				.user("Stack Trace Element")
-				.parser(new UnparsableParser<>()));
+				.user("Stack Trace Element"));
 		}
 		if (Bukkit.getPluginManager().isPluginEnabled("PowerNBT")) {
 			Classes.registerClass(new ClassInfo<>(NBTCompound.class, "nbtcompound")
 				.user("nbt ?compounds?")
 				.name("NBT Compound")
-				.description("NBTを表す型", "parse可")
-				.parser(new Parser<NBTCompound>() {
-
-					@Nullable
-					@Override
-					public NBTCompound parse(String s, ParseContext context) {
-						Object maybeCompound = PowerNBT.getApi().parseMojangson(s);
-						if (maybeCompound instanceof NBTCompound) {
-							return (NBTCompound)maybeCompound;
-						}
-						return null;
-					}
-
-					@Override
-					public String toString(NBTCompound o, int flags) {
-						return o.getHandle().toString();
-					}
-
-					@Override
-					public String toVariableNameString(NBTCompound o) {
-						return o.getHandle().toString();
-					}
-
-					@Override
-					public String getVariableNamePattern() {
-						return ".+";
-					}
-
-				})
+				.description("NBTを表す型")
 				.serializer(new Serializer<NBTCompound>() {
 
 					@Override
@@ -154,33 +113,6 @@ public class SkRageTypes {
 			Classes.registerClass(new ClassInfo<>(NBTList.class, "nbtlist")
 				.user("nbt ?lists?")
 				.name("NBT List")
-				.parser(new Parser<NBTList>() {
-
-					@Nullable
-					@Override
-					public NBTList parse(String s, ParseContext context) {
-						Object maybeList = PowerNBT.getApi().parseMojangson(s);
-						if (maybeList instanceof NBTList) {
-							return (NBTList)maybeList;
-						}
-						return null;
-					}
-
-					@Override
-					public String toString(NBTList o, int flags) {
-						return o.getHandle().toString();
-					}
-
-					@Override
-					public String toVariableNameString(NBTList o) {
-						return o.getHandle().toString();
-					}
-
-					@Override
-					public String getVariableNamePattern() {
-						return ".+";
-					}
-				})
 				.serializer(new Serializer<NBTList>() {
 
 					@Override

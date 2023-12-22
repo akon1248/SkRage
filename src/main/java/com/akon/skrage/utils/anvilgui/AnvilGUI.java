@@ -1,6 +1,7 @@
 package com.akon.skrage.utils.anvilgui;
 
 import com.akon.skrage.SkRage;
+import com.akon.skrage.utils.LogUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
@@ -63,7 +64,7 @@ public class AnvilGUI {
 				ProtocolLibrary.getProtocolManager().sendServerPacket(player, openAnvil);
 				ProtocolLibrary.getProtocolManager().sendServerPacket(player, windowsItems);
 			} catch (InvocationTargetException ex) {
-				ex.printStackTrace();
+				LogUtil.logThrowable(ex);
 			}
 			ANVIL_GUI_MAP.put(player.getUniqueId(), this);
 			this.viewer = player;
@@ -80,7 +81,7 @@ public class AnvilGUI {
 		try {
 			ProtocolLibrary.getProtocolManager().sendServerPacket(this.viewer, close);
 		} catch (InvocationTargetException ex) {
-			ex.printStackTrace();
+			LogUtil.logThrowable(ex);
 		}
 		ANVIL_GUI_MAP.remove(this.viewer.getUniqueId());
 		this.viewer = null;

@@ -16,7 +16,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 & param2};
 			}
 
@@ -35,7 +35,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 | param2};
 			}
 
@@ -45,7 +45,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 ^ param2};
 			}
 
@@ -55,7 +55,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 >> param2};
 			}
 
@@ -65,7 +65,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 << param2};
 			}
 
@@ -75,7 +75,7 @@ public class BitCalcFunctions {
 			@Override
 			public Number[] execute(FunctionEvent e, Object[][] params) {
 				long param1 = ((Number)params[0][0]).longValue();
-				long param2 = ((Number)params[0][1]).longValue();
+				long param2 = ((Number)params[1][0]).longValue();
 				return new Number[]{param1 >>> param2};
 			}
 

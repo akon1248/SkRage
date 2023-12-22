@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import com.akon.skrage.utils.exceptionsafe.ExceptionSafe;
 import com.comphenix.protocol.PacketType;
@@ -34,7 +35,9 @@ import java.util.Optional;
 public class EffClientSideFirework extends Effect {
 
 	static {
-		Skript.registerEffect(EffClientSideFirework.class, "show firework[s] [effect] %fireworkeffects% at %location% [for %players%]");
+		if (Classes.getClassInfoNoError("fireworkeffect") != null) {
+			Skript.registerEffect(EffClientSideFirework.class, "show firework[s] [effect] %fireworkeffects% at %location% [for %players%]");
+		}
 	}
 
 	private Expression<FireworkEffect> effect;
@@ -65,7 +68,7 @@ public class EffClientSideFirework extends Effect {
 					ProtocolLibrary.getProtocolManager().sendServerPacket(p, metadata);
 					ProtocolLibrary.getProtocolManager().sendServerPacket(p, explode);
 					ProtocolLibrary.getProtocolManager().sendServerPacket(p, destroy);
-				}).caught(ExceptionSafe.PRINT_STACK_TRACE));
+				}).onCatch(ExceptionSafe.PRINT_STACK_TRACE));
 			});
 		}
 	}

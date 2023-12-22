@@ -1,6 +1,7 @@
 package com.akon.skrage.utils.skin;
 
 import com.akon.skrage.SkRage;
+import com.akon.skrage.utils.LogUtil;
 import com.akon.skrage.utils.NMSUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -46,7 +47,7 @@ public class SkinManager {
 						return new Skin(property.get("value"), property.get("signature"));
 					}
 				} catch (IOException ex) {
-					ex.printStackTrace();
+					LogUtil.logThrowable(ex);
 				}
 			}
 		}
@@ -126,7 +127,7 @@ public class SkinManager {
 				ProtocolLibrary.getProtocolManager().sendServerPacket(p, packet);
 			}
 		} catch (InvocationTargetException ex) {
-			ex.printStackTrace();
+			LogUtil.logThrowable(ex);
 		}
 		p.setHealth(p.getHealth());
 		p.updateInventory();

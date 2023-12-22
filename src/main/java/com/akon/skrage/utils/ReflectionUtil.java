@@ -39,7 +39,7 @@ public class ReflectionUtil {
 		return value;
 	}
 
-	private static String toTypeDescription(Class<?> clazz) {
+	private static String toTypeDescriptor(Class<?> clazz) {
 		Validate.notNull(clazz);
 		if (clazz.isPrimitive()) {
 			if (clazz == void.class) {
@@ -62,13 +62,13 @@ public class ReflectionUtil {
 				return "Z";
 			}
 		} else if (clazz.isArray()) {
-			return '[' + toTypeDescription(clazz.getComponentType());
+			return '[' + toTypeDescriptor(clazz.getComponentType());
 		}
 		return 'L' + clazz.getName().replace('.', '/') + ';';
 	}
 
 	private static String methodInfo(String name, Class<?>[] params) {
-		return name + '(' + Arrays.stream(params).map(ReflectionUtil::toTypeDescription).collect(Collectors.joining()) + ')';
+		return name + '(' + Arrays.stream(params).map(ReflectionUtil::toTypeDescriptor).collect(Collectors.joining()) + ')';
 	}
 
 	private static <T> T reflectiveAction(ThrowsSupplier<T, ReflectiveOperationException> action) {
